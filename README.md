@@ -56,7 +56,7 @@ Include a README.md in your branch with:
 - Plagiarism or using pre-built APIs without modification will result in zero marks
 
 ## Submission Guidelines
-1. Fork the provided repository and set up your team's workspace
+1. Clone the provided repository and set up your team's workspace
 2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
 3. Submit a Pull Request (PR) by May 11, 2025 (11:59 PM) with:
    - Working API code
