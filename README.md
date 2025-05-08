@@ -29,19 +29,37 @@ Include a README.md in your branch with:
 - Input parameters (JSON/query params/form data)
 - Output format (JSON, image, text)
 - Example request/response
-- Error handling (possible failure cases)
+- Error handling (possible failure cases) or troubleshooting guide.
 
-### 4. Git Workflow
+### 4. Folder Structure & Naming Convention
+- All API-related files must be placed under `src/routes/api`.
+- Name your folder in the format: `src/routes/api/[team-name]-[ai-agent]` (e.g. `src/routes/api/team-alpha-imagegen`)
+- The folder must contain the following:
+  - API implementation files.
+  - A README.md documenting the API.
+  - The JSON Schema for input validation.
+
+### 5. Git Workflow
 - Branch out from main and develop your feature in a new branch
 - Submit a Pull Request (PR) for review before merging
 - No direct commits to main - all changes must go through PRs
+- **Add the instructor (@gcccsjedd) as a reviewer** to your Pull Request.
 
-### 5. Demo & Presentation
-- Demo Dates: May 12–18, 2025
+### 6. Demo & Presentation
+- Demo Dates: May 14–23, 2025
 - Prepare a 5-minute live demo showcasing:
   - API functionality (input/output demonstration)
   - Explanation of your AI agent's design
   - Challenges faced & lessons learned
+
+## Submission Guidelines
+1. Clone the provided repository and set up your team's workspace
+2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
+3. Submit a Pull Request (PR) by May 14, 2025 (11:59 PM) with:
+   - Working API code
+   - Documentation (README + JSON Schema)
+   - A list of contributions per member
+   - Add **@gcccsjedd** as a reviewer to your Pull Request before submission.
 
 ## Grading Criteria
 1. Functional API
@@ -54,14 +72,7 @@ Include a README.md in your branch with:
 - No submission = Incomplete grade in Finals
 - Late submissions will incur a 10% deduction per day
 - Plagiarism or using pre-built APIs without modification will result in zero marks
-
-## Submission Guidelines
-1. Clone the provided repository and set up your team's workspace
-2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
-3. Submit a Pull Request (PR) by May 11, 2025 (11:59 PM) with:
-   - Working API code
-   - Documentation (README + JSON Schema)
-   - A list of contributions per member
+- Failure to add @gcccsjedd as a reviewer to your PR will result in a 10% penalty.
 
 # sv
 
