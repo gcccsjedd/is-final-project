@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string", "minLength": 5 },
+            "deadline": { "type": "string", "format": "date" },
+            "category": { "type": "string", "enum": ["work", "personal", "other"] },
+            "urgency": { "type": "string", "enum": ["high", "medium", "low"] }
+          },
+          "required": ["description", "deadline", "category", "urgency"]
+        },
+        "minItems": 1
+      }
+    },
+    "required": ["tasks"]
+  }
+  

@@ -1,11 +1,8 @@
 import { json } from "@sveltejs/kit";
 import { Ollama } from "ollama";
-import type { RequestHandler } from "@sveltejs/kit";
-import { validateTasks } from "../api/anongteamnatenpre-decisionagent/validate";
-import { sortTasks } from "../api/anongteamnatenpre-decisionagent/sortTask";
-
-// 🔹 AI Model Configuration (DeepSeek-R1 7B)
-const ollamaModel = "deepseek-r1:7b"; // Ensure correct model tag
+import { validateTasks } from "./validate";
+import { sortTasks } from "./sortTask";
+import type { RequestHandler } from "./$types";
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
@@ -23,14 +20,14 @@ export const POST: RequestHandler = async ({ request }) => {
         // Sort tasks
         const sortedTasks = sortTasks(tasks);
 
-        // 🔹 DeepSeek-R1 AI Prompt Refinement
-        const ollamaPrompt = `
-        You are an AI specializing in task prioritization. Given the following tasks, rank them based on urgency, importance, and deadlines:
-        ${JSON.stringify(sortedTasks)}
-        Provide reasoning behind each priority level and suggest potential improvements.
-        `;
+        // Specify Ollama AI model
+        const ollamaModel = "mistral";
 
-        // 🔹 Call DeepSeek-R1 AI for Task Prioritization
+        // AI Prompt Refinement
+        const ollamaPrompt = `Rank these tasks based on urgency, importance, and deadlines:\n${JSON.stringify(sortedTasks)}
+        Provide reasoning behind each priority level and suggest potential improvements.`;
+
+        // Call Ollama AI with Model Specification
         const ollamaResponse = await new Ollama().generate({ model: ollamaModel, prompt: ollamaPrompt });
 
         return json({ prioritized_tasks: sortedTasks, ollama_analysis: ollamaResponse }, { status: 200 });
