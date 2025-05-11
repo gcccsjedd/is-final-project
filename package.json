@@ -40,6 +40,7 @@
 	},
 	"dependencies": {
 		"markdown-it": "^14.1.0",
-		"ollama": "^0.5.15"
+		"ollama": "^0.5.15",
+		"zod": "^3.24.4"
 	}
 }
