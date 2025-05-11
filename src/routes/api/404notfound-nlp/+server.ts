@@ -1,10 +1,10 @@
-// src/routes/api/sample/+server.ts
+// src/routes/api/404notfound-nlp/+server.ts
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async () => {
     const sampleData = {
-        message: "This is a sample API response",
+        message: "This is a 404notfound-nlp API response",
         timestamp: new Date().toISOString(),
         endpoints: [
             {

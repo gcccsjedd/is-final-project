@@ -44,7 +44,7 @@
 
 <main class="flex min-h-screen w-screen flex-col items-center justify-center p-4">
     <Card size="lg" class="w-full max-w-2xl">
-        <h1 class="text-2xl font-bold mb-4">AI Text Assistant</h1>
+        <h1 class="text-2xl font-bold mb-4">AI Text Summarization</h1>
         
         {#if error}
             <Alert color="red" class="mb-4">
