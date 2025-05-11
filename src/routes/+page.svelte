@@ -18,7 +18,7 @@
         summary = '';
         
         try {
-            const response = await fetch('/agent', {
+            const response = await fetch('/api/404notfound-nlp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

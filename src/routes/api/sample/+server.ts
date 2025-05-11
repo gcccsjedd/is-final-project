@@ -8,7 +8,7 @@ export const GET: RequestHandler = async () => {
         timestamp: new Date().toISOString(),
         endpoints: [
             {
-                path: "/api/agent",
+                path: "/api/404notfound-nlp",
                 method: "POST",
                 description: "Process text with local Mistral instance",
                 example_request: {
