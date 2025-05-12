@@ -9,7 +9,6 @@ interface LanguageDetectionResult {
   modelUsed: 'deepseek' | 'pattern-based';
 }
 
-// Language patterns for basic detection
 interface LanguagePattern {
   code: string;
   name: string;
@@ -86,19 +85,14 @@ const LANGUAGE_PATTERNS: LanguagePattern[] = [
   }
 ];
 
-/**
- * Detect the language of a text
- */
 export async function processLanguageDetection(
   text: string,
   deepseekResult?: string
 ): Promise<LanguageDetectionResult> {
-  // Try to use deepseek result if available
   if (deepseekResult && deepseekResult.trim().length > 0) {
     try {
       const result = deepseekResult.toLowerCase().trim();
       
-      // Try to extract language code or name from result
       for (const lang of LANGUAGE_PATTERNS) {
         if (result.includes(lang.code) || result.includes(lang.name.toLowerCase())) {
           return {
@@ -117,37 +111,28 @@ export async function processLanguageDetection(
       }
     } catch (error) {
       console.error('Error parsing deepseek language detection result:', error);
-      // Continue to fallback method
     }
   }
   
-  // Fallback to pattern-based detection
   return patternBasedLanguageDetection(text);
 }
 
-/**
- * Pattern-based language detection as a fallback method
- */
 function patternBasedLanguageDetection(text: string): LanguageDetectionResult {
-  // Scores for each language
   const scores: Record<string, number> = {};
   
-  // Initialize scores
   LANGUAGE_PATTERNS.forEach(lang => {
     scores[lang.code] = 0;
   });
   
-  // Check character patterns first (more reliable for languages with unique scripts)
   for (const lang of LANGUAGE_PATTERNS) {
     if (lang.characterPatterns) {
       const matches = text.match(lang.characterPatterns);
       if (matches && matches.length > 0) {
-        scores[lang.code] += matches.length * 2; // Give higher weight to character patterns
+        scores[lang.code] += matches.length * 2;
       }
     }
   }
   
-  // If character patterns gave a strong signal for some languages, prioritize them
   const characterBasedLanguages = Object.entries(scores)
     .filter(([, score]) => score > 0)
     .map(([code]) => code);
@@ -156,12 +141,10 @@ function patternBasedLanguageDetection(text: string): LanguageDetectionResult {
     ? characterBasedLanguages 
     : LANGUAGE_PATTERNS.map(lang => lang.code);
   
-  // Tokenize input text (simple word tokenization)
   const words = text.toLowerCase()
     .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '')
     .split(/\s+/);
   
-  // Count stop words for each language
   for (const langCode of languagesToCheck) {
     const lang = LANGUAGE_PATTERNS.find(l => l.code === langCode);
     if (!lang) continue;
@@ -173,9 +156,8 @@ function patternBasedLanguageDetection(text: string): LanguageDetectionResult {
     }
   }
   
-  // Find the language with the highest score
   let maxScore = 0;
-  let bestLanguageCode = 'en'; // Default to English if no matches
+  let bestLanguageCode = 'en';
   
   Object.entries(scores).forEach(([code, score]) => {
     if (score > maxScore) {
@@ -184,17 +166,14 @@ function patternBasedLanguageDetection(text: string): LanguageDetectionResult {
     }
   });
   
-  // Get the language name
   const bestLanguage = LANGUAGE_PATTERNS.find(lang => lang.code === bestLanguageCode)?.name || 'Unknown';
   
-  // Calculate confidence for each language
   const totalScore = Object.values(scores).reduce((a, b) => a + b, 0) || 1;
   const confidenceScores = LANGUAGE_PATTERNS.map(lang => ({
     language: lang.name,
     confidence: parseFloat((scores[lang.code] / totalScore).toFixed(2)) || 0.01
   }));
   
-  // Sort by confidence in descending order
   confidenceScores.sort((a, b) => b.confidence - a.confidence);
   
   return {
@@ -204,4 +183,4 @@ function patternBasedLanguageDetection(text: string): LanguageDetectionResult {
     possibleLanguages: confidenceScores,
     modelUsed: 'pattern-based'
   };
-} 
+}

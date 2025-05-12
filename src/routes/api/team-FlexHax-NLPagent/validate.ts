@@ -17,15 +17,12 @@ interface ValidationResult {
 }
 
 export function validateNlpRequest(data: unknown): ValidationResult {
-  // Basic validation
   if (!data || typeof data !== 'object') {
     return { isValid: false, error: 'Invalid request format' };
   }
   
-  // Type guard to check if data matches our expected structure
   const requestData = data as Partial<NlpRequest>;
 
-  // Check required fields
   if (!requestData.text || typeof requestData.text !== 'string') {
     return { isValid: false, error: 'Text is required and must be a string' };
   }
@@ -45,9 +42,7 @@ export function validateNlpRequest(data: unknown): ValidationResult {
     };
   }
 
-  // Validate task-specific options
   if (requestData.options) {
-    // Summarization options
     if (requestData.task === 'summarize') {
       const { maxLength, minLength } = requestData.options;
       
@@ -74,7 +69,6 @@ export function validateNlpRequest(data: unknown): ValidationResult {
       }
     }
     
-    // Classification options
     if (requestData.task === 'classify') {
       const { categories } = requestData.options;
       
@@ -93,7 +87,6 @@ export function validateNlpRequest(data: unknown): ValidationResult {
       }
     }
     
-    // Keyword extraction options
     if (requestData.task === 'extract-keywords') {
       const { keywordCount } = requestData.options;
       
