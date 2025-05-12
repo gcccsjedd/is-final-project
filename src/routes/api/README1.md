@@ -1,4 +1,6 @@
 
+PAJARO,ROESCEN ABIE S.
+(API developer, documentation lead, Git workflow manager)
 
 ##### bun --bun run dev
 
