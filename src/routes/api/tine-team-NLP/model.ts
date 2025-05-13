@@ -20,7 +20,7 @@ Do NOT include any explanation. Only return the JSON.`;
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
-			model: "llama2",
+			model: "llama2:7b",
 			prompt,
 			stream: false,
 		}),
