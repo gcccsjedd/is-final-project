@@ -2,6 +2,8 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import OpenAI from "openai";
 import type { Project, TechStackAdvice } from "../../../types";
+import { validateProject } from "$lib/validate";
+
 
 //api key
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
@@ -18,8 +20,20 @@ const openai = new OpenAI({
 export const POST: RequestHandler = async ({ request }) => {
 	try {
 		const body: Project = await request.json();
-		const { name, type, teamSize, requirements } = body;
+		
+		// Validate the request body
+		const validation = validateProject(body);
+		if (!validation.valid) {
+			return json(
+				{ 
+					error: "Validation failed", 
+					details: validation.errors 
+				}, 
+				{ status: 400 }
+			);
+		}
 
+		const { name, type, teamSize, requirements } = body;
 		const prompt = `As a tech stack advisor, recommend appropriate technologies for the following project:
 		Project Name: ${name}
 		Project Type: ${type}
