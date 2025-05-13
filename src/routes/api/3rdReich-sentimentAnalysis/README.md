@@ -131,7 +131,7 @@ The detailed response provides:
 #### Example Request
 
 ```http
-GET /api/3rdReich-sentiment HTTP/1.1
+GET /api/3rdReich-sentimentAnalysis HTTP/1.1
 ```
 
 #### Success Response
@@ -246,36 +246,3 @@ response = requests.post(url, data=json.dumps(payload), headers=headers)
 print(response.json())
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **Model Not Found**:
-   - Error: `"No DeepSeek model available. Please install a DeepSeek model with Ollama."`
-   - Solution: Run `ollama pull deepseek:r1-7b` or check that Ollama is running
-
-2. **Request Timeout**:
-   - Symptom: Request hangs or times out
-   - Solution: For long text inputs, the model might take longer to process. Consider using shorter text or increasing your client timeout.
-
-3. **Invalid JSON Response**:
-   - Error: `"The model didn't return valid JSON. Please try again."`
-   - Solution: This can occasionally happen with complex text. Try again or use `detailed: false` for more reliable responses.
-
-4. **Ollama Connection Error**:
-   - Symptom: `"Failed to connect to Ollama service"`
-   - Solution: Ensure Ollama is running with `ollama serve` command
-
-## Performance Considerations
-
-- **Response Time**: Typically 1-5 seconds depending on text length and system resources
-- **Concurrent Requests**: The API can handle multiple concurrent requests, limited by Ollama's capabilities
-- **Text Length**: Performance degrades with very long texts (>1000 characters)
-- **Memory Usage**: Higher for detailed analysis and longer texts
-
-## Security Considerations
-
-- This API does not store or log analyzed text
-- No authentication is required by default (implement based on your needs)
-- Rate limiting should be implemented at the application level
-- Consider additional validation for production use
