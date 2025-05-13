@@ -17,7 +17,7 @@ This API utilizes state-of-the-art NLP techniques to analyze the emotional tone 
 
 - **Framework**: SvelteKit (backend API routes)
 - **Language**: TypeScript
-- **AI Model**: DeepSeek (any variant, including r1-7b)
+- **AI Model**: DeepSeek (any variant, in use r1-7b)
 - **Model Interface**: Ollama
 - **Response Format**: JSON
 
@@ -27,7 +27,7 @@ This API utilizes state-of-the-art NLP techniques to analyze the emotional tone 
    - Download from: [https://ollama.ai/](https://ollama.ai/)
 
 2. **DeepSeek Model**: Must be pulled into Ollama
-   - Install with: `ollama pull deepseek:r1-7b` (or any DeepSeek variant)
+   - Install with: `ollama run deepseek:r1-7b` (or any DeepSeek variant)
 
 3. **System Requirements**:
    - At least 8GB RAM (16GB recommended for better performance)
@@ -50,7 +50,7 @@ The API accepts JSON input with the following parameters:
 #### Example Request
 
 ```http
-POST /api/3rdReich-sentimentAnalysis HTTP/1.1
+POST http://localhost:5173/api/3rdReich-sentimentAnalysis/ HTTP/1.1
 Content-Type: application/json
 
 {
@@ -60,6 +60,25 @@ Content-Type: application/json
 ```
 
 #### Success Responses
+
+```json
+{
+    "result": {
+        "sentiment": "positive",
+        "score": 0.95,
+        "key_phrases": [
+            "enjoyed",
+            "plot",
+            "engaging",
+            "characters",
+            "well developed"
+        ],
+        "analysis": "The sentiment is positive as the user explicitly states they enjoyed the movie and found the plot and characters to be engaging and well-developed."
+    },
+    "model": "deepseek-r1:7b",
+    "text": "I really enjoyed the movie. The plot was engaging and the characters were well developed."
+}
+```
 
 ##### Standard Response (detailed=false)
 
@@ -83,14 +102,20 @@ Where:
 
 ```json
 {
-  "result": {
-    "sentiment": "positive",
-    "score": 0.92,
-    "key_phrases": ["really enjoyed", "engaging", "well developed"],
-    "analysis": "The text shows strong positive sentiment with emphasizing words like 'really' and appreciative adjectives like 'engaging' and 'well developed'. There are no negative phrases or qualifiers."
-  },
-  "model": "deepseek:r1-7b",
-  "text": "I really enjoyed the movie. The plot was engaging and the characters were well developed."
+    "result": {
+        "sentiment": "positive",
+        "score": 0.95,
+        "key_phrases": [
+            "enjoyed",
+            "plot",
+            "engaging",
+            "characters",
+            "well developed"
+        ],
+        "analysis": "The sentiment of this text is positive because it contains multiple phrases that convey enthusiasm and appreciation for the movie. The words 'enjoyed' indicates a strong positive feeling, while 'plot was engaging' and 'characters were well developed' suggest a positive evaluation of both the storyline and character development."
+    },
+    "model": "deepseek-r1:7b",
+    "text": "I really enjoyed the movie. The plot was engaging and the characters were well developed."
 }
 ```
 
@@ -186,8 +211,6 @@ Invalid model response:
 
 ## Code Examples
 
-
-
 ### JavaScript (Fetch)
 
 ```javascript
@@ -256,4 +279,3 @@ print(response.json())
 - No authentication is required by default (implement based on your needs)
 - Rate limiting should be implemented at the application level
 - Consider additional validation for production use
-
