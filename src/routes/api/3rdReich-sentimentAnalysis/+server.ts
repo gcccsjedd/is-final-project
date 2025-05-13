@@ -88,7 +88,6 @@ async function findDeepSeekModel(): Promise<string | null> {
         
         // Possible model variations
         const modelOptions = [
-            'deepseek:r1-7b',
             'deepseek-r1-7b',
             'deepseek-coder:7b-instruct-q4_0',
             'deepseek:latest'
