@@ -106,7 +106,7 @@ The detailed response provides:
 #### Example Request
 
 ```http
-GET /api/3rdReich-sentimentAnalysis HTTP/1.1
+GET /api/3rdReich-sentiment HTTP/1.1
 ```
 
 #### Success Response
@@ -186,13 +186,7 @@ Invalid model response:
 
 ## Code Examples
 
-### cURL
 
-```bash
-curl -X POST https://your-domain.com/api/3rdReich-sentimentAnalysis \
-  -H "Content-Type: application/json" \
-  -d '{"text":"I really enjoyed the movie. The plot was engaging and the characters were well developed.","detailed":false}'
-```
 
 ### JavaScript (Fetch)
 
@@ -218,7 +212,7 @@ fetch('/api/3rdReich-sentimentAnalysis', {
 import requests
 import json
 
-url = "https://your-domain.com/api/3rdReich-sentimentAnalysis"
+url = "https://your-domain.com/api/3rdReich-sentiment"
 payload = {
     "text": "I really enjoyed the movie. The plot was engaging and the characters were well developed.",
     "detailed": True
@@ -263,8 +257,3 @@ print(response.json())
 - Rate limiting should be implemented at the application level
 - Consider additional validation for production use
 
-## License and Attribution
-
-When using this API in your projects, please provide appropriate attribution:
-
-"Sentiment Analysis powered by 3rdReich-sentiment API using DeepSeek language model."
