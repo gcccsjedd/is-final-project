@@ -13,10 +13,10 @@ export const POST: RequestHandler = async ({ request }) => {
 	// and not hardcoded in the codebase
 
 	// para d ka na po sir gumawa ng api key
-	//  "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"
+	//  "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"
 
 	const client = new Groq({
-		apiKey: process.env.GROQ_API_KEY || "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",
+		apiKey: process.env.GROQ_API_KEY,
 	});
 
 	try {
