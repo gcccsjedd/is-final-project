@@ -27,16 +27,26 @@ export const POST: RequestHandler = async ({ request }) => {
         const ollamaPrompt = `Rank these tasks based on urgency, importance, and deadlines:\n${JSON.stringify(sortedTasks)}
         Provide reasoning behind each priority level and suggest potential improvements.`;
 
-        // Call Ollama AI with Model Specification
+        // 🔹 Call Ollama AI with Model Specification
         const ollamaResponse = await new Ollama().generate({ model: ollamaModel, prompt: ollamaPrompt });
 
-        // 🔹 Regex Processing - Remove extra `<think>` blocks except the last one
-        const cleanResponse = String(ollamaResponse).replace(/<think>[\s\S]*?<\/think>/g, (match, offset, str) => {
-            const occurrences = str.match(/<think>[\s\S]*?<\/think>/g);
-            return occurrences && offset === str.lastIndexOf(occurrences[occurrences.length - 1]) ? match : "";
-        }).trim();
+        if (!ollamaResponse || !ollamaResponse.response) {
+            return json({ error: "Ollama returned an empty response." }, { status: 500 });
+        }
 
-        return json({ prioritized_tasks: sortedTasks, ollama_analysis: cleanResponse }, { status: 200 });
+        // 🔹 Convert Ollama response to a clean string
+        const ollamaAnalysisString = typeof ollamaResponse.response === "object"
+            ? JSON.stringify(ollamaResponse.response, null, 2) // Converts object to formatted JSON string
+            : ollamaResponse.response.toString().trim(); // Converts raw text to string
+
+        // 🔹 Regex Cleanup for `<think>` Blocks
+        const cleanResponse = ollamaAnalysisString.replace(/^[\s\S]*<\/think>(?![\s\S]*<\/think>)/g, '').trim();
+
+        return json({
+            prioritized_tasks: sortedTasks,
+            ollama_analysis: cleanResponse // 🔹 Now properly formatted as a string
+        }, { status: 200 });
+
 
     } catch (error) {
         console.error("Error processing task prioritization:", error);
