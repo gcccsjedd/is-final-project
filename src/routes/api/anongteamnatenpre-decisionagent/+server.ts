@@ -20,8 +20,8 @@ export const POST: RequestHandler = async ({ request }) => {
         // Sort tasks
         const sortedTasks = sortTasks(tasks);
 
-        // Specify Ollama AI model
-        const ollamaModel = "mistral";
+        // 🔹 AI Model Configuration (DeepSeek-R1 7B)
+        const ollamaModel = "deepseek-r1:7b"; // Ensure correct model tag
 
         // AI Prompt Refinement
         const ollamaPrompt = `Rank these tasks based on urgency, importance, and deadlines:\n${JSON.stringify(sortedTasks)}
