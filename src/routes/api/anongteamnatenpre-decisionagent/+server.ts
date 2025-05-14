@@ -30,7 +30,13 @@ export const POST: RequestHandler = async ({ request }) => {
         // Call Ollama AI with Model Specification
         const ollamaResponse = await new Ollama().generate({ model: ollamaModel, prompt: ollamaPrompt });
 
-        return json({ prioritized_tasks: sortedTasks, ollama_analysis: ollamaResponse }, { status: 200 });
+        // 🔹 Regex Processing - Remove extra `<think>` blocks except the last one
+        const cleanResponse = String(ollamaResponse).replace(/<think>[\s\S]*?<\/think>/g, (match, offset, str) => {
+            const occurrences = str.match(/<think>[\s\S]*?<\/think>/g);
+            return occurrences && offset === str.lastIndexOf(occurrences[occurrences.length - 1]) ? match : "";
+        }).trim();
+
+        return json({ prioritized_tasks: sortedTasks, ollama_analysis: cleanResponse }, { status: 200 });
 
     } catch (error) {
         console.error("Error processing task prioritization:", error);
