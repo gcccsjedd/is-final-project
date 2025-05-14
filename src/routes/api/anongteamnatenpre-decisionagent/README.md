@@ -1,3 +1,9 @@
+Team Member: 
+API developer : Janzen Egnisaban
+Documentation lead : Anthony Alfred Almenario
+Git workflow manager : Henric Matthew Del Rosario
+
+
 🧠 Decision-Making AI Agent - Task Prioritization API
 📌 Overview
 The Task Prioritization API intelligently ranks tasks based on urgency, deadlines, and importance using AI-assisted reasoning via DeepSeek-R1 7B. This ensures better task management and decision-making efficiency.
