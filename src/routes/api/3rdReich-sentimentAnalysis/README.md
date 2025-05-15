@@ -229,20 +229,3 @@ fetch('/api/3rdReich-sentimentAnalysis', {
 .catch(error => console.error('Error:', error));
 ```
 
-### Python (Requests)
-
-```python
-import requests
-import json
-
-url = "https://your-domain.com/api/3rdReich-sentiment"
-payload = {
-    "text": "I really enjoyed the movie. The plot was engaging and the characters were well developed.",
-    "detailed": True
-}
-headers = {"Content-Type": "application/json"}
-
-response = requests.post(url, data=json.dumps(payload), headers=headers)
-print(response.json())
-```
-
