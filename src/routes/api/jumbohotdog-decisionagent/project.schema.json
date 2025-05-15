@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project",
+  "type": "object",
+  "required": ["name", "type", "teamSize", "requirements"],
+  "properties": {
+    "name": { "type": "string" },
+    "type": { "type": "string" },
+    "teamSize": { "type": "integer", "minimum": 1 },
+    "requirements": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": false
+}
