@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Storytelling AI Input Schema",
+  "description": "Schema for validating input to the image-based storytelling AI API",
+  "type": "object",
+  "required": ["image64Url", "tags"],
+  "properties": {
+    "image64Url": {
+      "type": "string",
+      "description": "Base64 encoded image that will serve as the inspiration for the story",
+      "minLength": 1
+    },
+    "tags": {
+      "type": "array",
+      "description": "Array of tags/themes to include in the generated story",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "image64Url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...",
+      "tags": ["adventure", "mystery", "fantasy"]
+    }
+  ]
+} 
