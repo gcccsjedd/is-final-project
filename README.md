@@ -1,114 +1,94 @@
-# Theoretical General AI Approach - Final Project
+# Storytelling AI API
 
-## Project Overview
-This project involves collaborating in a GitHub repository using the Svelte, Bun, and Ollama tech stack to develop an AI agent that simulates aspects of a theoretical General AI approach. Teams will design and implement a functional API that integrates with the repository.
+## API Information
+- **Endpoint:** `/api/Supercalifragilisticexpialidocious-ImageProcessing`
+- **HTTP Method:** POST
 
-## Learning Objectives
-By completing this project, you will:
-- Work collaboratively in a Git-based development workflow (branching, pull requests, merging)
-- Design and implement an AI-driven API that processes inputs and returns meaningful outputs
-- Document API usage, including expected inputs, outputs, and error handling
-- Simulate an AI agent within a larger AI system
+## Description
+This API generates creative stories based on a base64-encoded image and user-provided tags. The AI analyzes the visual content of the image and incorporates the specified thematic elements to craft an engaging narrative complete with a title.
 
-## Project Requirements
+## Input Parameters
+The API accepts JSON data with the following parameters:
 
-### 1. Team Formation
-- Form a team of 3 members
-- Assign roles (API developer, documentation lead, Git workflow manager)
+| Parameter | Type | Description | Required |
+|-----------|------|-------------|----------|
+| `image64Url` | string | Base64-encoded image that serves as the visual inspiration for the story | Yes |
+| `tags` | array of strings | Thematic elements or keywords to incorporate into the story | Yes |
 
-### 2. AI Agent Development
-Develop one functional API that integrates with the provided repository. Choose one of the following agent types:
-- Natural Language Processing (NLP) (e.g., text summarization, sentiment analysis)
-- Image Generation (e.g., Stable Diffusion via Ollama)
-- Image Processing (e.g., object detection, filters)
-- Decision-Making Agent (e.g., rule-based or LLM-driven reasoning)
+## Output Format
+The API returns a streaming text response containing the generated story. The response is delivered incrementally as content is generated.
 
-### 3. Documentation
-Include a README.md in your branch with:
-- API endpoint and expected HTTP method (GET/POST)
-- Input parameters (JSON/query params/form data)
-- Output format (JSON, image, text)
-- Example request/response
-- Error handling (possible failure cases) or troubleshooting guide.
+## Example Request
+```json
+POST /api/Supercalifragilisticexpialidocious-ImageProcessing
+Content-Type: application/json
 
-### 4. Folder Structure & Naming Convention
-- All API-related files must be placed under `src/routes/api`.
-- Name your folder in the format: `src/routes/api/[team-name]-[ai-agent]` (e.g. `src/routes/api/team-alpha-imagegen`)
-- The folder must contain the following:
-  - API implementation files.
-  - A README.md documenting the API.
-  - The JSON Schema for input validation.
-
-### 5. Git Workflow
-- Branch out from main and develop your feature in a new branch
-- Submit a Pull Request (PR) for review before merging
-- No direct commits to main - all changes must go through PRs
-- **Add the instructor (@gcccsjedd) as a reviewer** to your Pull Request.
-
-### 6. Demo & Presentation
-- Demo Dates: May 14–23, 2025
-- Prepare a 5-minute live demo showcasing:
-  - API functionality (input/output demonstration)
-  - Explanation of your AI agent's design
-  - Challenges faced & lessons learned
-
-## Submission Guidelines
-1. Clone the provided repository and set up your team's workspace
-2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
-3. Submit a Pull Request (PR) by May 14, 2025 (11:59 PM) with:
-   - Working API code
-   - Documentation (README + JSON Schema)
-   - A list of contributions per member
-   - Add **@gcccsjedd** as a reviewer to your Pull Request before submission.
-
-## Grading Criteria
-1. Functional API
-2. Git Collaboration
-3. Documentation & Schema
-4. Demo & Presentation
-5. Code Quality & Readability
-
-## Important Notes
-- No submission = Incomplete grade in Finals
-- Late submissions will incur a 10% deduction per day
-- Plagiarism or using pre-built APIs without modification will result in zero marks
-- Failure to add @gcccsjedd as a reviewer to your PR will result in a 10% penalty.
-
-# sv
-
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+{
+  "image64Url": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD...",
+  "tags": ["adventure", "mystery", "fantasy"]
+}
 ```
 
-## Developing
+## Example Response
+```
+THE ENCHANTED FOREST
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Deep within the emerald heart of the Whispering Woods, where sunlight filtered through ancient trees in dappled patterns, young Elara discovered a hidden door carved into the trunk of a massive oak.
 
-```bash
-npm run dev
+The door, adorned with intricate symbols that seemed to shift when not directly observed, had appeared after a peculiar storm that had raged for three days and three nights.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+"There are mysteries in these woods older than time itself," her grandmother had warned her. But curiosity, as it often does, overcame caution.
+
+As Elara placed her palm against the weathered wood, the symbols glowed with an ethereal blue light, and the door swung open silently. Beyond lay not the hollow interior of a tree, but a vast chamber filled with floating orbs of light and pathways that seemed to lead in impossible directions.
+
+A small, leather-bound journal lay on a stone pedestal nearby, its pages filled with maps to realms beyond imagination and warnings of shadows that hungered for light.
+
+Elara had only taken three steps into this impossible place when the door closed behind her, and she realized that finding her way home would be just the beginning of her adventure.
+
+What she didn't yet know was that the forest had chosen her for a reason, and the fate of both worlds now rested on her shoulders.
 ```
 
-## Building
+## Error Handling
 
-To create a production version of your app:
+The API may return the following error responses:
 
-```bash
-npm run build
+### 400 Bad Request
+Returned when the input data fails validation.
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "path": "image64Url",
+      "message": "Image data is required"
+    }
+  ]
+}
 ```
 
-You can preview the production build with `npm run preview`.
+### 500 Internal Server Error
+Returned when the API encounters an unexpected error during story generation.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```json
+{
+  "error": "Failed to process image"
+}
+```
+
+## Troubleshooting Guide
+
+1. **Invalid Image Format**: Ensure the base64 image string includes the MIME type prefix (e.g., `data:image/jpeg;base64,`)
+2. **Empty or Invalid Tags Array**: The tags array must contain at least one string element
+3. **Large Image Size**: If the API times out, try using a smaller image (under 10MB after base64 encoding)
+4. **Connection Issues**: For streaming responses, ensure your client supports chunked transfer encoding
+5. **Model Unavailability**: The API relies on the LLaVa model running on Ollama. If the model is not available, the API will return a 500 error
+
+## Technical Implementation
+- This API utilizes the LLaVa model via Ollama for image understanding and story generation
+- Input validation is performed using Zod
+- Response is delivered as a stream for real-time content delivery
+
+## Dependencies
+- Ollama with LLaVa model for multimodal (text+image) processing
+- Zod for schema validation and error handling 
