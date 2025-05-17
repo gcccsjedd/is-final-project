@@ -58,6 +58,10 @@ url: http://localhost:5173/api/AegisX-nlp?text=Do%20you%20still%20love%20me..%3F
 - Json parsing failure
 - Confidence value is out of bounds
 
+If it does not work, consider using a different model.
+- ollama pull deepseek-r1:1.5b
+- change the MODEL_NAME to "deepseek-r1:1.5b"
+
 `503 Error`
 - Ollama service not running
 - Model not downloaded/loaded
