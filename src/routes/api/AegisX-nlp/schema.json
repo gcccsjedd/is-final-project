@@ -1,0 +1,16 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Sentiment Analysis Input",
+    "description": "Schema for validating sentiment analysis requests",
+    "type": "object",
+    "properties": {
+        "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "description": "Text to analyze for sentiment"
+        }
+    },
+    "required": ["text"],
+    "additionalProperties": false
+}
