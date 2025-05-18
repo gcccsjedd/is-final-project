@@ -6,21 +6,22 @@ export async function analyzeText(text: string) {
 Respond ONLY with a valid JSON object like this:
 
 {
-  "sentiment": "positive | negative | neutral",
-  "emotion": "joy | sadness | anger | fear | surprise | disgust",
+  "sentiment": "positive" | "negative" | "neutral",
+  "emotion": "joy" | "sadness" | "anger" | "fear" | "surprise" | "disgust",
   "confidence": {
     "sentiment": float (0-1),
     "emotion": float (0-1)
   }
 }
 
+The "sentiment" and "emotion" fields MUST be strings as shown above.
 Do NOT include any explanation. Only return the JSON.`;
 
 	const response = await fetch("http://localhost:11434/api/generate", {
 		method: "POST",
 		headers: { "Content-Type": "application/json" },
 		body: JSON.stringify({
-			model: "llama2:7b",
+			model: "deepseek-r1:1.5b",
 			prompt,
 			stream: false,
 		}),
@@ -33,6 +34,7 @@ Do NOT include any explanation. Only return the JSON.`;
 	}
 
 	const result = await response.json();
-	const parsed = JSON.parse(result.response.trim());
+	const parsed = JSON.parse(result.response.replace(/^[\s\S]*<\/think>(?![\s\S]*<\/think>)/g, "").trim());
+
 	return parsed;
 }
