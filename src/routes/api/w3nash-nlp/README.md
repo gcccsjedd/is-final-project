@@ -16,7 +16,6 @@ The API accepts JSON data in the request body with the following structure:
   "operation": "one-of-supported-operations",
   "options": {
     "maxLength": 200,
-    "format": "json",
     "detailLevel": "basic"
   }
 }
@@ -33,7 +32,6 @@ The API accepts JSON data in the request body with the following structure:
 ### Optional Fields
 - `options`: Object - Additional configuration options
   - `maxLength`: Number - Maximum length for summarization (default: 30% of original)
-  - `format`: String - Output format, either 'json' or 'text' (default: 'json')
   - `detailLevel`: String - Detail level for analysis, either 'basic' or 'detailed' (default: 'basic')
 
 ## Output Format
@@ -54,7 +52,7 @@ The API returns JSON responses with different structures based on the requested 
   "sentiment": "positive",
   "score": 0.75,
   "confidence": 0.85,
-  "analysis": "The text contains predominantly positive language..." 
+  "analysis": "The text contains predominantly positive language..."
 }
 ```
 
@@ -282,9 +280,7 @@ The API is built using the following technologies:
    ollama pull llama3
    ```
 
-3. For parsing errors in responses, try using the 'text' format option instead of 'json'
-
-4. If experiencing type errors, verify that all dependencies are correctly installed:
+3. If experiencing type errors, verify that all dependencies are correctly installed:
    ```bash
    bun add ai ollama-ai-provider zod
    ```
