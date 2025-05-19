@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {
+        "playerChampion": { "type": "string" },
+        "laneOpponent": { "type": "string" },
+        "enemyTeam": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 5,
+            "maxItems": 5
+        }
+    },
+    "required": ["playerChampion", "laneOpponent", "enemyTeam"],
+    "additionalProperties": false
+}
