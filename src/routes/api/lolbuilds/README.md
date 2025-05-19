@@ -1,7 +1,7 @@
 # lolbuilds API
 
 ## Overview
-This API uses the Groq AI model to recommend an item build for a League of Legends champion based on the player's chosen champion and the enemy team composition.
+This API uses the Groq AI model with data from League of Legends Champions and items to recommend an item build for a League of Legends champion based on the player's chosen champion and the enemy team composition.
 
 ## Endpoint
 - **URL**: `/api/lolbuilds`
