@@ -30,6 +30,7 @@ interface DataDragonData {
     validChampions: string;
     validItems: string;
     validItemNames: Set<string>;
+    validBoots: string[];
 }
 
 interface ChampionData {
@@ -71,11 +72,34 @@ async function loadDataDragonData(): Promise<DataDragonData> {
         .map((item: ItemData) => item.name);
     const validItems = validItemNamesList.join(', ');
     const validItemNames = new Set(validItemNamesList.map(name => name.toLowerCase().replace(/['"]/g, '')));
-    return { validChampions, validItems, validItemNames };
+    const validBoots = validItemNamesList.filter(item => item.toLowerCase().includes('boots'));
+    return { validChampions, validItems, validItemNames, validBoots };
 }
 
 function normalizeItemName(name: string): string {
     return name.toLowerCase().replace(/['"]/g, '').trim();
+}
+
+function selectRecommendedBoots(playerTags: string[], enemyTeamInfo: EnemyTeamInfo[]): string {
+    const isMage = playerTags.includes('Mage');
+    const isMarksman = playerTags.includes('Marksman');
+    const isSupport = playerTags.includes('Support');
+    const isTank = playerTags.includes('Tank');
+    const isFighter = playerTags.includes('Fighter') || playerTags.includes('Bruiser');
+    const hasHeavyAP = enemyTeamInfo.filter(info => info.tags.includes('Mage') || info.tags.includes('Support')).length >= 3;
+    const hasHeavyCC = enemyTeamInfo.some(info => info.tags.includes('Support') || info.champion.toLowerCase() === 'ahri');
+    const hasSlows = enemyTeamInfo.some(info => info.tags.includes('Support') || info.champion.toLowerCase() === 'lulu');
+
+    if (isMage) return 'Sorcerer\'s Shoes';
+    if (isMarksman) return 'Berserker\'s Greaves';
+    if (isSupport && !isMage) return 'Ionian Boots of Lucidity';
+    if (isFighter || isTank || playerTags.includes('Bruiser')) return 'Plated Steelcaps';
+
+    // Situational boots
+    if (hasHeavyAP || hasHeavyCC) return 'Mercury\'s Treads';
+    if (isSupport && enemyTeamInfo.length > 1) return 'Symbiotic Soles'; // Rare case for roaming supports
+
+    return 'Plated Steelcaps'; // Default fallback
 }
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -93,7 +117,7 @@ export const POST: RequestHandler = async ({ request }) => {
         }
 
         // Load Data Dragon data
-        const { validChampions, validItems, validItemNames } = await loadDataDragonData();
+        const { validChampions, validItems, validItemNames, validBoots } = await loadDataDragonData();
 
         // Validate player champion, enemy team, and lane opponent against Data Dragon
         const champions = validChampions.split(', ').map(champ => champ.toLowerCase());
@@ -120,8 +144,10 @@ export const POST: RequestHandler = async ({ request }) => {
             return { champion: champ, tags };
         });
 
+        const recommendedBoots = selectRecommendedBoots(playerChampionTags, enemyTeamInfo);
+
         // Prepare prompt for Groq with Data Dragon context, champion tags, and lane opponent
-        const prompt = `You are a League of Legends build expert. Valid champions are: ${validChampions}. Valid items are: ${validItems}. For the player champion "${playerChampion}" with tags "${playerChampionTags}" facing a lane opponent "${laneOpponent}" with tags "${laneOpponentTags}" and an enemy team of ${enemyTeamInfo.map((info: EnemyTeamInfo) => `${info.champion} (${info.tags})`).join(', ')}, provide a detailed build recommendation. Prioritize countering the lane opponent while also considering the overall enemy team composition. Return ONLY a valid JSON object with the following structure: 
+        const prompt = `You are a League of Legends build expert. Valid champions are: ${validChampions}. Valid items are: ${validItems}. Valid boots are: ${validBoots}. For the player champion "${playerChampion}" with tags "${playerChampionTags}" facing a lane opponent "${laneOpponent}" with tags "${laneOpponentTags}" and an enemy team of ${enemyTeamInfo.map((info: EnemyTeamInfo) => `${info.champion} (${info.tags})`).join(', ')}, provide a detailed build recommendation. Prioritize countering the lane opponent while also considering the overall enemy team composition. The Boots of Swiftness should not be recommended for the player champion unless it's a Jhin, but the Boots of Swiftness could be placed in the situational builds. Return ONLY a valid JSON object with the following structure: 
         {
             "recommendedBuild": ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6"],
             "explanation": {
@@ -140,9 +166,15 @@ export const POST: RequestHandler = async ({ request }) => {
                 "earlyGame": "Steps for early game (items and strategy)",
                 "midGame": "Steps for mid game (items and strategy)",
                 "lateGame": "Steps for late game (items and strategy)"
+            },
+            "tips": {
+                "laning": "Specific tips for laning against the opponent",
+                "trading": "How to trade effectively in lane",
+                "powerspikes": "When to look for all-ins or aggressive plays",
+                "defensive": "How to play defensively when needed"
             }
         }
-        The "recommendedBuild" must contain exactly 6 items from the valid items list, including one completed boots item. Ensure that they're all completed items that cost more than 2000 gold, except for a completed boots item which costs lower than 2000 gold. The "alternativeBuilds" must also contain valid items. Use the champion tags to inform item choices (e.g., Fighters may need Health and Attack Damage, Mages need Ability Power). Prioritize items that counter the lane opponent's tags (e.g., Armor against Fighters, Magic Resist against Mages). Do not include any text outside the JSON object.`;
+        The "recommendedBuild" must contain exactly 6 items from the valid items list, including one completed boots item. Ensure that they're all completed items that cost more than 2000 gold, except for a completed boots item which costs lower than 2000 gold. Do not recommend Doran's items. The "alternativeBuilds" must also contain valid items. Use the champion tags to inform item choices (e.g., Fighters may need Health and Attack Damage, Mages need Ability Power). Prioritize items that counter the lane opponent's tags (e.g., Armor against Fighters, Magic Resist against Mages).Ensure that marksman do not build AP items, except for Kaisa and Kog'Maw. Do not include any text outside the JSON object.`;
 
         // Call Groq API
         const response = await fetch(GROQ_API_URL, {
