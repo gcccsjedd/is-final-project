@@ -26,7 +26,7 @@ npm run dev -- --open
 
 ### API Endpoint and HTTP Method
 
-POST /api/team-Infernet/translate
+POST /api/team-InferNet/translate
 
 - Method: POST
 - Content-Type: application/json
