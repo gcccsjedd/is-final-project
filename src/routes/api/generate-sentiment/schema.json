@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "required": ["text"],
+  "properties": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 5000,
+      "description": "The text to analyze for sentiment"
+    }
+  },
+  "additionalProperties": false
+}
