@@ -17,7 +17,7 @@
 ### Documentation
   # API endpoint and expected HTTP method (GET/POST) (API Route starts with "/api")
 
-  .env
+  #.env
     GENAI_API_KEY = "AIzaSyBES7EKUdjKQza2BbC6dENL9EWNlO_B9Ro"
     SUPABASE_URL = "https://kqmepdljhtucgkxwfsdu.supabase.co"
     SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxbWVwZGxqaHR1Y2dreHdmc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MTEwMDQsImV4cCI6MjA2MzI4NzAwNH0.X-mCTVN6v3CJkpwq4dBoe27j_3mz2-V6QB0y0gcCvjQ"
