@@ -125,15 +125,16 @@ function analyzeEnemyTeam(enemyTeam: EnemyTeam[]): { roleCount: Record<string, n
     return { roleCount, tagCount };
 }
 
+// ...existing code...
 async function suggestTeamComposition(enemyTeam: EnemyTeam[]): Promise<{ team: string[]; teamUp: string; explanation: string }> {
     const allHeroes = await getAllHeroes();
     const { roleCount, tagCount } = analyzeEnemyTeam(enemyTeam);
 
     // Counter rules based on enemy composition
     const counters: Record<string, string[]> = {
-        Vanguard: ['Duelist', 'Strategist'], // Counter tanks with damage and support
-        Duelist: ['Vanguard', 'Strategist'], // Counter damage with tanks and heals
-        Strategist: ['Duelist', 'Vanguard'], // Counter healers with damage and disruption
+        Vanguard: ['Duelist', 'Strategist'],
+        Duelist: ['Vanguard', 'Strategist'],
+        Strategist: ['Duelist', 'Vanguard'],
     };
 
     const tagCounters: Record<string, string[]> = {
@@ -151,55 +152,134 @@ async function suggestTeamComposition(enemyTeam: EnemyTeam[]): Promise<{ team: s
     if (roleCount.Strategist > 1) neededRoles.push('Duelist');
     while (neededRoles.length < 4) neededRoles.push(Object.keys(counters)[Math.floor(Math.random() * 3)]);
 
-    // Select 6 heroes (2 Vanguards, 2 Duelists, 2 Strategists)
-    const team: string[] = [];
-    const roleDistribution = { Vanguard: 2, Duelist: 2, Strategist: 2 };
+    // Gather all team-up heroes (S and A tier, sorted by winRate descending)
+    const allTeamUps = [...teamuptierlist.S, ...teamuptierlist.A]
+        .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
 
-    for (const role of Object.keys(roleDistribution) as Array<keyof typeof roleDistribution>) {
-        const targetCount = roleDistribution[role];
-        let selected = 0;
-        // Pre-fetch stats and tiers for all candidates
-        const candidatesRaw = allHeroes.filter(h => h.role === role && !team.includes(h.name));
-        const candidatesWithStats = await Promise.all(
-            candidatesRaw.map(async (h) => {
-                const stats = await getHeroStats(h.name);
-                const tier = getHeroTier(h.name)?.tier || 'D';
-                return { hero: h, stats, tier };
-            })
-        );
-        // Sort synchronously
-        const sortedCandidates = candidatesWithStats.sort((a, b) => {
-            const winRateDiff = (b.stats.winRate || 0) - (a.stats.winRate || 0);
-            if (winRateDiff !== 0) return winRateDiff;
-            const tierOrder = ['S', 'A', 'B', 'C', 'D'];
-            return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);
-        });
-        let idx = 0;
-        while (selected < targetCount && idx < sortedCandidates.length) {
-            const hero = sortedCandidates[idx].hero;
-            team.push(hero.name);
-            selected++;
-            idx++;
+    // Try to build a team that maximizes high win rate team-ups
+    let bestTeam: string[] = [];
+    let bestTeamUp: string = 'None';
+    let bestTeamUpWinRate = 0;
+
+    for (const teamUp of allTeamUps) {
+        // Try to include as many heroes from the team-up as possible
+        const team: string[] = [];
+        const usedRoles = { Vanguard: 0, Duelist: 0, Strategist: 0 };
+
+        // Add primary hero if not already added and role limit not exceeded
+        const primaryHero = allHeroes.find(h => h.name === teamUp.primaryHero);
+        if (primaryHero && usedRoles[primaryHero.role as keyof typeof usedRoles] < 2) {
+            team.push(primaryHero.name);
+            usedRoles[primaryHero.role as keyof typeof usedRoles]++;
+        }
+
+        // Add secondary heroes
+        for (const secName of teamUp.secondaryHeroes) {
+            if (team.length >= 6) break;
+            const secHero = allHeroes.find(h => h.name === secName);
+            if (
+                secHero &&
+                !team.includes(secHero.name) &&
+                usedRoles[secHero.role as keyof typeof usedRoles] < 2
+            ) {
+                team.push(secHero.name);
+                usedRoles[secHero.role as keyof typeof usedRoles]++;
+            }
+        }
+
+        // Fill remaining slots with best available heroes by win rate and tier, respecting role limits
+        const roleDistribution = { Vanguard: 2, Duelist: 2, Strategist: 2 };
+        for (const role of Object.keys(roleDistribution) as Array<keyof typeof roleDistribution>) {
+            const needed = roleDistribution[role] - usedRoles[role];
+            if (needed > 0) {
+                const candidatesRaw = allHeroes.filter(h => h.role === role && !team.includes(h.name));
+                const candidatesWithStats = await Promise.all(
+                    candidatesRaw.map(async (h) => {
+                        const stats = await getHeroStats(h.name);
+                        const tier = getHeroTier(h.name)?.tier || 'D';
+                        return { hero: h, stats, tier };
+                    })
+                );
+                const sortedCandidates = candidatesWithStats.sort((a, b) => {
+                    const winRateDiff = (b.stats.winRate || 0) - (a.stats.winRate || 0);
+                    if (winRateDiff !== 0) return winRateDiff;
+                    const tierOrder = ['S', 'A', 'B', 'C', 'D'];
+                    return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);
+                });
+                let idx = 0;
+                let added = 0;
+                while (added < needed && idx < sortedCandidates.length && team.length < 6) {
+                    const hero = sortedCandidates[idx].hero;
+                    team.push(hero.name);
+                    usedRoles[role]++;
+                    added++;
+                    idx++;
+                }
+            }
+        }
+
+        // If we have a full team, and this team-up has a higher win rate, use it
+        if (team.length === 6 && parseFloat(teamUp.winRate) > bestTeamUpWinRate) {
+            bestTeam = team;
+            bestTeamUp = teamUp.teamUpName;
+            bestTeamUpWinRate = parseFloat(teamUp.winRate);
         }
     }
 
-    // Select team-up based on compatibility and countering
-    const teamUpOptions = teamuptierlist.S.concat(teamuptierlist.A).filter(tu =>
-        team.includes(tu.primaryHero) || tu.secondaryHeroes.some(h => team.includes(h))
-    ).sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
-    const teamUp = teamUpOptions.length > 0 ? teamUpOptions[0].teamUpName : 'None';
+    // Fallback: if no team-up could be formed, use original logic
+    if (bestTeam.length === 0) {
+        // Select 6 heroes (2 Vanguards, 2 Duelists, 2 Strategists)
+        const team: string[] = [];
+        const roleDistribution = { Vanguard: 2, Duelist: 2, Strategist: 2 };
+
+        for (const role of Object.keys(roleDistribution) as Array<keyof typeof roleDistribution>) {
+            const targetCount = roleDistribution[role];
+            let selected = 0;
+            const candidatesRaw = allHeroes.filter(h => h.role === role && !team.includes(h.name));
+            const candidatesWithStats = await Promise.all(
+                candidatesRaw.map(async (h) => {
+                    const stats = await getHeroStats(h.name);
+                    const tier = getHeroTier(h.name)?.tier || 'D';
+                    return { hero: h, stats, tier };
+                })
+            );
+            const sortedCandidates = candidatesWithStats.sort((a, b) => {
+                const winRateDiff = (b.stats.winRate || 0) - (a.stats.winRate || 0);
+                if (winRateDiff !== 0) return winRateDiff;
+                const tierOrder = ['S', 'A', 'B', 'C', 'D'];
+                return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);
+            });
+            let idx = 0;
+            while (selected < targetCount && idx < sortedCandidates.length) {
+                const hero = sortedCandidates[idx].hero;
+                team.push(hero.name);
+                selected++;
+                idx++;
+            }
+        }
+
+        // Select team-up based on compatibility and countering
+        const teamUpOptions = teamuptierlist.S.concat(teamuptierlist.A).filter(tu =>
+            team.includes(tu.primaryHero) || tu.secondaryHeroes.some(h => team.includes(h))
+        ).sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
+        const teamUp = teamUpOptions.length > 0 ? teamUpOptions[0].teamUpName : 'None';
+
+        bestTeam = team;
+        bestTeamUp = teamUp;
+    }
 
     // Generate explanation
     let explanation = 'Suggested team composition to counter enemy team:\n';
     explanation += `- Enemy has ${roleCount.Vanguard} Vanguards, ${roleCount.Duelist} Duelists, ${roleCount.Strategist} Strategists.\n`;
     explanation += `- Prioritized ${neededRoles.join(', ')} to counter enemy roles.\n`;
-    explanation += `- Team: ${team.join(', ')} with ${teamUp} team-up.\n`;
+    explanation += `- Team: ${bestTeam.join(', ')} with ${bestTeamUp} team-up.\n`;
     explanation += `- Counters: ${Object.entries(tagCount)
         .map(([tag, count]) => `${tag} x${count} countered with ${tagCounters[tag]?.join(' and ') || 'general strategy'}`)
         .join(', ')}.\n`;
 
-    return { team, teamUp, explanation };
+    return { team: bestTeam, teamUp: bestTeamUp, explanation };
 }
+// ...existing code...
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
