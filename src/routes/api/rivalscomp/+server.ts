@@ -1,23 +1,19 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import axios from 'axios';
-import herotierlist from './herotierlist.json' assert { type: 'json' };
-import teamuptierlist from './teamuptierlist.json' assert { type: 'json' };
-
-// Replace with your actual API key or load from environment
 import 'dotenv/config';
-const API_KEY = process.env.MARVEL_RIVALS_API_KEY || 'YOUR_API_KEY';
 
+// Type definitions
 interface Hero {
     name: string;
     role: string;
     tags: string[];
+    tier?: { tier: string; winRate: number };
+    teamUps?: TeamUp[];
 }
 
 interface HeroStats {
     winRate: number;
-    pickRate: number;
-    banRate: number;
 }
 
 interface TeamUp {
@@ -28,283 +24,327 @@ interface TeamUp {
     winRate: string;
 }
 
-interface EnemyTeam {
+interface HeroTierList {
+    S: Array<{ name: string; winRate: number }>;
+    A: Array<{ name: string; winRate: number }>;
+    B: Array<{ name: string; winRate: number }>;
+    C: Array<{ name: string; winRate: number }>;
+    D: Array<{ name: string; winRate: number }>;
+}
+
+interface TeamUpTierList {
+    S: TeamUp[];
+    A: TeamUp[];
+    B: TeamUp[];
+    C: TeamUp[];
+}
+
+interface HeroData {
     name: string;
-    role: string;
-    tags: string[];
+    abilities?: Record<string, any>;
+    strengths?: string[];
+    weaknesses?: string[];
+    playstyle?: string[];
 }
 
-async function getAllHeroes(): Promise<Hero[]> {
-    try {
-        const response = await axios.get('https://marvelrivalsapi.com/api/v1/heroes', {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_KEY
+interface HeroesData {
+    Vanguard: HeroData[];
+    Duelist: HeroData[];
+    Strategist: HeroData[];
+}
+
+// Load JSON data with type assertions
+import heroesDataJson from './heroes.json' assert { type: 'json' };
+const heroesData = heroesDataJson as HeroesData;
+import herotierlistJson from './herotierlist.json' assert { type: 'json' };
+const herotierlist = herotierlistJson as { heroTierList: HeroTierList };
+import teamuptierlistJson from './teamuptierlist.json' assert { type: 'json' };
+const teamuptierlist = teamuptierlistJson as { teamupTierList: TeamUpTierList };
+
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_API_KEY = process.env.GROQ_API_KEY || 'YOUR_GROQ_API_KEY';
+
+type HeroRole = 'Vanguard' | 'Duelist' | 'Strategist';
+
+function getHeroDetails(heroName: string): Hero {
+    const roles: HeroRole[] = ['Vanguard', 'Duelist', 'Strategist'];
+    
+    for (const role of roles) {
+        const hero = heroesData[role]?.find(h => h.name === heroName);
+        if (hero) {
+            const tags: string[] = [];
+            
+            if (hero.abilities) {
+                tags.push(...Object.keys(hero.abilities));
             }
-        });
-        return response.data;
-    } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            console.error('Error fetching all heroes:', error.response?.data || error.message);
-        } else {
-            console.error('Error fetching all heroes:', error instanceof Error ? error.message : String(error));
-        }
-        throw new Error('Failed to fetch heroes list');
-    }
-}
-
-async function getHeroDetails(heroName: string): Promise<Hero> {
-    try {
-        const response = await axios.get(`https://marvelrivalsapi.com/api/v1/heroes/hero/${encodeURIComponent(heroName)}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_KEY
+            
+            if (Array.isArray(hero.strengths)) {
+                tags.push(...hero.strengths);
             }
-        });
-        return response.data;
-    } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            console.error(`Error fetching details for ${heroName}:`, error.response?.data || error.message);
-        } else {
-            console.error(`Error fetching details for ${heroName}:`, error instanceof Error ? error.message : String(error));
-        }
-        throw new Error(`Failed to fetch details for ${heroName}`);
-    }
-}
-
-async function getHeroStats(heroName: string): Promise<HeroStats> {
-    try {
-        const response = await axios.get(`https://marvelrivalsapi.com/api/v1/heroes/hero/${encodeURIComponent(heroName)}/stats`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': API_KEY
+            
+            if (Array.isArray(hero.weaknesses)) {
+                tags.push(...hero.weaknesses);
             }
-        });
-        return response.data;
-    } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-            console.error(`Error fetching stats for ${heroName}:`, error.response?.data || error.message);
-        } else {
-            console.error(`Error fetching stats for ${heroName}:`, error instanceof Error ? error.message : String(error));
-        }
-        throw new Error(`Failed to fetch stats for ${heroName}`);
-    }
-}
 
-function getHeroTier(heroName: string): { tier: string; winRate: number } | null {
-    const tiers: Array<'S' | 'A' | 'B' | 'C' | 'D'> = ['S', 'A', 'B', 'C', 'D'];
-    for (const tier of tiers) {
-        const hero = herotierlist.heroTierList[tier].find((h: { name: string; winRate: number }) => h.name === heroName);
-        if (hero) return { tier, winRate: hero.winRate };
-    }
-    return null;
-}
-
-function getTeamUpTier(teamUpName: string): { tier: string; winRate: string } | null {
-    const tiers: Array<'S' | 'A' | 'B' | 'C'> = ['S', 'A', 'B', 'C'];
-    for (const tier of tiers) {
-        const teamUp = teamuptierlist[tier].find(t => t.teamUpName === teamUpName);
-        if (teamUp) return { tier, winRate: teamUp.winRate };
-    }
-    return null;
-}
-
-function analyzeEnemyTeam(enemyTeam: EnemyTeam[]): { roleCount: Record<string, number>; tagCount: Record<string, number> } {
-    const roleCount: Record<string, number> = { Vanguard: 0, Duelist: 0, Strategist: 0 };
-    const tagCount: Record<string, number> = {};
-
-    enemyTeam.forEach(hero => {
-        roleCount[hero.role]++;
-        if (Array.isArray(hero.tags)) {
-            hero.tags.forEach(tag => {
-                tagCount[tag] = (tagCount[tag] || 0) + 1;
-            });
-        }
-    });
-
-    return { roleCount, tagCount };
-}
-
-// ...existing code...
-async function suggestTeamComposition(enemyTeam: EnemyTeam[]): Promise<{ team: string[]; teamUp: string; explanation: string }> {
-    const allHeroes = await getAllHeroes();
-    const { roleCount, tagCount } = analyzeEnemyTeam(enemyTeam);
-
-    // Counter rules based on enemy composition
-    const counters: Record<string, string[]> = {
-        Vanguard: ['Duelist', 'Strategist'],
-        Duelist: ['Vanguard', 'Strategist'],
-        Strategist: ['Duelist', 'Vanguard'],
-    };
-
-    const tagCounters: Record<string, string[]> = {
-        'Tank': ['Damage', 'CrowdControl'],
-        'Damage': ['Tank', 'Heal'],
-        'Heal': ['Damage', 'Disrupt'],
-        'CrowdControl': ['Mobile', 'Tank'],
-        'Mobile': ['CrowdControl', 'Tank'],
-    };
-
-    // Prioritize roles to counter enemy
-    const neededRoles = [];
-    if (roleCount.Vanguard > 1) neededRoles.push('Duelist');
-    if (roleCount.Duelist > 1) neededRoles.push('Vanguard');
-    if (roleCount.Strategist > 1) neededRoles.push('Duelist');
-    while (neededRoles.length < 4) neededRoles.push(Object.keys(counters)[Math.floor(Math.random() * 3)]);
-
-    // Gather all team-up heroes (S and A tier, sorted by winRate descending)
-    const allTeamUps = [...teamuptierlist.S, ...teamuptierlist.A]
-        .sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
-
-    // Try to build a team that maximizes high win rate team-ups
-    let bestTeam: string[] = [];
-    let bestTeamUp: string = 'None';
-    let bestTeamUpWinRate = 0;
-
-    for (const teamUp of allTeamUps) {
-        // Try to include as many heroes from the team-up as possible
-        const team: string[] = [];
-        const usedRoles = { Vanguard: 0, Duelist: 0, Strategist: 0 };
-
-        // Add primary hero if not already added and role limit not exceeded
-        const primaryHero = allHeroes.find(h => h.name === teamUp.primaryHero);
-        if (primaryHero && usedRoles[primaryHero.role as keyof typeof usedRoles] < 2) {
-            team.push(primaryHero.name);
-            usedRoles[primaryHero.role as keyof typeof usedRoles]++;
-        }
-
-        // Add secondary heroes
-        for (const secName of teamUp.secondaryHeroes) {
-            if (team.length >= 6) break;
-            const secHero = allHeroes.find(h => h.name === secName);
-            if (
-                secHero &&
-                !team.includes(secHero.name) &&
-                usedRoles[secHero.role as keyof typeof usedRoles] < 2
-            ) {
-                team.push(secHero.name);
-                usedRoles[secHero.role as keyof typeof usedRoles]++;
-            }
-        }
-
-        // Fill remaining slots with best available heroes by win rate and tier, respecting role limits
-        const roleDistribution = { Vanguard: 2, Duelist: 2, Strategist: 2 };
-        for (const role of Object.keys(roleDistribution) as Array<keyof typeof roleDistribution>) {
-            const needed = roleDistribution[role] - usedRoles[role];
-            if (needed > 0) {
-                const candidatesRaw = allHeroes.filter(h => h.role === role && !team.includes(h.name));
-                const candidatesWithStats = await Promise.all(
-                    candidatesRaw.map(async (h) => {
-                        const stats = await getHeroStats(h.name);
-                        const tier = getHeroTier(h.name)?.tier || 'D';
-                        return { hero: h, stats, tier };
-                    })
-                );
-                const sortedCandidates = candidatesWithStats.sort((a, b) => {
-                    const winRateDiff = (b.stats.winRate || 0) - (a.stats.winRate || 0);
-                    if (winRateDiff !== 0) return winRateDiff;
-                    const tierOrder = ['S', 'A', 'B', 'C', 'D'];
-                    return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);
-                });
-                let idx = 0;
-                let added = 0;
-                while (added < needed && idx < sortedCandidates.length && team.length < 6) {
-                    const hero = sortedCandidates[idx].hero;
-                    team.push(hero.name);
-                    usedRoles[role]++;
-                    added++;
-                    idx++;
+            // Fetch tier information
+            const tiers: Array<'S' | 'A' | 'B' | 'C' | 'D'> = ['S', 'A', 'B', 'C', 'D'];
+            let tierInfo = null;
+            for (const tier of tiers) {
+                const heroTier = herotierlist.heroTierList[tier]?.find(h => h.name === heroName);
+                if (heroTier) {
+                    tierInfo = { tier, winRate: heroTier.winRate };
+                    break;
                 }
             }
-        }
 
-        // If we have a full team, and this team-up has a higher win rate, use it
-        if (team.length === 6 && parseFloat(teamUp.winRate) > bestTeamUpWinRate) {
-            bestTeam = team;
-            bestTeamUp = teamUp.teamUpName;
-            bestTeamUpWinRate = parseFloat(teamUp.winRate);
-        }
-    }
-
-    // Fallback: if no team-up could be formed, use original logic
-    if (bestTeam.length === 0) {
-        // Select 6 heroes (2 Vanguards, 2 Duelists, 2 Strategists)
-        const team: string[] = [];
-        const roleDistribution = { Vanguard: 2, Duelist: 2, Strategist: 2 };
-
-        for (const role of Object.keys(roleDistribution) as Array<keyof typeof roleDistribution>) {
-            const targetCount = roleDistribution[role];
-            let selected = 0;
-            const candidatesRaw = allHeroes.filter(h => h.role === role && !team.includes(h.name));
-            const candidatesWithStats = await Promise.all(
-                candidatesRaw.map(async (h) => {
-                    const stats = await getHeroStats(h.name);
-                    const tier = getHeroTier(h.name)?.tier || 'D';
-                    return { hero: h, stats, tier };
-                })
-            );
-            const sortedCandidates = candidatesWithStats.sort((a, b) => {
-                const winRateDiff = (b.stats.winRate || 0) - (a.stats.winRate || 0);
-                if (winRateDiff !== 0) return winRateDiff;
-                const tierOrder = ['S', 'A', 'B', 'C', 'D'];
-                return tierOrder.indexOf(b.tier) - tierOrder.indexOf(a.tier);
-            });
-            let idx = 0;
-            while (selected < targetCount && idx < sortedCandidates.length) {
-                const hero = sortedCandidates[idx].hero;
-                team.push(hero.name);
-                selected++;
-                idx++;
+            // Fetch team-up information
+            const teamUps: TeamUp[] = [];
+            const teamUpTiers: Array<'S' | 'A' | 'B' | 'C'> = ['S', 'A', 'B', 'C'];
+            for (const tier of teamUpTiers) {
+                const tierTeamUps = teamuptierlist.teamupTierList[tier]?.filter(
+                    tu => tu.primaryHero === heroName || tu.secondaryHeroes.includes(heroName)
+                );
+                if (tierTeamUps) {
+                    teamUps.push(...tierTeamUps);
+                }
             }
+
+            return {
+                name: hero.name,
+                role,
+                tags,
+                tier: tierInfo || { tier: 'D', winRate: 40 },
+                teamUps
+            };
+        }
+    }
+    throw new Error(`Hero ${heroName} not found in heroes.json`);
+}
+
+function getAllHeroes(): Hero[] {
+    const roles: HeroRole[] = ['Vanguard', 'Duelist', 'Strategist'];
+    const allHeroes: Hero[] = [];
+    
+    for (const role of roles) {
+        heroesData[role]?.forEach(hero => {
+            allHeroes.push(getHeroDetails(hero.name));
+        });
+    }
+    
+    return allHeroes;
+}
+
+async function suggestMainHeroes(userDescription: string): Promise<{ 
+    suggestion: { 
+        hero: string; 
+        role: string;
+        tier: string;
+        winRate: number; 
+        abilities: Record<string, any>;
+        strengths: string[]; 
+        weaknesses: string[]; 
+        playstyle: string[]; 
+        teamup: string[]; 
+        tips: string[] 
+    }; 
+    explanation: string 
+}> {
+    const allHeroes = getAllHeroes();
+
+    const prompt = `
+You are an expert in Marvel Rivals hero selection. Given a user's description of their preferred playstyle, suggest exactly 1 hero that would suit them best as their main hero. Consider suggesting a hero regardless of their current tier unless the userDescription specifies a preference for a specific tier. For the suggested hero, provide:
+
+1. Their role (Vanguard, Duelist, or Strategist)
+2. Current tier and win rate (for informational purposes)
+3. All abilities (include all relevant abilities as a key-value object, using only the abilities listed in the provided hero data)
+4. All key strengths (include all relevant strengths)
+5. All key weaknesses (include all relevant weaknesses)
+6. Complete playstyle description (include all relevant playstyle aspects)
+7. One good team composition (mention 1 strong team-up partner)
+8. 2-3 tips for playing this hero effectively
+
+Important: 
+- Do not limit the number of strengths, weaknesses, or playstyle aspects - include all relevant ones for the hero.
+- For abilities, use ONLY the abilities provided in the hero data below. Do not invent or include abilities not listed in the provided data.
+
+User description: "${userDescription}"
+
+Available Heroes:
+${allHeroes.map(hero => {
+    const heroData = heroesData[hero.role as HeroRole]?.find(h => h.name === hero.name);
+    const strengths = heroData?.strengths ? 
+        (Array.isArray(heroData.strengths) ? heroData.strengths : [String(heroData.strengths)]) : 
+        ['N/A'];
+    const weaknesses = heroData?.weaknesses ? 
+        (Array.isArray(heroData.weaknesses) ? heroData.weaknesses : [String(heroData.weaknesses)]) : 
+        ['N/A'];
+    const abilities = heroData?.abilities ? 
+        Object.entries(heroData.abilities).map(([key, value]) => `${key}: ${value}`).join(', ') : 
+        'No abilities listed';
+    
+    return `- ${hero.name} (${hero.role}): ${hero.tier?.tier || 'D'} tier, ${hero.tier?.winRate || 40}% win rate. ` +
+           `Strengths: ${strengths.join(', ')}. Weaknesses: ${weaknesses.join(', ')}. Abilities: ${abilities}.`;
+}).join('\n')}
+
+Response format (JSON):
+{
+    "suggestion": {
+        "hero": "Hero Name",
+        "role": "Vanguard/Duelist/Strategist",
+        "tier": "S/A/B/C/D",
+        "winRate": number,
+        "abilities": {"ability1": "description1", "ability2": "description2", ...},
+        "strengths": ["strength1", "strength2", "strength3", ...],
+        "weaknesses": ["weakness1", "weakness2", "weakness3", ...],
+        "playstyle": ["playstyle1", "playstyle2", "playstyle3", ...],
+        "teamup": ["single best partner and the teamup definition"],
+        "tips": ["tip1", "tip2", "tip3"]
+    },
+    "explanation": "Explanation connecting user's preferences to the suggested hero"
+}
+`;
+
+    try {
+        const response = await axios.post(GROQ_API_URL, {
+            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+            messages: [{ role: 'user', content: prompt }],
+            response_format: { type: "json_object" }
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`
+            }
+        });
+
+        const result = JSON.parse(response.data.choices[0].message.content);
+
+        // Validate response
+        if (!result.suggestion || typeof result.suggestion !== 'object') {
+            throw new Error('Invalid Groq API response: Missing or invalid suggestion object');
         }
 
-        // Select team-up based on compatibility and countering
-        const teamUpOptions = teamuptierlist.S.concat(teamuptierlist.A).filter(tu =>
-            team.includes(tu.primaryHero) || tu.secondaryHeroes.some(h => team.includes(h))
-        ).sort((a, b) => parseFloat(b.winRate) - parseFloat(a.winRate));
-        const teamUp = teamUpOptions.length > 0 ? teamUpOptions[0].teamUpName : 'None';
+        // Verify suggestion has required fields and arrays aren't artificially limited
+        const suggestion = result.suggestion;
+        if (!suggestion.hero || !suggestion.role || !suggestion.tier || suggestion.winRate === undefined || !suggestion.abilities) {
+            throw new Error('Invalid suggestion format: Missing required fields');
+        }
+        if (suggestion.strengths && suggestion.strengths.length < 2) {
+            throw new Error('Invalid suggestion format: Strengths list too short');
+        }
+        if (suggestion.weaknesses && suggestion.weaknesses.length < 2) {
+            throw new Error('Invalid suggestion format: Weaknesses list too short');
+        }
+        if (suggestion.playstyle && suggestion.playstyle.length < 2) {
+            throw new Error('Invalid suggestion format: Playstyle list too short');
+        }
+        if (suggestion.teamup && suggestion.teamup.length !== 1) {
+            throw new Error('Invalid suggestion format: Should have exactly 1 teamup');
+        }
 
-        bestTeam = team;
-        bestTeamUp = teamUp;
+        // Validate abilities match heroes.json
+        const heroData = heroesData[suggestion.role as HeroRole]?.find(h => h.name === suggestion.hero);
+        if (heroData?.abilities) {
+            const expectedAbilities = Object.keys(heroData.abilities);
+            const returnedAbilities = Object.keys(suggestion.abilities);
+            if (!returnedAbilities.every(ability => expectedAbilities.includes(ability))) {
+                throw new Error('Invalid suggestion format: Abilities do not match heroes.json');
+            }
+            // Optionally, check if descriptions match
+            for (const [key, value] of Object.entries(suggestion.abilities)) {
+                if (heroData.abilities[key] !== value) {
+                    throw new Error(`Invalid ability description for ${key}: does not match heroes.json`);
+                }
+            }
+        } else if (Object.keys(suggestion.abilities).length > 0) {
+            throw new Error('Invalid suggestion format: Abilities provided for hero with no abilities in heroes.json');
+        }
+
+        return {
+            suggestion: suggestion,
+            explanation: result.explanation
+        };
+    } catch (error) {
+        console.error('Groq API error:', error instanceof Error ? error.message : String(error));
+
+        // Fallback logic with single hero
+        const fallbackHero = shuffleArray(allHeroes)[0];
+        const heroData = heroesData[fallbackHero.role as HeroRole]?.find(h => h.name === fallbackHero.name);
+        
+        // Get all strengths
+        const strengths = heroData?.strengths ? 
+            (Array.isArray(heroData.strengths) ? heroData.strengths : [String(heroData.strengths)]) : 
+            ['No strengths listed'];
+        
+        // Get all weaknesses
+        const weaknesses = heroData?.weaknesses ? 
+            (Array.isArray(heroData.weaknesses) ? heroData.weaknesses : [String(heroData.weaknesses)]) : 
+            ['No weaknesses listed'];
+
+        // Generate complete playstyle based on abilities
+        const playstyle = [];
+        if (heroData?.abilities) {
+            if (heroData.abilities.normalAttack) playstyle.push("Basic: " + heroData.abilities.normalAttack.split(' – ')[0]);
+            if (heroData.abilities.q) playstyle.push("Ultimate: " + heroData.abilities.q.split(' – ')[0]);
+            if (heroData.abilities.lshift) playstyle.push("Movement: " + heroData.abilities.lshift.split(' – ')[0]);
+            if (heroData.abilities.e) playstyle.push("Special: " + heroData.abilities.e.split(' – ')[0]);
+        }
+
+        // Get exactly one team comp
+        const teamup = fallbackHero.teamUps?.length ? 
+            [fallbackHero.teamUps[0].primaryHero === fallbackHero.name ? 
+             fallbackHero.teamUps[0].secondaryHeroes[0] : 
+             fallbackHero.teamUps[0].primaryHero] : 
+            ['No recommended partner'];
+
+        return {
+            suggestion: {
+                hero: fallbackHero.name,
+                role: fallbackHero.role,
+                tier: fallbackHero.tier?.tier || 'D',
+                winRate: fallbackHero.tier?.winRate || 40,
+                abilities: heroData?.abilities || {},
+                strengths: strengths,
+                weaknesses: weaknesses,
+                playstyle: playstyle.length ? playstyle : ["Adaptive playstyle"],
+                teamup: teamup,
+                tips: [
+                    `Master ${strengths[0] || 'your abilities'}`,
+                    `Compensate for ${weaknesses[0] || 'your limitations'}`,
+                    `Pair well with ${teamup[0]}`
+                ]
+            },
+            explanation: `Based on your description, ${fallbackHero.name} is recommended as it aligns with your described preferences with its full capabilities.`
+        };
     }
-
-    // Generate explanation
-    let explanation = 'Suggested team composition to counter enemy team:\n';
-    explanation += `- Enemy has ${roleCount.Vanguard} Vanguards, ${roleCount.Duelist} Duelists, ${roleCount.Strategist} Strategists.\n`;
-    explanation += `- Prioritized ${neededRoles.join(', ')} to counter enemy roles.\n`;
-    explanation += `- Team: ${bestTeam.join(', ')} with ${bestTeamUp} team-up.\n`;
-    explanation += `- Counters: ${Object.entries(tagCount)
-        .map(([tag, count]) => `${tag} x${count} countered with ${tagCounters[tag]?.join(' and ') || 'general strategy'}`)
-        .join(', ')}.\n`;
-
-    return { team: bestTeam, teamUp: bestTeamUp, explanation };
 }
-// ...existing code...
+
+function shuffleArray<T>(array: T[]): T[] {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
-        // Validate API key presence
-        if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
-            throw new Error('MARVEL_RIVALS_API_KEY is not set in environment variables');
+        // Validate Groq API key
+        if (!GROQ_API_KEY || GROQ_API_KEY === 'YOUR_GROQ_API_KEY') {
+            throw new Error('GROQ_API_KEY is not set in environment variables');
         }
 
-        const { enemyTeam } = await request.json();
+        const { userDescription } = await request.json();
 
         // Validate input
-        if (!enemyTeam || !Array.isArray(enemyTeam) || enemyTeam.length !== 6) {
-            return json({ error: 'Invalid input: Provide an enemy team with exactly 6 heroes' }, { status: 400 });
+        if (!userDescription || typeof userDescription !== 'string') {
+            return json({ error: 'Invalid input: Provide a description of your playstyle as a string' }, { status: 400 });
         }
 
-        // Fetch enemy team details
-        const enemyTeamDetails = await Promise.all(enemyTeam.map(async (name: string) => {
-            const details = await getHeroDetails(name);
-            return { name, role: details.role, tags: details.tags };
-        }));
-
-        const result = await suggestTeamComposition(enemyTeamDetails);
+        const result = await suggestMainHeroes(userDescription);
 
         return json({
-            enemyTeam,
+            userDescription,
             ...result,
             legalNotice: 'rivals-comps is not endorsed by Marvel or NetEase Games and does not reflect their views or opinions.'
         }, { status: 200 });

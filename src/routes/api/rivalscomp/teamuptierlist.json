@@ -1,4 +1,5 @@
 {
+  "teamupTierList":{
     "S": [
       {
         "teamUpName": "Ragnarok Rebirth",
@@ -48,7 +49,7 @@
         "teamUpName": "Ammo Overload",
         "primaryHero": "Rocket Raccoon",
         "secondaryHeroes": ["The Punisher"],
-        "effect": "Rocket Raccoon gains a bonus ability that allows him to place an ammo device on the ground. This device grants The Punisher faster firing weapons and unlimited ammo while he's nearby. Rocket gets additional 5% healing boost.",
+        "effect": "Rocket Raccoon gains a bonus ability that allows him to place an ammo device on the ground. This device grants The Punisher faster firing weapons and unlimited ammo while he's nearby. Rocket Raccoon gets additional 5% healing boost.",
         "winRate": "52.75"
       },
       {
@@ -134,3 +135,4 @@
       }
     ]
   }
+}

@@ -1,7 +1,7 @@
 # rivalscomp API
 
 ## Overview
-This API uses the rule-based decision making with data from Marvel Rivals to recommend a team comp based on the enemy team comp.
+This API uses the Groq AI model with data from Marvel Rivals Characters to recommend a list of characters to main based on user's description.
 
 ## Endpoint
 - **URL**: `/api/rivalscomp`
@@ -12,5 +12,5 @@ This API uses the rule-based decision making with data from Marvel Rivals to rec
 - **Body**:
   ```json
   {
-      "enemyTeam": ["Thor", "Magneto", "Psylocke", "Magik", "Mantis", "Loki"]
+      "userDescription": "I want to main a character with low healing output"
   }

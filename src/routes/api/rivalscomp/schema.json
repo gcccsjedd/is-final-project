@@ -1,13 +1,8 @@
 {
     "type": "object",
     "properties": {
-        "enemyTeam": {
-            "type": "array",
-            "items": { "type": "string" },
-            "minItems": 6,
-            "maxItems": 6
-        }
+        "userDescription": { "type": "string" }
     },
-    "required": ["enemyTeam"],
+    "required": ["userDescription"],
     "additionalProperties": false
 }
