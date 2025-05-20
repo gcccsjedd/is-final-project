@@ -12,5 +12,5 @@ This API uses the Groq AI model with data from Marvel Rivals Characters to recom
 - **Body**:
   ```json
   {
-      "userDescription": "I want to main a character with low healing output"
+      "userDescription": "I want to main a character with high healing output"
   }
