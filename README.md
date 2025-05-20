@@ -16,6 +16,210 @@
 
 ### Documentation
   # API endpoint and expected HTTP method (GET/POST) (API Route starts with "/api")
+
+  env
+  GENAI_API_KEY = "AIzaSyBES7EKUdjKQza2BbC6dENL9EWNlO_B9Ro"
+  SUPABASE_URL = "https://kqmepdljhtucgkxwfsdu.supabase.co"
+  SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxbWVwZGxqaHR1Y2dreHdmc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MTEwMDQsImV4cCI6MjA2MzI4NzAwNH0.X-mCTVN6v3CJkpwq4dBoe27j_3mz2-V6QB0y0gcCvjQ"
+
+  {
+    "info": {
+      "_postman_id": "77bdead4-98c7-4229-a5a5-4d3d120ca7b2",
+      "name": "SDK-NLP",
+      "description": "First run the API from your localhost server or change it to your domain if live to test.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "_exporter_id": "40612100"
+    },
+    "item": [
+      {
+        "name": "Single Input",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{ \"text\": \"I recently visited FastBite and I have to say, I was pleasantly surprised! The service was quick and friendly, which is exactly what you want when you’re in a hurry. The burgers were juicy and flavorful, and the fries were perfectly crispy — just the right amount of salt. The restaurant was clean and well-maintained, making the whole experience comfortable. The prices were reasonable, especially for the portion sizes. Definitely a great spot for a tasty, fast meal when you’re on the go. I’ll be coming back soon!\" }",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:5173/api/generate-sentiment",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "generate-sentiment"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Multiple Input",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n  \"texts\": [\r\n    \"I love stopping by FastBite! The staff is always super friendly, and my order is ready in minutes.\",\r\n    \"FastBite has good food, but sometimes the fries come out a bit soggy.\",\r\n    \"FastBite is okay for a quick bite. Nothing fancy, but the food hits the spot when you’re in a rush.\",\r\n    \"I was disappointed by my last visit. The burger was cold and the fries tasted stale.\",\r\n    \"Great value for the price! The spicy chicken sandwich is my favorite.\"\r\n  ]\r\n}\r\n",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:5173/api/generate-sentiment",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "generate-sentiment"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Create Account",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5173/api/account",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "account"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Check Account",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:5173/api/account/1",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "account",
+              "1"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Single Input Store to DB",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{ \r\n    \"text\": \"I absolutely loved the experience! Everything was perfect.\",\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n }",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:5173/api/generate-sentiment",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "generate-sentiment"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Multiple Input Store to DB",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n  \"texts\": [\r\n    \"I love stopping by FastBite! The staff is always super friendly, and my order is ready in minutes.\",\r\n    \"FastBite has good food, but sometimes the fries come out a bit soggy.\",\r\n    \"FastBite is okay for a quick bite. Nothing fancy, but the food hits the spot when you’re in a rush.\",\r\n    \"I was disappointed by my last visit. The burger was cold and the fries tasted stale.\",\r\n    \"Great value for the price! The spicy chicken sandwich is my favorite.\"\r\n  ],\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n}\r\n",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:5173/api/generate-sentiment",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "generate-sentiment"
+            ]
+          }
+        },
+        "response": []
+      },
+      {
+        "name": "Generate Report",
+        "request": {
+          "method": "POST",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "{\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n}\r\n",
+            "options": {
+              "raw": {
+                "language": "json"
+              }
+            }
+          },
+          "url": {
+            "raw": "http://localhost:5173/api/generate-report",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "5173",
+            "path": [
+              "api",
+              "generate-report"
+            ]
+          }
+        },
+        "response": []
+      }
+    ]
+  }
+
     ##Account
       #Create Account
         #Description
