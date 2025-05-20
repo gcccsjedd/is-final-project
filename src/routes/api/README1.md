@@ -29,7 +29,7 @@ Include a README.md in your branch with:
 Request:
 {
   "text": "Artificial intelligence is transforming industries by automating tasks, improving decision-making, and enabling new applications like self-driving cars and medical diagnostics.",
-  "model": "mistral-7b-instruct",
+  "model": "deepseek/deepseek-prover-v2:free",
   "max_tokens": 150,
   "temperature": 0.7
 }

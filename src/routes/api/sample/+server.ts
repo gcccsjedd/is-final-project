@@ -10,7 +10,7 @@ const getSampleData = (): SampleResponse => ({
         {
             path: "/api/404notfound-nlp",
             method: "POST",
-            description: "Get text summary using Mistral via OpenRouter",
+            description: "Get text summary using deepseek via OpenRouter",
             example_request: { text: "Summarize this article about AI" },
             example_response: { summary: "The article discusses recent advances in AI..." }
         },
@@ -22,7 +22,7 @@ const getSampleData = (): SampleResponse => ({
             example_response: {}
         }
     ],
-    note: "This API uses OpenRouter's free Mistral-7B model"
+    note: "This API uses OpenRouter's free deepseek/deepseek-prover-v2:free"
 });
 
 export const GET: RequestHandler = async () => {
