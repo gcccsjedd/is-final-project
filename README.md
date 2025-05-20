@@ -1,114 +1,208 @@
-# Theoretical General AI Approach - Final Project
+# Klein NLP API
 
-## Project Overview
-This project involves collaborating in a GitHub repository using the Svelte, Bun, and Ollama tech stack to develop an AI agent that simulates aspects of a theoretical General AI approach. Teams will design and implement a functional API that integrates with the repository.
+This API provides various natural language processing capabilities including translation, summarization, and sentiment analysis.
 
-## Learning Objectives
-By completing this project, you will:
-- Work collaboratively in a Git-based development workflow (branching, pull requests, merging)
-- Design and implement an AI-driven API that processes inputs and returns meaningful outputs
-- Document API usage, including expected inputs, outputs, and error handling
-- Simulate an AI agent within a larger AI system
+## Translation Endpoint
 
-## Project Requirements
+- **URL**: `/api/klein-nlp/translation`
+- **Method**: `POST`
 
-### 1. Team Formation
-- Form a team of 3 members
-- Assign roles (API developer, documentation lead, Git workflow manager)
+### Input Parameters
 
-### 2. AI Agent Development
-Develop one functional API that integrates with the provided repository. Choose one of the following agent types:
-- Natural Language Processing (NLP) (e.g., text summarization, sentiment analysis)
-- Image Generation (e.g., Stable Diffusion via Ollama)
-- Image Processing (e.g., object detection, filters)
-- Decision-Making Agent (e.g., rule-based or LLM-driven reasoning)
+The API accepts a JSON payload with the following parameters:
 
-### 3. Documentation
-Include a README.md in your branch with:
-- API endpoint and expected HTTP method (GET/POST)
-- Input parameters (JSON/query params/form data)
-- Output format (JSON, image, text)
-- Example request/response
-- Error handling (possible failure cases) or troubleshooting guide.
-
-### 4. Folder Structure & Naming Convention
-- All API-related files must be placed under `src/routes/api`.
-- Name your folder in the format: `src/routes/api/[team-name]-[ai-agent]` (e.g. `src/routes/api/team-alpha-imagegen`)
-- The folder must contain the following:
-  - API implementation files.
-  - A README.md documenting the API.
-  - The JSON Schema for input validation.
-
-### 5. Git Workflow
-- Branch out from main and develop your feature in a new branch
-- Submit a Pull Request (PR) for review before merging
-- No direct commits to main - all changes must go through PRs
-- **Add the instructor (@gcccsjedd) as a reviewer** to your Pull Request.
-
-### 6. Demo & Presentation
-- Demo Dates: May 14–23, 2025
-- Prepare a 5-minute live demo showcasing:
-  - API functionality (input/output demonstration)
-  - Explanation of your AI agent's design
-  - Challenges faced & lessons learned
-
-## Submission Guidelines
-1. Clone the provided repository and set up your team's workspace
-2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
-3. Submit a Pull Request (PR) by May 14, 2025 (11:59 PM) with:
-   - Working API code
-   - Documentation (README + JSON Schema)
-   - A list of contributions per member
-   - Add **@gcccsjedd** as a reviewer to your Pull Request before submission.
-
-## Grading Criteria
-1. Functional API
-2. Git Collaboration
-3. Documentation & Schema
-4. Demo & Presentation
-5. Code Quality & Readability
-
-## Important Notes
-- No submission = Incomplete grade in Finals
-- Late submissions will incur a 10% deduction per day
-- Plagiarism or using pre-built APIs without modification will result in zero marks
-- Failure to add @gcccsjedd as a reviewer to your PR will result in a 10% penalty.
-
-# sv
-
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
+```json
+{
+  "text": "Text to translate", // Required
+  "model": "Helsinki-NLP/opus-mt-en-es", 
+  "sourceLanguage": "en", 
+  "targetLanguage": "es" 
+}
 ```
 
-## Developing
+### Output Format
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The API returns a JSON response with the following structure:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```json
+{
+  "original": "Hello, how are you?",
+  "translation": "Hola, ¿cómo estás?",
+  "model": "Helsinki-NLP/opus-mt-en-es"
+}
 ```
 
-## Building
+### Error Handling
 
-To create a production version of your app:
+The API returns the following errors:
 
-```bash
-npm run build
+- **400 Bad Request**: If the text parameter is missing
+  ```json
+  {
+    "error": "Text is required"
+  }
+  ```
+
+- **500 Internal Server Error**: If there's an error with the translation service
+  ```json
+  {
+    "error": "Translation service error",
+    "message": "Error details"
+  }
+  ```
+
+### Example Usage
+
+```javascript
+// Example: Translate English to French
+const response = await fetch('/api/klein-nlp/translation', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    text: 'Hello, how are you?',
+  }),
+});
+
+const result = await response.json();
+console.log(result.translation);
 ```
 
-You can preview the production build with `npm run preview`.
+### Available Models
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+For a full list of available models, visit [Hugging Face Models](https://huggingface.co/models?pipeline_tag=translation).
+
+
+
+
+
+
+## Summarization Endpoint
+
+- **URL**: `/api/klein-nlp/summarization`
+- **Method**: `POST`
+
+### Input Parameters
+
+The API accepts a JSON payload with the following parameters:
+
+```json
+{
+  "text": "Text to summarize" // Required
+}
+```
+
+### Output Format
+
+The API returns a JSON response from the Ollama API, which includes the summarized text.
+
+### Error Handling
+
+The API returns the following errors:
+
+- **400 Bad Request**: If the text parameter is missing
+  ```json
+  {
+    "error": "Text is required"
+  }
+  ```
+
+- **500 Internal Server Error**: If there's an error with the summarization service
+  ```json
+  {
+    "error": "Internal server error"
+  }
+  ```
+
+### Example Usage
+
+```javascript
+// Example: Summarize a long text
+const response = await fetch('/api/klein-nlp/summarization', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat...',
+  }),
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+
+
+
+
+
+## Sentiment Analysis Endpoint
+
+- **URL**: `/api/klein-nlp/sentiment`
+- **Method**: `POST`
+
+### Input Parameters
+
+The API accepts a JSON payload with the following parameters:
+
+```json
+{
+  "text": "Text to analyze for sentiment" // Required
+}
+```
+
+### Output Format
+
+The API returns a JSON response from the Ollama API, which typically includes sentiment analysis information in the following format:
+
+```json
+{
+  "sentiment": "positive",
+  "confidence": 0.85,
+  "explanation": "The text contains positive language and expressions of satisfaction."
+}
+```
+
+### Error Handling
+
+The API returns the following errors:
+
+- **400 Bad Request**: If the text parameter is missing
+  ```json
+  {
+    "error": "Text is required"
+  }
+  ```
+
+- **500 Internal Server Error**: If there's an error with the sentiment analysis service
+  ```json
+  {
+    "error": "Internal server error"
+  }
+  ```
+
+### Example Usage
+
+```javascript
+// Example: Analyze sentiment of a text
+const response = await fetch('/api/klein-nlp/sentiment', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    text: 'I really enjoyed using this product. It exceeded my expectations!',
+  }),
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+## Implementation Details
+
+All endpoints are powered by language models:
+- The translation endpoint uses Hugging Face Transformer models
+- The summarization and sentiment analysis endpoints use Ollama API with the llama3.2 model
