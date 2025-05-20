@@ -37,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
                     { role: "user", content: `Summarize this text: ${text}` }
                 ],
                 temperature: 0.7,
-                max_tokens: 150
+                max_tokens: 150,
             })
         });
 
