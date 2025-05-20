@@ -1,474 +1,114 @@
 # Theoretical General AI Approach - Final Project
 
-# Team SDK Sentiment Analysis API
-
 ## Project Overview
-- The objective of this project is to create an AI agent utilizing the Svelte, Bun, and Gemini tech stack, which will be hosted on a shared GitHub repository. The primary capability is sentiment analysis, which assesses the emotional tone of text and classifies it as positive, negative, or neutral. This allows for practical applications such as customer feedback analysis and brand impression monitoring.
+This project involves collaborating in a GitHub repository using the Svelte, Bun, and Ollama tech stack to develop an AI agent that simulates aspects of a theoretical General AI approach. Teams will design and implement a functional API that integrates with the repository.
 
-- Our team’s API is designed to analyze sentiment from text input and optionally generate a marketing tagline based on the detected sentiment. We use the Gemma 3 12B model to power the AI's language understanding and generation capabilities.
+## Learning Objectives
+By completing this project, you will:
+- Work collaboratively in a Git-based development workflow (branching, pull requests, merging)
+- Design and implement an AI-driven API that processes inputs and returns meaningful outputs
+- Document API usage, including expected inputs, outputs, and error handling
+- Simulate an AI agent within a larger AI system
 
-- The AI agent aims to simulate certain aspects of a theoretical General AI, such as adaptive reasoning and contextual understanding, moving beyond task-specific models. This project demonstrates how advanced AI can be integrated into real-world applications for smarter, emotion-aware communication.
+## Project Requirements
 
-### Team Formation
-- Alberto, Sean Rad P. - API developer
-- Banluta, Christian Dave - Git workflow manager
-- Flores, Kaye L. - documentation lead
+### 1. Team Formation
+- Form a team of 3 members
+- Assign roles (API developer, documentation lead, Git workflow manager)
 
-### Documentation
-  # API endpoint and expected HTTP method (GET/POST) (API Route starts with "/api")
+### 2. AI Agent Development
+Develop one functional API that integrates with the provided repository. Choose one of the following agent types:
+- Natural Language Processing (NLP) (e.g., text summarization, sentiment analysis)
+- Image Generation (e.g., Stable Diffusion via Ollama)
+- Image Processing (e.g., object detection, filters)
+- Decision-Making Agent (e.g., rule-based or LLM-driven reasoning)
 
-  env
-  GENAI_API_KEY = "AIzaSyBES7EKUdjKQza2BbC6dENL9EWNlO_B9Ro"
-  SUPABASE_URL = "https://kqmepdljhtucgkxwfsdu.supabase.co"
-  SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxbWVwZGxqaHR1Y2dreHdmc2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc3MTEwMDQsImV4cCI6MjA2MzI4NzAwNH0.X-mCTVN6v3CJkpwq4dBoe27j_3mz2-V6QB0y0gcCvjQ"
+### 3. Documentation
+Include a README.md in your branch with:
+- API endpoint and expected HTTP method (GET/POST)
+- Input parameters (JSON/query params/form data)
+- Output format (JSON, image, text)
+- Example request/response
+- Error handling (possible failure cases) or troubleshooting guide.
 
-  {
-    "info": {
-      "_postman_id": "77bdead4-98c7-4229-a5a5-4d3d120ca7b2",
-      "name": "SDK-NLP",
-      "description": "First run the API from your localhost server or change it to your domain if live to test.",
-      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-      "_exporter_id": "40612100"
-    },
-    "item": [
-      {
-        "name": "Single Input",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "body": {
-            "mode": "raw",
-            "raw": "{ \"text\": \"I recently visited FastBite and I have to say, I was pleasantly surprised! The service was quick and friendly, which is exactly what you want when you’re in a hurry. The burgers were juicy and flavorful, and the fries were perfectly crispy — just the right amount of salt. The restaurant was clean and well-maintained, making the whole experience comfortable. The prices were reasonable, especially for the portion sizes. Definitely a great spot for a tasty, fast meal when you’re on the go. I’ll be coming back soon!\" }",
-            "options": {
-              "raw": {
-                "language": "json"
-              }
-            }
-          },
-          "url": {
-            "raw": "http://localhost:5173/api/generate-sentiment",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "generate-sentiment"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Multiple Input",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "body": {
-            "mode": "raw",
-            "raw": "{\r\n  \"texts\": [\r\n    \"I love stopping by FastBite! The staff is always super friendly, and my order is ready in minutes.\",\r\n    \"FastBite has good food, but sometimes the fries come out a bit soggy.\",\r\n    \"FastBite is okay for a quick bite. Nothing fancy, but the food hits the spot when you’re in a rush.\",\r\n    \"I was disappointed by my last visit. The burger was cold and the fries tasted stale.\",\r\n    \"Great value for the price! The spicy chicken sandwich is my favorite.\"\r\n  ]\r\n}\r\n",
-            "options": {
-              "raw": {
-                "language": "json"
-              }
-            }
-          },
-          "url": {
-            "raw": "http://localhost:5173/api/generate-sentiment",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "generate-sentiment"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Create Account",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "url": {
-            "raw": "http://localhost:5173/api/account",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "account"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Check Account",
-        "request": {
-          "method": "GET",
-          "header": [],
-          "url": {
-            "raw": "http://localhost:5173/api/account/1",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "account",
-              "1"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Single Input Store to DB",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "body": {
-            "mode": "raw",
-            "raw": "{ \r\n    \"text\": \"I absolutely loved the experience! Everything was perfect.\",\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n }",
-            "options": {
-              "raw": {
-                "language": "json"
-              }
-            }
-          },
-          "url": {
-            "raw": "http://localhost:5173/api/generate-sentiment",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "generate-sentiment"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Multiple Input Store to DB",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "body": {
-            "mode": "raw",
-            "raw": "{\r\n  \"texts\": [\r\n    \"I love stopping by FastBite! The staff is always super friendly, and my order is ready in minutes.\",\r\n    \"FastBite has good food, but sometimes the fries come out a bit soggy.\",\r\n    \"FastBite is okay for a quick bite. Nothing fancy, but the food hits the spot when you’re in a rush.\",\r\n    \"I was disappointed by my last visit. The burger was cold and the fries tasted stale.\",\r\n    \"Great value for the price! The spicy chicken sandwich is my favorite.\"\r\n  ],\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n}\r\n",
-            "options": {
-              "raw": {
-                "language": "json"
-              }
-            }
-          },
-          "url": {
-            "raw": "http://localhost:5173/api/generate-sentiment",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "generate-sentiment"
-            ]
-          }
-        },
-        "response": []
-      },
-      {
-        "name": "Generate Report",
-        "request": {
-          "method": "POST",
-          "header": [],
-          "body": {
-            "mode": "raw",
-            "raw": "{\r\n    \"account_id\": \"2\",\r\n    \"account_key\": \"adf7e766-1321-4eae-839d-b12c1cb4e222\"\r\n}\r\n",
-            "options": {
-              "raw": {
-                "language": "json"
-              }
-            }
-          },
-          "url": {
-            "raw": "http://localhost:5173/api/generate-report",
-            "protocol": "http",
-            "host": [
-              "localhost"
-            ],
-            "port": "5173",
-            "path": [
-              "api",
-              "generate-report"
-            ]
-          }
-        },
-        "response": []
-      }
-    ]
-  }
+### 4. Folder Structure & Naming Convention
+- All API-related files must be placed under `src/routes/api`.
+- Name your folder in the format: `src/routes/api/[team-name]-[ai-agent]` (e.g. `src/routes/api/team-alpha-imagegen`)
+- The folder must contain the following:
+  - API implementation files.
+  - A README.md documenting the API.
+  - The JSON Schema for input validation.
 
-    ##Account
-      #Create Account
-        #Description
-        Route Type: POST
-        Path: /api/account (assuming this file is placed under src/routes/api/account/+server.ts)
-        Purpose: To create a new account entry in the database.
-        Function Used: createAccount() from server-side database module ($lib/server/db).
+### 5. Git Workflow
+- Branch out from main and develop your feature in a new branch
+- Submit a Pull Request (PR) for review before merging
+- No direct commits to main - all changes must go through PRs
+- **Add the instructor (@gcccsjedd) as a reviewer** to your Pull Request.
 
-        #Request
-        Method: POST
-        Headers: None required
-        Body: None required
+### 6. Demo & Presentation
+- Demo Dates: May 14–23, 2025
+- Prepare a 5-minute live demo showcasing:
+  - API functionality (input/output demonstration)
+  - Explanation of your AI agent's design
+  - Challenges faced & lessons learned
 
-        #Response
-        Success (201 Created):
-        Body: JSON object containing the new account data.
-        Headers: Content-Type: application/json
+## Submission Guidelines
+1. Clone the provided repository and set up your team's workspace
+2. Create a branch named `feature/[team-name]-[ai-agent]` (e.g., `feature/team-alpha-imagegen`)
+3. Submit a Pull Request (PR) by May 14, 2025 (11:59 PM) with:
+   - Working API code
+   - Documentation (README + JSON Schema)
+   - A list of contributions per member
+   - Add **@gcccsjedd** as a reviewer to your Pull Request before submission.
 
-        {
-    "id": 2,
-    "account_key": "adf7e766-1321-4eae-839d-b12c1cb4e222"
-}
-        
-      #Check Account
-        #Description
-        Route Type: GET
-        Path: /api/account-exists/[id] (assuming this file is placed under src/routes/api/account-exists/[id]/+server.ts)
+## Grading Criteria
+1. Functional API
+2. Git Collaboration
+3. Documentation & Schema
+4. Demo & Presentation
+5. Code Quality & Readability
 
-        #Request: 
-        Method: GET
-        Headers: None required
-        URL Parameter: id (string): The account ID to verify.
+## Important Notes
+- No submission = Incomplete grade in Finals
+- Late submissions will incur a 10% deduction per day
+- Plagiarism or using pre-built APIs without modification will result in zero marks
+- Failure to add @gcccsjedd as a reviewer to your PR will result in a 10% penalty.
 
-        #Purpose: To check whether an account with the given id exists in the database.
+# sv
 
-        #Function Used: Supabase query using .from('accounts').select('id').eq('id', id).single()
+Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
-        #Response: Success (200 OK):
-        Body: JSON object indicating whether the account exists. 
-        Client Error (400 Bad Request):
-        Body: JSON object describing the error
-        Server Error (500 Internal Server Error):
-        Body: JSON object describing the error.
+## Creating a project
 
-          {
-        "exists": true
-      } 
+If you're seeing this, you've probably already done this step. Congrats!
 
-    ##Sentiment
-      #Create Single Sentiment
-        #Descripyion
-        Route Type: POST
-        Path: /api/sentiment (assuming this file is placed under src/routes/api/sentiment/+server.ts)
+```bash
+# create a new project in the current directory
+npx sv create
 
-        Purpose: To analyze the sentiment of one or more text inputs using Google's Gemini model, generate a summary, and optionally store the results in the database.
-        
-        Functions Used: 
-        - analyzeSentimentWithGemini() from $lib/server/model
-        - generateSummaryWithGeminiStream() from $lib/server/model
-        - getAverageScore() from $lib/server/model
-        - insertSentimentAnalysis() from $lib/server/db
+# create a new project in my-app
+npx sv create my-app
+```
 
-        #Response
-        {
-    "success": true,
-    "analysis": [
-        {
-            "sentiment": "Positive",
-            "score": 92
-        }
-    ],
-    "summary": [
-        "The reviewer had a positive experience at FastBite, praising the quick and friendly service, delicious and juicy burgers, crispy fries, clean environment, and reasonable prices. They recommend it for a quick and tasty meal."
-    ]
-}
+## Developing
 
-      #Create Multiple Sentiment
-        #Description
-        Route Type: POST
-        Path: /api/sentiment (assuming this file is placed under src/routes/api/sentiment/+server.ts)
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
-        #Request:
-        Method: POST
-        Headers:
-          Content-Type: application/json
-          Body (JSON):
-        Either:
-          { "text": string, "account_id"?: string, "account_key"?: string }
-        Or:
-          { "texts": string[], "account_id"?: string, "account_key"?: string }
+```bash
+npm run dev
 
-        #Purpose:
-          To analyze the sentiment of a single text or multiple texts, return the sentiment results and summary, and optionally save the analysis in the database for authenticated users.
-        
-        #Function Used:
-        - analyzeSentimentWithGemini(text: string) — Performs sentiment analysis on a given text.
-        - generateSummaryWithGeminiStream(text: string) — Generates a summary of the input text(s).
-        - getAverageScore(results: Array<{score: number}>) — Calculates average sentiment score from multiple results.
-        - insertSentimentAnalysis(data) — Saves sentiment results to the database
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
+```
 
-        #Response 
-        {
-    "success": true,
-    "analysis": [
-        {
-                "sentiment": "Positive",
-                "score": 92
-            },
-            {
-                "sentiment": "Positive",
-                "score": 75
-            },
-            {
-                "sentiment": "Neutral",
-                "score": 65
-            },
-            {
-                "sentiment": "Negative",
-                "score": 25
-            },
-            {
-                "sentiment": "Positive",
-                "score": 85
-            }
-        ],
-        "overall": {
-            "sentiment": "Neutral",
-            "score": 68.4
-        },
-        "summary": [
-            "FastBite is a convenient and affordable option for a quick meal, praised for its friendly staff and fast service. While generally offering good food and a favorite spicy chicken sandwich, recent experiences have been inconsistent with issues like cold burgers and stale fries."
-        ]
-      }
+## Building
 
-      #Create Single Sentiment/Account
-        #Description
-        Accepts either a single text or multiple texts for sentiment analysis.
-        Returns sentiment classification and scores for each text.
-        Generates a summary for the input texts.
-        Optionally saves results to a database when valid account credentials (account_id and account_key) are provided together.
+To create a production version of your app:
 
-        #Request Body
-          You can send one of two types of JSON payloads:
-             Single Text Input:
-             - text (string, required): The text string to analyze.
-             - account_id (string, optional): The account identifier. Must be provided together with account_key.
-             - account_key (string, optional): The account key/password. Must be provided together with account_id.
+```bash
+npm run build
+```
 
-             Multiple Texts Input:
-             - texts (array of strings, required): An array of text strings to analyze.
-             - account_id (string, optional): Must be provided together with account_key.
-             - account_key (string, optional): Must be provided together with account_id.
+You can preview the production build with `npm run preview`.
 
-        #Important Validation Rules
-        - You must provide either the text field or the texts array — not both.
-        - If you provide one of account_id or account_key, you must provide the other as well.
-        - Both text and each element of texts must be non-empty strings.
-
-        #Response
-        {
-          "success": true,
-          "analysis": [
-              {
-                  "sentiment": "Positive",
-                  "score": 92
-              }
-          ],
-          "summary": [
-              "The reviewer had a positive experience at FastBite, praising the quick and friendly service, delicious and juicy burgers, crispy fries, clean environment, and reasonable prices. They recommend it for a quick and tasty meal."
-          ]
-        }
-        
-
-      #Create Multiple Sentiment/Account
-        #Description
-        Accepts either a single text or multiple texts for sentiment analysis.
-        Returns sentiment classification and scores for each text.
-        Generates a summary for the input texts.
-        Optionally saves results to a database when valid account credentials (account_id and account_key) are provided together.
-
-        #Request Body
-        You can send one of two types of JSON payloads:
-
-          Single Text Input
-          - text (string, required): The text string to analyze.
-          - account_id (string, optional): The account identifier. Must be provided together with account_key.
-          - account_key (string, optional): The account key/password. Must be provided together with account_id.
-
-          Multiple Texts Input
-          - texts (array of strings, required): An array of text strings to analyze.
-          - account_id (string, optional): Must be provided together with account_key.
-          - account_key (string, optional): Must be provided together with account_id.
-        
-        #Response 
-        {
-          "success": true,
-          "analysis": [
-              {
-                  "sentiment": "Positive",
-                  "score": 92
-              },
-              {
-                  "sentiment": "Positive",
-                  "score": 75
-              },
-              {
-                  "sentiment": "Neutral",
-                  "score": 65
-              },
-              {
-                  "sentiment": "Negative",
-                  "score": 25
-              },
-              {
-                  "sentiment": "Positive",
-                  "score": 85
-              }
-          ],
-          "overall": {
-              "sentiment": "Neutral",
-              "score": 68.4
-        },
-        "summary": [
-            "FastBite is a convenient and affordable option for a quick meal, praised for its friendly staff and fast service. While generally offering good food and a favorite spicy chicken sandwich, recent experiences have been inconsistent with issues like cold burgers and stale fries."
-        ]
-      }
-
-    #Report
-      #Generate Report
-        #Dscriptipn
-          This endpoint generates a sentiment analysis report based on the provided account credentials. It aggregates data for all sentiments linked to the specified account.
-      #Request
-      Method: POST
-      Content-Type: application/json
-      Request Body Parameters
-      Parameter      Type    Required   Description                                      
-      `account_id`  string    Yes       The unique identifier for the user account.    
-      `account_key` string    Yes       The secret key or token associated with the user account for authentication. 
-
-      #Response 
-      {
-        "success": true,
-        "report": {
-            "trend": "positive",
-            "average_score": 68.4,
-            "detailed_report": "Overall sentiment towards FastBite is positive, with several reviewers praising the friendly staff, quick service, and value for money. The spicy chicken sandwich received specific positive mention. However, there are recurring concerns about the quality of the fries, with some reviewers noting they were soggy or stale. One reviewer also reported a negative experience with a cold burger. While the majority of feedback is favorable, the consistency of food quality, particularly the fries and burger temperature, appears to be an area for improvement.",
-            "recommendations": "Focus on improving the consistency of food quality, specifically addressing the issues with fries and burger temperature. Consider implementing quality control checks to ensure food is served fresh and at the correct temperature. Continue to highlight the positive aspects of FastBite, such as friendly staff and quick service, and consider promoting the spicy chicken sandwich."
-      }
-}
-
-
-
+> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
