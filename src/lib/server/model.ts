@@ -97,3 +97,13 @@ Respond strictly in this JSON format (do NOT include markdown or backticks):
         }
     }
 }
+
+//Function for getting the average score of the sentiment analysis
+export function getAverageScore(analysisResults: { sentiment: string; score: number }[]): number {
+    if (analysisResults.length === 0) {
+        return 0;
+    }
+
+    const totalScore = analysisResults.reduce((acc, result) => acc + result.score, 0);
+    return totalScore / analysisResults.length;
+}

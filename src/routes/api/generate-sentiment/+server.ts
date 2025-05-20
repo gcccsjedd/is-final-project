@@ -1,7 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { z } from "zod";
-import { analyzeSentimentWithGemini, generateSummaryWithGeminiStream } from "$lib/server/model";
+import { analyzeSentimentWithGemini, generateSummaryWithGeminiStream, getAverageScore } from "$lib/server/model";
 
 const SentimentAnalysisSchema = z.union([
 	z.object({
@@ -21,8 +21,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			return json({ error: "Invalid input", details: result.error.format() }, { status: 400 });
 		}
 
-		let analysisResults: unknown[] = [];
+		let analysisResults: { sentiment: string; score: number }[] = [];
 		let summaryResults: unknown[] = [];
+		let overallAnalysisResult: { sentiment: string; score: number } | null = null;
+		let averageSentiment: number = 0;
 
 		if ("text" in result.data) {
 			// Single text case
@@ -32,25 +34,40 @@ export const POST: RequestHandler = async ({ request }) => {
 
 			analysisResults.push(analysisResult);
 			summaryResults.push(summaryResult.summary);
+			overallAnalysisResult = analysisResult;
+			return json({
+				success: true,
+				analysis: analysisResults,
+				summary: summaryResults,
+			});
 		} else if ("texts" in result.data) {
-			// Multiple texts case - process all in parallel or sequentially
+			// Multiple texts case
 			const texts = result.data.texts;
-
-			// For better performance, you can run in parallel:
 			const analysisPromises = texts.map((t) => analyzeSentimentWithGemini(t));
-			//Make a summary for the whole text as one
-			const summaryPromises = generateSummaryWithGeminiStream(texts.join(" "));
 
 			analysisResults = await Promise.all(analysisPromises);
-			const summary = await summaryPromises;
-			summaryResults = [summary.summary];
+
+			// Overall sentiment for all texts combined
+			overallAnalysisResult = await analyzeSentimentWithGemini(texts.join(" "));
+			averageSentiment = getAverageScore(analysisResults);
+
+			// Summary for combined text
+			const summaryResult = await generateSummaryWithGeminiStream(texts.join(" "));
+			summaryResults = [summaryResult.summary];
+
+			return json({
+				success: true,
+				analysis: analysisResults,
+				overall: {
+					sentiment: overallAnalysisResult?.sentiment,
+					score: averageSentiment,
+				},
+				summary: summaryResults,
+			});
 		}
 
-		return json({
-			success: true,
-			analysis: analysisResults,
-			summary: summaryResults,
-		});
+		// If neither "text" nor "texts" is present, return a 400 error
+		return json({ error: "Invalid input: missing 'text' or 'texts' property" }, { status: 400 });
 	} catch (error) {
 		console.error("Error processing sentiment analysis request:", error);
 		return json(
@@ -62,3 +79,4 @@ export const POST: RequestHandler = async ({ request }) => {
 		);
 	}
 };
+
