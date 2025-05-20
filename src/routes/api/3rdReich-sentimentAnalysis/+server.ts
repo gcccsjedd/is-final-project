@@ -3,14 +3,19 @@ import type { RequestHandler } from "@sveltejs/kit";
 import { Ollama } from "ollama";
 
 /**
- * Sentiment Analysis API Implementation
- * API Path: /api/3rdReich-sentimentAnalysis
+ * THIS API ANALYZES TEXT TO DETERMINE IF IT HAS POSITIVE, NEGATIVE, OR NEUTRAL SENTIMENT
  * 
- * Uses DeepSeek language model via Ollama for sentiment classification
+ * HOW IT WORKS:
+ * 1. You send text to this API
+ * 2. The API sends your text to an AI model called DeepSeek
+ * 3. The AI model analyzes the text and returns whether it's positive, negative, or neutral
+ * 4. The API sends the results back to you
  */
 
 /**
- * Input validation type definition for sentiment analysis requests
+ * This defines what data must be sent to the API
+ * - text: The text you want to analyze (required)
+ * - detailed: Whether you want simple or detailed results (optional)
  */
 interface SentimentAnalysisInput {
 	text: string;
@@ -18,7 +23,7 @@ interface SentimentAnalysisInput {
 }
 
 /**
- * Interface for Ollama model response
+ * This defines what the AI model's response looks like
  */
 interface ModelResponse {
 	message: {
@@ -27,32 +32,35 @@ interface ModelResponse {
 }
 
 /**
- * Validates input for sentiment analysis API
- * @param input The input object to validate
- * @returns Validation result with success flag and error details or validated data
+ * This function checks if the data sent to the API is valid
+ * It makes sure:
+ * - Text is provided and is a string
+ * - Text isn't too long or too short
+ * - The "detailed" option is true or false if provided
  */
 function validateInput(input: any): { success: boolean; error?: string; data?: SentimentAnalysisInput } {
-	// Check if input is an object
+	// Check if input is an object (like {text: "some text"})
 	if (!input || typeof input !== 'object') {
 		return { success: false, error: "Input must be an object" };
 	}
 
-	// Check for required text field
+	// Make sure text was provided and is a string
 	if (!input.text || typeof input.text !== 'string') {
 		return { success: false, error: "Text field is required and must be a string" };
 	}
 
-	// Check text length
-	if (input.text.length < 1 || input.text.length > 5000) {
+	// Check text isn't too short or too long - Force string conversion to ensure length check works consistently
+	const textToCheck = String(input.text);
+	if (textToCheck.length < 1 || textToCheck.length > 5000) {
 		return { success: false, error: "Text must be between 1 and 5000 characters" };
 	}
 
-	// Check detailed flag if provided
+	// Make sure detailed is a true/false value if provided
 	if (input.detailed !== undefined && typeof input.detailed !== 'boolean') {
 		return { success: false, error: "Detailed flag must be a boolean when provided" };
 	}
 
-	// Return validated data with detailed defaulting to false if undefined
+	// If everything is valid, return the data
 	return { 
 		success: true, 
 		data: { 
@@ -62,51 +70,34 @@ function validateInput(input: any): { success: boolean; error?: string; data?: S
 	};
 }
 
-// Lazy-loaded Ollama client to avoid initialization issues at startup
+// This creates a connection to the AI system (Ollama) when needed
 let ollamaClient: Ollama | null = null;
 
 /**
- * Gets or creates the Ollama client
- * @returns Ollama client instance
+ * Sets up a connection to the AI system running on your computer
  */
 function getOllamaClient() {
     if (!ollamaClient) {
         ollamaClient = new Ollama({ 
-            host: 'http://localhost:11434'
+            host: 'http://localhost:11434'  // This is where the AI system is running on your computer
         });
     }
     return ollamaClient;
 }
 
 /**
- * Finds the available DeepSeek model from Ollama
- * @returns The name of the available DeepSeek model or null if none found
+ * This function looks for the DeepSeek AI model on your computer
+ * It needs to be installed separately using Ollama
  */
 async function findDeepSeekModel(): Promise<string | null> {
     try {
         const ollama = getOllamaClient();
         
-        // Possible model variations
-        const modelOptions = [
-            'deepseek-r1-7b',
-            'deepseek-coder:7b-instruct-q4_0',
-            'deepseek:latest'
-        ];
-        
-        // List available models
+        // Ask Ollama what AI models are available
         const models = await ollama.list();
         console.log("Available models:", models.models.map(m => m.name));
-        
-        // Try to find the exact model first
-        for (const option of modelOptions) {
-            const exactMatch = models.models.find(m => m.name === option);
-            if (exactMatch) {
-                console.log(`Found exact DeepSeek model match: ${exactMatch.name}`);
-                return exactMatch.name;
-            }
-        }
-        
-        // If no exact match, look for any model containing 'deepseek'
+    
+        // Look for any model with "deepseek" in its name
         const partialMatch = models.models.find(m => 
             m.name.toLowerCase().includes('deepseek')
         );
@@ -125,25 +116,24 @@ async function findDeepSeekModel(): Promise<string | null> {
 }
 
 /**
- * Perform sentiment analysis using the DeepSeek model
- * @param text Text to analyze
- * @param detailed Whether to return detailed analysis
- * @returns Analysis result
+ * This is the main function that does the sentiment analysis
+ * It sends text to the AI model and gets back results
  */
 async function analyzeSentiment(text: string, detailed: boolean): Promise<ModelResponse> {
-    // Get the Ollama client
+    // Connect to the AI system
     const ollama = getOllamaClient();
     
-    // Find available DeepSeek model
+    // Find the right AI model to use
     const modelName = await findDeepSeekModel();
     
+    // Stop if no suitable AI model was found
     if (!modelName) {
         throw new Error("No DeepSeek model available. Please install a DeepSeek model with Ollama.");
     }
     
     console.log(`Using model ${modelName} for sentiment analysis`);
     
-    // Build detailed or simple prompt based on user request
+    // Create different instructions based on whether detailed analysis was requested
     const analysisPrompt = detailed 
         ? `Analyze the sentiment of the following text. Provide a detailed analysis including:
             - The overall sentiment (positive, negative, or neutral)
@@ -168,7 +158,7 @@ async function analyzeSentiment(text: string, detailed: boolean): Promise<ModelR
             
             Text: "${text}"`;
     
-    // Call the Ollama API
+    // Send the text to the AI model and return its response
     return await ollama.chat({
         model: modelName,
         messages: [
@@ -182,35 +172,41 @@ async function analyzeSentiment(text: string, detailed: boolean): Promise<ModelR
 }
 
 /**
- * POST endpoint for sentiment analysis
- * Accepts text input and returns sentiment analysis results
- * Uses the DeepSeek model through Ollama
+ * THIS HANDLES POST REQUESTS TO THE API
+ * 
+ * When someone sends data to this API using POST, this function:
+ * 1. Checks if the request data is valid
+ * 2. Sends the text to the AI for analysis
+ * 3. Returns the analysis results
  */
 export const POST: RequestHandler = async ({ request }) => {
     try {
-        // Parse and validate request body
+        // Get the data sent in the request
         const body = await request.json();
-        const validationResult = validateInput(body);
         
+        // Always create a fresh validation for each request
+        const validationResult = validateInput({...body});
+        
+        // If data is invalid, return an error
         if (!validationResult.success) {
             return json({
                 error: "Invalid input",
                 details: validationResult.error
-            }, { status: 400 });
+            }, { status: 400 });  // 400 means "Bad Request"
         }
         
         const { text, detailed } = validationResult.data!;
         
         try {
-            // Call the sentiment analysis function
+            // Send text to the AI for analysis
             const response = await analyzeSentiment(text, detailed || false);
             
-            // Get the model used for the analysis
+            // Get the name of the AI model used
             const modelName = await findDeepSeekModel() || "unknown";
             
             if (detailed) {
                 try {
-                    // Try to parse the JSON response
+                    // Try to understand the AI's response as JSON
                     const parsedContent = JSON.parse(response.message.content);
                     return json({
                         result: parsedContent,
@@ -218,15 +214,15 @@ export const POST: RequestHandler = async ({ request }) => {
                         text: text
                     });
                 } catch (e) {
-                    // If parsing fails, return an error
+                    // If the AI response isn't valid JSON, return an error
                     return json({
                         error: "Invalid model response",
                         message: "The model didn't return valid JSON. Please try again.",
                         raw_response: response.message.content
-                    }, { status: 500 });
+                    }, { status: 500 });  // 500 means "Server Error"
                 }
             } else {
-                // For simple responses, ensure we have proper JSON format
+                // For simple responses, make sure we have valid JSON
                 try {
                     const parsedResponse = JSON.parse(response.message.content);
                     return json({
@@ -236,7 +232,7 @@ export const POST: RequestHandler = async ({ request }) => {
                         text: text
                     });
                 } catch (e) {
-                    // If parsing fails, return an error
+                    // If the AI response isn't valid JSON, return an error
                     return json({
                         error: "Invalid model response",
                         message: "The model didn't return valid JSON. Please try again.",
@@ -263,11 +259,17 @@ export const POST: RequestHandler = async ({ request }) => {
 };
 
 /**
- * GET endpoint for checking API status and model availability
+ * THIS HANDLES GET REQUESTS TO THE API
+ * 
+ * When someone accesses this API with GET, this function:
+ * 1. Checks if the AI system is working
+ * 2. Returns information about the API status
+ * 
+ * This is useful to check if the API is online before trying to use it
  */
 export const GET: RequestHandler = async () => {
     try {
-        // Check if Ollama and model are available
+        // Check if the AI model is available
         let modelInfo = "No DeepSeek model found";
         let modelAvailable = false;
         
@@ -282,6 +284,7 @@ export const GET: RequestHandler = async () => {
             console.error("Error checking Ollama models:", e);
         }
         
+        // Return information about the API's status
         return json({
             status: "online",
             message: "Sentiment Analysis API is running. Please use POST method with text payload.",
