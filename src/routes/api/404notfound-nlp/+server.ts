@@ -31,7 +31,7 @@ export const POST: RequestHandler = async ({ request }) => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "mistralai/mistral-7b-instruct:free",
+                model: "deepseek/deepseek-prover-v2:free",
                 messages: [
                     { role: "system", content: "You are a concise summarizer. Respond with a 2-3 sentence summary." },
                     { role: "user", content: `Summarize this text: ${text}` }
