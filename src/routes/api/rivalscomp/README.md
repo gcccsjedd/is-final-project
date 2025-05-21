@@ -1,7 +1,7 @@
 # rivalscomp API
 
 ## Overview
-This API uses the Groq AI model with data from Marvel Rivals Characters to recommend a list of characters to main based on user's description.
+This API uses the Groq AI model with data from Marvel Rivals Characters to recommend a list of characters to main based on user's description.##
 
 ## Endpoint
 - **URL**: `/api/rivalscomp`
@@ -14,3 +14,6 @@ This API uses the Groq AI model with data from Marvel Rivals Characters to recom
   {
       "userDescription": "I want to main a character with high healing output"
   }
+
+## Ollama Model
+deepseek-r1:7b

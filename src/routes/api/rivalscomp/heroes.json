@@ -1,7 +1,10 @@
-{
-  "Vanguard": [
+[
     {
       "name": "Captain America",
+      "roles":["Vanguard", "Diver", "Tank","Melee"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.55,
       "abilities": {
         "normalAttack": "Sentinel Strike – Get up close to strike enemies. Landing the second hit enables a shield throw that can ricochet.",
         "q": "Freedom Charge – Shield held high, carve a path forward, granting both himself and allies along the path continuous Bonus Health and Movement Boosts.",
@@ -31,6 +34,10 @@
     },
     {
       "name": "Doctor Strange",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 48.84,
       "abilities": {
         "normalAttack": "Daggers of Denak – Cast Daggers of Denak forward.",
         "q": "Eye of Agamotto – Separate nearby enemies' Souls from their bodies. Damage dealt to these Souls is transferred to their physical bodies.",
@@ -61,6 +68,10 @@
     },
     {
       "name": "Emma Frost",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Hitscan",
+      "tier": "A",
+      "winRate": 50.08,
       "forms": {
         "Human": {
           "abilities": {
@@ -98,6 +109,10 @@
     },
     {
       "name": "Groot",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Hitscan",
+      "tier" : "B",
+      "winRate": 49.60,
       "abilities": {
         "normalAttack": "Vine Strike – Launch vines to attack enemies.",
         "q": "Strangling Prison – Fire a massive vine cluster that pulls nearby enemies to its center and Imprisons them.",
@@ -129,6 +144,10 @@
     },
     {
       "name": "Hulk",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "S",
+      "winRate": 52.98,
       "variants": [
         {
           "name": "Bruce Banner",
@@ -184,6 +203,10 @@
     },
     {
       "name": "Magneto",
+      "roles":["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "A",
+      "winRate": 46.61,
       "abilities": {
         "normalAttack": "Iron Volley – Fire a volley of magnetic orbs forward.",
         "q": "Meteor M – Alter the magnetic field to draw in matter and projectiles and forge a massive iron meteor, delivering catastrophic damage to the targeted area upon impact.",
@@ -213,6 +236,10 @@
     },
     {
       "name": "Peni Parker",
+      "roles":["Vanguard","Anti-Dive","Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 52.01,
       "abilities": {
         "normalAttack": "Cyber-Web Cluster – Launch forward a Cyber-Web Cluster.",
         "rightClick": "Cyber-Web Snare – Cast futuristic webbing that immobilizes enemies upon impact and creates a Cyber-Web upon hitting the scene.",
@@ -244,6 +271,10 @@
     },
     {
       "name": "The Thing",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.62,
       "abilities": {
         "normalAttack": "Rocky Jab – Rapidly punch forward",
         "q": "Clobberin' Time – Launch Up enemies ahead and spiral through the air, sweeping up enemies along the path and delivering a devastating impact at the landing point. Impact deals extra damage based on Rage accumulated.",
@@ -272,6 +303,10 @@
     },
     {
       "name": "Thor",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 51.93,
       "abilities": {
         "normalAttack1": "Mjolnir Bash – Wield Mjolnir to strike enemies. When Awakened, Thor can launch lightning arc waves to deal damage.",
         "normalAttack2": "Hammer Throw – Throw Mjolnir forward and then it returns.",
@@ -304,6 +339,10 @@
     },
     {
       "name": "Venom",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 47.73,
       "abilities": {
         "normalAttack": "Dark Predation – Unleash tentacles forward to attack enemies",
         "q": "Feast of the Abyss – Burrow underground for free movement. After a duration or by pressing Left Click to devour enemies above and generate Bonus Health.",
@@ -336,11 +375,13 @@
         "Few options to protect team; functions more as a melee Duelist.",
         "Venom Swing has only one charge and high cooldown."
       ]
-    }
-  ],
-  "Duelist": [
+    },
     {
       "name": "Black Panther",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 49.31,
       "abilities": {
         "normalAttack": "Vibranium Claws – Slice Vibranium Claws forward.",
         "q": "Bast's Descent – Summon Bast, pouncing forward, dealing damage, and attaching a Vibranium Mark to hit enemies.",
@@ -373,6 +414,10 @@
     },
     {
       "name": "Black Widow",
+      "roles":["Duelist","Sniper"],
+      "attackRange": "Long Hitscan",
+      "tier": "F",
+      "winRate": 39.68,
       "abilities": {
         "normalAttack1": "Widow's Bite Baton – Strike with the enhanced electric batons.",
         "normalAttack2": "Red Room Rifle – Attack with the Red Room Rifle.",
@@ -404,6 +449,10 @@
     },
     {
       "name": "Hawkeye",
+      "roles":["Duelist","Sniper","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 46.59,
       "abilities": {
         "normalAttack1": "Piercing Arrows – Shoot a powerful arrow.",
         "normalAttack2": "Shoot three explosive arrows.",
@@ -438,6 +487,10 @@
     },
     {
       "name": "Hela",
+      "roles":["Duelist", "High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.12,
       "abilities": {
         "normalAttack1": "Nightsword Thorn – Throw Nightsword thorns.",
         "q": "Goddess of Death – Soar into the sky and unleash Nastrond Crows from each hand at will.",
@@ -470,6 +523,10 @@
     },
     {
       "name": "Human Torch",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 50.61,
       "abilities": {
         "normalAttack": "Fire Cluster – Launch forward a splittable fireball",
         "q": "Supernova – Explode with cosmic fire to deal damage to enemies within range. Upon skill activation, all Flame Fields will transform into Flame Tornadoes, dealing extra damage",
@@ -499,6 +556,10 @@
     },
     {
       "name": "Iron Fist",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 50.74,
       "abilities": {
         "normalAttack1": "Jeet Kune Do – Strike the targeted enemy with Jeet Kune Do, reducing the cooldown of Dragon's Defense with every hit.",
         "normalAttack2": "Yat Jee Chung Kuen – Dash forward to pursue the targeted enemy and unleash a flurry of attacks.",
@@ -533,6 +594,10 @@
     },
     {
       "name": "Iron Man",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 52.72,
       "abilities": {
         "normalAttack1": "Repulsor Blast – Fire nano pulse cannons forward.",
         "normalAttack2": "Unibeam – Fire a unibeam forward.",
@@ -563,6 +628,10 @@
     },
     {
       "name": "Magik",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.88,
       "abilities": {
         "normalAttack": "Soulsword – Slash forward with the Soulsword.",
         "q": "Darkchild – Transform into Darkchild, gaining enhancements to all her abilities.",
@@ -597,6 +666,10 @@
     },
     {
       "name": "Mister Fantastic",
+      "roles":["Duelist","Frontliner","Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.90,
       "abilities": {
         "passive": [
           "Elastic Strength – Using abilities generates Elasticity, boosting attack power. Reaching full Elasticity triggers an Inflated state that grants Shield and boosts even more damage."
@@ -627,6 +700,10 @@
     },
     {
       "name": "Moon Knight",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 45.27,
       "abilities": {
         "normalAttack1": "Crescent Dart – Unleash Crescent Darts forward that can bounce between enemies and Ankhs, dealing damage to enemies.",
         "normalAttack2": "Moon Blade – Launch forward a Moon Blade that can bounce between enemies and Ankhs, dealing damage to enemies.",
@@ -658,6 +735,10 @@
     },
     {
       "name": "Namor",
+      "roles":["Duelist","Anti-Dive"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 48.33,
       "abilities": {
         "normalAttack": "Trident of Neptune – Toss the trident forward, reducing Aquatic Dominion's cooldown upon enemy impact.",
         "q": "Horn of Proteus – Summon Giganto to leap atop enemies within range.",
@@ -688,6 +769,10 @@
     },
     {
       "name": "Psylocke",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Short Hitscan",
+      "tier": "B",
+      "winRate": 48.87,
       "abilities": {
         "normalAttack": "Psionic Crossbow – Unleash bolts with psionic crossbows to damage enemies and reduce the cooldowns of all her abilities.",
         "q": "Dance of the Butterfly – Slash nearby enemies with a psionic katana, dealing massive damage.",
@@ -714,6 +799,10 @@
     },
     {
       "name": "Scarlet Witch",
+      "roles":["Duelist","Airborne"],
+      "attackRange": "Close Hitscan",
+      "tier": "C",
+      "winRate": 47.62,
       "abilities": {
         "normalAttack": "Chaos Control – Use Chaos Magic to attack enemies and restore Chaos Energy.",
         "q": "Reality Erasure – Engage in free-flight while charging energy, then unleash it to deal massive damage.",
@@ -742,6 +831,10 @@
     },
     {
       "name": "Spider-Man",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.60,
       "abilities": {
         "normalAttack": "Spider-Power – Swing fists forward to strike, dealing extra damage to the enemy with a Spider-Tracer.",
         "rightClick": "Web-Cluster – Shoot a Web-Cluster that deals damage and attaches a Spider-Tracer to the hit enemy.",
@@ -758,6 +851,10 @@
     },
     {
       "name": "Squirrel Girl",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "D",
+      "winRate": 45.25,
       "abilities": {
         "normalAttack": "Burst Acorn – Shoot bouncing Burst Acorns.",
         "q": "Unbeatable Squirrel Tsunami – Summon a horde of squirrels to charge forward, dealing damage while bouncing against structures.",
@@ -783,6 +880,10 @@
     },
     {
       "name": "Star-Lord",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Close Hitscan",
+      "tier": "B",
+      "winRate": 47.45,
       "abilities": {
         "normalAttack": "Element Guns – Shoot enemies with dual Element Guns.",
         "q": "Galactic Legend – Engage in free-flight and lock onto enemies in sight.",
@@ -793,6 +894,10 @@
     },
     {
       "name": "Storm",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 53.83,
       "abilities": {
         "normalAttack": "Wind Blade – Launch forward-piercing Wind Blades.",
         "q": "Omega Hurricane – Transform into a hurricane to draw in nearby enemies and deal damage.",
@@ -803,6 +908,10 @@
     },
     {
       "name": "The Punisher",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "C",
+      "winRate": 45.58,
       "abilities": {
         "normalAttack1": "Adjudication – Fire at enemies with Adjudication, his Automatic Rifle",
         "normalAttack2": "Deliverance – Fire at enemies with Deliverance, his Shotgun",
@@ -830,6 +939,10 @@
     },
     {
       "name": "Winter Soldier",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 46.67,
       "abilities": {
         "normalAttack": "Roterstern – Fire explosive rounds with his blaster, Roterstern, damaging the target hit and enemies behind them.",
         "q": "Kraken Impact – Leap high, then dash forward and slam down with the bionic arm, dealing damage to enemies in range, marking them for culling. Marked enemies will perish instantly if their health falls below a certain threshold, recharging the bionic arm for another Kraken Impact within a short period.",
@@ -856,6 +969,10 @@
     },
     {
       "name": "Wolverine",
+      "roles":["Duelist","Diver","Anti-Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 48.36,
       "abilities": {
         "normalAttack": "Savage Claw – Slash with Adamantium claws for a Claw Strike. Unleashing Feral Leap will enhance it to Berserk Claw Strike for a brief period.",
         "q": "Last Stand – Launch Up enemies ahead and spiral through the air, sweeping up enemies along the path and delivering a devastating impact at the landing point. Impact deals extra damage based on Rage accumulated.",
@@ -867,11 +984,13 @@
           "Berserker Rage – Rage builds when Wolverine attacks or takes hits, boosting the damage of his Claw Strikes and the Bonus Health from his regenerative healing factor."
         ]
       }
-    }
-  ],
-  "Strategist": [
+    },
     {
       "name": "Adam Warlock",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.99,
       "abilities": {
         "normalAttack": "Quantum Magic – Launch quantum energy to deal damage.",
         "q": "Karmic Revival – Awaken the karma of allies to revive them. Allies revived have lower health but enjoy a brief period of invincibility.",
@@ -906,6 +1025,10 @@
     },
     {
       "name": "Cloak & Dagger",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 48.35,
       "abilities": {
         "normalAttackDagger": "Lightforce Dagger – Unleash a bouncing Lightforce Dagger to damage enemies and heal nearby allies.",
         "lshiftDagger": "Shadow's Embrace – Switch to Cloak.",
@@ -953,6 +1076,10 @@
     },
     {
       "name": "Invisible Woman",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 46.63,
       "abilities": {
         "passive": [
           "Covert Advance – Enter Invisible state some time after disengaging from combat and grant yourself healing over time."
@@ -989,6 +1116,10 @@
     },
     {
       "name": "Jeff the Land Shark",
+      "roles":["Strategist","Support","Healer","Diver"],
+      "attackRange": "Long Projectile",
+      "tier": "E",
+      "winRate": 42.07,
       "abilities": {
         "normalAttack1": "Joyful Splash – Unleash a healing splash.",
         "normalAttack2": "Aqua Burst – Launch a high-speed water sphere that bursts, damaging nearby enemies.",
@@ -1024,6 +1155,10 @@
     },
     {
       "name": "Loki",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 51.09,
       "abilities": {
         "normalAttack": "Mystical Missile – Fire missiles that heal allies or damage enemies.",
         "q": "God of Mischief – Shapeshift into a selected ally or enemy hero and use their abilities.",
@@ -1058,6 +1193,10 @@
     },
     {
       "name": "Luna Snow",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 45.22,
       "abilities": {
         "normalAttack": "Light & Dark Ice – Fire ice shots that heal allies or damage enemies.",
         "q": "Fate of Both Worlds – Toggle between healing allies or granting them a Damage Boost through a performance.",
@@ -1092,6 +1231,10 @@
     },
     {
       "name": "Mantis",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 52.80,
       "abilities": {
         "normalAttack": "Life Energy Blast – Fire an energy thorn. Gain one Life Orb on critical hits.",
         "q": "Soul Resurgence – Move while releasing healing energy and granting Movement Boost to allies.",
@@ -1125,6 +1268,10 @@
     },
     {
       "name": "Rocket Raccoon",
+      "roles":["Strategist","Support","Healer", "Anti-Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "S",
+      "winRate": 53.55,
       "abilities": {
         "normalAttack": "Bombard Mode – Fire energy projectiles that deal damage.",
         "rightClick": "Repair Mode – Shoot bouncing spheres to heal allies.",
@@ -1158,5 +1305,4 @@
         "Vulnerable when riding Groot"
       ]
     }
-  ]
-}
+]

@@ -1,35 +1,20 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
-import axios from 'axios';
 import 'dotenv/config';
 
 // Type definitions
-interface Hero {
+interface Heroes {
     name: string;
-    role: string;
-    tags: string[];
-    tier?: { tier: string; winRate: number };
-    teamUps?: TeamUp[];
-}
-
-interface HeroStats {
+    roles: string[];
+    attackRange: string;
+    tier: string;
     winRate: number;
-}
-
-interface TeamUp {
-    teamUpName: string;
-    primaryHero: string;
-    secondaryHeroes: string[];
-    effect: string;
-    winRate: string;
-}
-
-interface HeroTierList {
-    S: Array<{ name: string; winRate: number }>;
-    A: Array<{ name: string; winRate: number }>;
-    B: Array<{ name: string; winRate: number }>;
-    C: Array<{ name: string; winRate: number }>;
-    D: Array<{ name: string; winRate: number }>;
+    abilities?: {
+        [key: string]: string | string[]; // account for string or string[] like in "passive"
+    };
+    strengths?: string[];
+    weaknesses?: string[];
+    teamUps?: TeamUp[]; // Only include if you define and use this
 }
 
 interface TeamUpTierList {
@@ -39,112 +24,72 @@ interface TeamUpTierList {
     C: TeamUp[];
 }
 
-interface HeroData {
-    name: string;
-    abilities?: Record<string, any>;
-    strengths?: string[];
-    weaknesses?: string[];
-    playstyle?: string[];
-}
-
-interface HeroesData {
-    Vanguard: HeroData[];
-    Duelist: HeroData[];
-    Strategist: HeroData[];
+interface TeamUp {
+    teamUpName: string;
+    primaryHero: string;
+    secondaryHeroes: string[];
+    effect: string;
+    teamupTier: string;
+    winRate: number;
 }
 
 // Load JSON data with type assertions
 import heroesDataJson from './heroes.json' assert { type: 'json' };
-const heroesData = heroesDataJson as HeroesData;
-import herotierlistJson from './herotierlist.json' assert { type: 'json' };
-const herotierlist = herotierlistJson as { heroTierList: HeroTierList };
-import teamuptierlistJson from './teamuptierlist.json' assert { type: 'json' };
-const teamuptierlist = teamuptierlistJson as { teamupTierList: TeamUpTierList };
-
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_API_KEY = process.env.GROQ_API_KEY || 'YOUR_GROQ_API_KEY';
-
-type HeroRole = 'Vanguard' | 'Duelist' | 'Strategist';
-
-function getHeroDetails(heroName: string): Hero {
-    const roles: HeroRole[] = ['Vanguard', 'Duelist', 'Strategist'];
+const heroesData = heroesDataJson as Heroes[];
+import teamuptierlistJson from './teamuptierlist.json' assert { type: 'json' };     
+const teamuptierlist = teamuptierlistJson as TeamUpTierList;
     
-    for (const role of roles) {
-        const hero = heroesData[role]?.find(h => h.name === heroName);
-        if (hero) {
-            const tags: string[] = [];
-            
-            if (hero.abilities) {
-                tags.push(...Object.keys(hero.abilities));
-            }
-            
-            if (Array.isArray(hero.strengths)) {
-                tags.push(...hero.strengths);
-            }
-            
-            if (Array.isArray(hero.weaknesses)) {
-                tags.push(...hero.weaknesses);
-            }
+const OLLAMA_API_URL = 'http://localhost:11434/api/chat';
+const OLLAMA_MODEL = 'llama2:latest';
 
-            // Fetch tier information
-            const tiers: Array<'S' | 'A' | 'B' | 'C' | 'D'> = ['S', 'A', 'B', 'C', 'D'];
-            let tierInfo = null;
-            for (const tier of tiers) {
-                const heroTier = herotierlist.heroTierList[tier]?.find(h => h.name === heroName);
-                if (heroTier) {
-                    tierInfo = { tier, winRate: heroTier.winRate };
-                    break;
-                }
-            }
 
-            // Fetch team-up information
-            const teamUps: TeamUp[] = [];
-            const teamUpTiers: Array<'S' | 'A' | 'B' | 'C'> = ['S', 'A', 'B', 'C'];
-            for (const tier of teamUpTiers) {
-                const tierTeamUps = teamuptierlist.teamupTierList[tier]?.filter(
-                    tu => tu.primaryHero === heroName || tu.secondaryHeroes.includes(heroName)
-                );
-                if (tierTeamUps) {
-                    teamUps.push(...tierTeamUps);
-                }
-            }
-
-            return {
-                name: hero.name,
-                role,
-                tags,
-                tier: tierInfo || { tier: 'D', winRate: 40 },
-                teamUps
-            };
-        }
+// Utility function for fetch with retry
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  retries = 5,
+): Promise<Response> {
+  const controller = new AbortController();
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    throw new Error(`Hero ${heroName} not found in heroes.json`);
+    return response;
+  } catch (error) {
+    if (retries > 0) {
+      console.log(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, 3000)); // wait 1 second before retry
+      return fetchWithRetry(url, options, retries - 1);
+    }
+    throw error;
+  }
 }
 
-function getAllHeroes(): Hero[] {
-    const roles: HeroRole[] = ['Vanguard', 'Duelist', 'Strategist'];
-    const allHeroes: Hero[] = [];
-    
-    for (const role of roles) {
-        heroesData[role]?.forEach(hero => {
-            allHeroes.push(getHeroDetails(hero.name));
-        });
-    }
-    
-    return allHeroes;
+function getHeroDetails(heroName: string): Heroes | undefined {
+    return heroesData.find((hero) => hero.name === heroName);
+}
+
+function getAllHeroes(): Heroes[] {
+    return heroesData;
 }
 
 async function suggestMainHeroes(userDescription: string): Promise<{ 
     suggestion: { 
         hero: string; 
-        role: string;
+        roles: string[];
         tier: string;
         winRate: number; 
         abilities: Record<string, any>;
         strengths: string[]; 
         weaknesses: string[]; 
         playstyle: string[]; 
-        teamup: string[]; 
+        teamup: string; 
         tips: string[] 
     }; 
     explanation: string 
@@ -152,188 +97,110 @@ async function suggestMainHeroes(userDescription: string): Promise<{
     const allHeroes = getAllHeroes();
 
     const prompt = `
-You are an expert in Marvel Rivals hero selection. Given a user's description of their preferred playstyle, suggest exactly 1 hero that would suit them best as their main hero. Consider suggesting a hero regardless of their current tier unless the userDescription specifies a preference for a specific tier. For the suggested hero, provide:
+        You are an expert in Marvel Rivals hero selection. Given a user's description, suggest exactly 1 hero that suits them best as their main hero. If the user explicitly names a hero (e.g., "I want to main Namor"), prioritize that hero if they exist in the available heroes list. Otherwise, suggest a hero based on their description. For the suggested hero, provide:
 
-1. Their role (Vanguard, Duelist, or Strategist)
-2. Current tier and win rate (for informational purposes)
-3. All abilities (include all relevant abilities as a key-value object, using only the abilities listed in the provided hero data)
-4. All key strengths (include all relevant strengths)
-5. All key weaknesses (include all relevant weaknesses)
-6. Complete playstyle description (include all relevant playstyle aspects)
-7. One good team composition (mention 1 strong team-up partner)
-8. 2-3 tips for playing this hero effectively
+        Their role (Vanguard, Duelist, or Strategist)
+        Current tier and win rate
+        All abilities (only from provided data)
+        All key strengths
+        All key weaknesses
+        Complete playstyle description
+        One good team composition
+        2-3 tips for playing this hero effectively
+        User description: "${userDescription}"
 
-Important: 
-- Do not limit the number of strengths, weaknesses, or playstyle aspects - include all relevant ones for the hero.
-- For abilities, use ONLY the abilities provided in the hero data below. Do not invent or include abilities not listed in the provided data.
+        Available Heroes:"${allHeroes}"
 
-User description: "${userDescription}"
-
-Available Heroes:
-${allHeroes.map(hero => {
-    const heroData = heroesData[hero.role as HeroRole]?.find(h => h.name === hero.name);
-    const strengths = heroData?.strengths ? 
-        (Array.isArray(heroData.strengths) ? heroData.strengths : [String(heroData.strengths)]) : 
-        ['N/A'];
-    const weaknesses = heroData?.weaknesses ? 
-        (Array.isArray(heroData.weaknesses) ? heroData.weaknesses : [String(heroData.weaknesses)]) : 
-        ['N/A'];
-    const abilities = heroData?.abilities ? 
-        Object.entries(heroData.abilities).map(([key, value]) => `${key}: ${value}`).join(', ') : 
-        'No abilities listed';
-    
-    return `- ${hero.name} (${hero.role}): ${hero.tier?.tier || 'D'} tier, ${hero.tier?.winRate || 40}% win rate. ` +
-           `Strengths: ${strengths.join(', ')}. Weaknesses: ${weaknesses.join(', ')}. Abilities: ${abilities}.`;
-}).join('\n')}
-
-Response format (JSON):
-{
-    "suggestion": {
+        Response format (JSON):
+        {
+        "suggestion": {
         "hero": "Hero Name",
-        "role": "Vanguard/Duelist/Strategist",
-        "tier": "S/A/B/C/D",
+        "roles": ["Vanguard", "Frontliner", "Tank"],
+        "tier": "S/A/B/C/D/E/F",
         "winRate": number,
         "abilities": {"ability1": "description1", "ability2": "description2", ...},
-        "strengths": ["strength1", "strength2", "strength3", ...],
-        "weaknesses": ["weakness1", "weakness2", "weakness3", ...],
-        "playstyle": ["playstyle1", "playstyle2", "playstyle3", ...],
-        "teamup": ["single best partner and the teamup definition"],
+        "strengths": ["strength1", "strength2", ...],
+        "weaknesses": ["weakness1", "weakness2", ...],
+        "playstyle": ["playstyle1", "playstyle2", ...],
+        "teamup": "single best partner",
         "tips": ["tip1", "tip2", "tip3"]
-    },
-    "explanation": "Explanation connecting user's preferences to the suggested hero"
-}
-`;
+        },
+        "explanation": "Explanation connecting user's preferences to the suggested hero"
+        }
+    `;
 
     try {
-        const response = await axios.post(GROQ_API_URL, {
-            model: 'meta-llama/llama-4-scout-17b-16e-instruct',
-            messages: [{ role: 'user', content: prompt }],
-            response_format: { type: "json_object" }
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GROQ_API_KEY}`
-            }
-        });
+        const ollamaResponse = await fetchWithRetry(
+            OLLAMA_API_URL,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: OLLAMA_MODEL,
+                    messages: [{ role: 'user', content: prompt }],
+                    stream: false,
+                    options: { temperature: 0.6, num_predict: 600 },
+                }),
+            },
+        );
 
-        const result = JSON.parse(response.data.choices[0].message.content);
-
-        // Validate response
-        if (!result.suggestion || typeof result.suggestion !== 'object') {
-            throw new Error('Invalid Groq API response: Missing or invalid suggestion object');
-        }
-
-        // Verify suggestion has required fields and arrays aren't artificially limited
-        const suggestion = result.suggestion;
-        if (!suggestion.hero || !suggestion.role || !suggestion.tier || suggestion.winRate === undefined || !suggestion.abilities) {
-            throw new Error('Invalid suggestion format: Missing required fields');
-        }
-        if (suggestion.strengths && suggestion.strengths.length < 2) {
-            throw new Error('Invalid suggestion format: Strengths list too short');
-        }
-        if (suggestion.weaknesses && suggestion.weaknesses.length < 2) {
-            throw new Error('Invalid suggestion format: Weaknesses list too short');
-        }
-        if (suggestion.playstyle && suggestion.playstyle.length < 2) {
-            throw new Error('Invalid suggestion format: Playstyle list too short');
-        }
-        if (suggestion.teamup && suggestion.teamup.length !== 1) {
-            throw new Error('Invalid suggestion format: Should have exactly 1 teamup');
+        if (!ollamaResponse.ok) {
+            throw new Error(`Ollama API failed with status: ${ollamaResponse.status}`);
         }
 
-        // Validate abilities match heroes.json
-        const heroData = heroesData[suggestion.role as HeroRole]?.find(h => h.name === suggestion.hero);
-        if (heroData?.abilities) {
-            const expectedAbilities = Object.keys(heroData.abilities);
-            const returnedAbilities = Object.keys(suggestion.abilities);
-            if (!returnedAbilities.every(ability => expectedAbilities.includes(ability))) {
-                throw new Error('Invalid suggestion format: Abilities do not match heroes.json');
-            }
-            // Optionally, check if descriptions match
-            for (const [key, value] of Object.entries(suggestion.abilities)) {
-                if (heroData.abilities[key] !== value) {
-                    throw new Error(`Invalid ability description for ${key}: does not match heroes.json`);
-                }
-            }
-        } else if (Object.keys(suggestion.abilities).length > 0) {
-            throw new Error('Invalid suggestion format: Abilities provided for hero with no abilities in heroes.json');
+        const responseData = await ollamaResponse.json();
+        const content = responseData.message?.content;
+
+        if (!content) {
+            throw new Error("Ollama returned an empty response");
         }
 
-        return {
-            suggestion: suggestion,
-            explanation: result.explanation
-        };
+        // Extract JSON from response (handles both raw JSON and markdown code blocks)
+        let jsonText: string;
+        let jsonResponse: any;
+        try {
+            const jsonMatch = content.match(/```json\s*([\s\S]*?)```/i);
+            jsonText = jsonMatch ? jsonMatch[1].trim() : content.trim();
+
+            // Normalize potential single quotes or unquoted keys if needed (optional safety)
+            jsonResponse = JSON.parse(jsonText);
+        } catch (parseError) {
+            console.error('Raw content from Ollama:', content);
+            throw new Error(`Failed to parse Ollama response: ${parseError instanceof Error ? parseError.message : 'Invalid JSON format'}`);
+        }
+
+        // Validate required fields
+        if (!jsonResponse.suggestion || !jsonResponse.explanation) {
+            throw new Error("Ollama response missing required fields");
+        }
+
+        return jsonResponse;
+
     } catch (error) {
-        console.error('Groq API error:', error instanceof Error ? error.message : String(error));
-
-        // Fallback logic with single hero
-        const fallbackHero = shuffleArray(allHeroes)[0];
-        const heroData = heroesData[fallbackHero.role as HeroRole]?.find(h => h.name === fallbackHero.name);
-        
-        // Get all strengths
-        const strengths = heroData?.strengths ? 
-            (Array.isArray(heroData.strengths) ? heroData.strengths : [String(heroData.strengths)]) : 
-            ['No strengths listed'];
-        
-        // Get all weaknesses
-        const weaknesses = heroData?.weaknesses ? 
-            (Array.isArray(heroData.weaknesses) ? heroData.weaknesses : [String(heroData.weaknesses)]) : 
-            ['No weaknesses listed'];
-
-        // Generate complete playstyle based on abilities
-        const playstyle = [];
-        if (heroData?.abilities) {
-            if (heroData.abilities.normalAttack) playstyle.push("Basic: " + heroData.abilities.normalAttack.split(' – ')[0]);
-            if (heroData.abilities.q) playstyle.push("Ultimate: " + heroData.abilities.q.split(' – ')[0]);
-            if (heroData.abilities.lshift) playstyle.push("Movement: " + heroData.abilities.lshift.split(' – ')[0]);
-            if (heroData.abilities.e) playstyle.push("Special: " + heroData.abilities.e.split(' – ')[0]);
-        }
-
-        // Get exactly one team comp
-        const teamup = fallbackHero.teamUps?.length ? 
-            [fallbackHero.teamUps[0].primaryHero === fallbackHero.name ? 
-             fallbackHero.teamUps[0].secondaryHeroes[0] : 
-             fallbackHero.teamUps[0].primaryHero] : 
-            ['No recommended partner'];
-
+        console.error("AI generation failed:", error);
+        // Mock response for testing
         return {
             suggestion: {
-                hero: fallbackHero.name,
-                role: fallbackHero.role,
-                tier: fallbackHero.tier?.tier || 'D',
-                winRate: fallbackHero.tier?.winRate || 40,
-                abilities: heroData?.abilities || {},
-                strengths: strengths,
-                weaknesses: weaknesses,
-                playstyle: playstyle.length ? playstyle : ["Adaptive playstyle"],
-                teamup: teamup,
-                tips: [
-                    `Master ${strengths[0] || 'your abilities'}`,
-                    `Compensate for ${weaknesses[0] || 'your limitations'}`,
-                    `Pair well with ${teamup[0]}`
-                ]
+                hero: "Namor",
+                roles: ["Vanguard", "Diver", "Tank"],
+                tier: "A",
+                winRate: 50.0,
+                abilities: { normalAttack: "Trident Strike" },
+                strengths: ["High mobility", "Strong melee"],
+                weaknesses: ["Low range", "Squishy without abilities"],
+                playstyle: ["Aggressive", "Dive-oriented"],
+                teamup: "Hulk",
+                tips: ["Use mobility to flank", "Coordinate with tanks"]
             },
-            explanation: `Based on your description, ${fallbackHero.name} is recommended as it aligns with your described preferences with its full capabilities.`
+            explanation: "Namor suits your preference for a mobile, aggressive hero."
         };
+        // throw new Error("AI generation failed: " + (error instanceof Error ? error.message : String(error)));
+        
     }
-}
-
-function shuffleArray<T>(array: T[]): T[] {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
 }
 
 export const POST: RequestHandler = async ({ request }) => {
     try {
-        // Validate Groq API key
-        if (!GROQ_API_KEY || GROQ_API_KEY === 'YOUR_GROQ_API_KEY') {
-            throw new Error('GROQ_API_KEY is not set in environment variables');
-        }
-
         const { userDescription } = await request.json();
 
         // Validate input
@@ -343,6 +210,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
         const result = await suggestMainHeroes(userDescription);
 
+        console.log('Response:', result);
         return json({
             userDescription,
             ...result,
