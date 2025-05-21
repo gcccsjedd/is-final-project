@@ -10,11 +10,11 @@ interface Heroes {
     tier: string;
     winRate: number;
     abilities?: {
-        [key: string]: string | string[]; // account for string or string[] like in "passive"
+        [key: string]: string | string[];
     };
     strengths?: string[];
     weaknesses?: string[];
-    teamUps?: TeamUps[]; // Only include if you define and use this
+    teamUps?: TeamUps[];
 }
 
 
@@ -40,9 +40,12 @@ heroesData.forEach(hero => {
 });
 
 
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+// const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+// const GROQ_API_KEY = process.env.GROQ_API_KEY;
+// const GROQ_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
+const OLLAMA_API_URL = 'http://localhost:11434/api/chat'; // or /api/generate
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama2:latest'; // Fallback to a reliable model
+
 
 // Utility function for fetch with retry
 async function fetchWithRetry(
@@ -63,9 +66,8 @@ async function fetchWithRetry(
         if (retries > 0) {
             console.warn(`Retrying... (${retries} attempts left)`);
             await new Promise((resolve) => setTimeout(resolve, retryDelay));
-            return fetchWithRetry(url, options, retries - 1, retryDelay * 2); // Exponential backoff
+            return fetchWithRetry(url, options, retries - 1, retryDelay); // Exponential backoff
         }
-
         throw error;
     }
 }
@@ -183,32 +185,28 @@ async function suggestMainHeroes(userDescription: string): Promise<{
 
     try {
         const response = await fetchWithRetry(
-            GROQ_API_URL,
+            OLLAMA_API_URL,
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: GROQ_MODEL,
+                    model: OLLAMA_MODEL,
                     messages: [{ role: 'user', content: prompt }],
-                    temperature: 0.3,
-                    max_tokens: 1024
+                    temperature: 0.3
                 }),
-            },
-            3,
-            1000
+            }
         );
 
         const data = await response.json();
         const content = data.choices?.[0]?.message?.content;
 
         if (!content) {
-            throw new Error('GROQ API returned an empty response');
+            throw new Error('API returned an empty response');
         }
 
-        console.log('Raw content from GROQ API:', content);
+        console.log('Raw content from the API:', content);
 
         // TODO: Parse the content string to extract structured suggestion data.
         // This is a placeholder return with dummy values.
