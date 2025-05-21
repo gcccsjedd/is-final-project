@@ -1,7 +1,7 @@
 [
     {
       "name": "Captain America",
-      "roles":["Vanguard", "Diver", "Tank","Melee"],
+      "roles":["Vanguard", "Diver", "Tank"],
       "attackRange": "Melee",
       "tier": "A",
       "winRate": 52.55,

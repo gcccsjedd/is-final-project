@@ -82,14 +82,15 @@ async function suggestMainHeroes(userDescription: string): Promise<{
     suggestion: {
         hero: string;
         roles: string[];
+        attackRange: string;
         tier: string;
         winRate: number;
         abilities: Record<string, any>;
         strengths: string[];
         weaknesses: string[];
-        playstyle: string[];
         teamup: string;
         tips: string[];
+        reason: string;
     };
     explanation: string;
 }> {
@@ -108,10 +109,11 @@ async function suggestMainHeroes(userDescription: string): Promise<{
         const heroDescriptions = allHeroes
             .map((hero) => {
                 return `Name: ${hero.name}
+
     Roles: ${hero.roles.join(', ')}
+    Attack Range: ${hero.attackRange}
     Tier: ${hero.tier}
     Win Rate: ${hero.winRate}
-    Attack Range: ${hero.attackRange}
     Strengths: ${
                     Array.isArray(hero.strengths)
                         ? hero.strengths.join('; ')
@@ -152,30 +154,26 @@ async function suggestMainHeroes(userDescription: string): Promise<{
     Team-Up Synergies:
     ${teamUpData}
 
-    Your output must be a single JSON object in this **exact** format, where all data is embedded directly in the 'suggestion' field. Do not place the suggestion data in the 'explanation' field. Populate all fields add at least two playstyles based on hero info, and provide at least two tips for the player.
+    Your output must be a single JSON object in this **exact** format, where all data is embedded directly in the 'suggestion' field. Do not place the suggestion data in the 'explanation' field. Populate all fields, and provide at least two tips for the player.
 
     {
     "userDescription": "${userDescription}",
     "suggestion": {
         "hero": "",
         "roles": [],
+        "attackRange": "",
         "tier": "",
         "winRate": 0,
         "abilities": {
-        "normalAttack": "",
-        "q": "",
-        "e": "",
-        "lshift": "",
-        "rightClick": ""
         },
         "strengths": [],
         "weaknesses": [],
-        "playstyle": [],
         "teamup":{
             "teamUpName": "",
             "effect": "",
         },
-        "tips": []
+        "tips": [],
+        "reason": ""
     },
     "legalNotice": "rivals-comps is not endorsed by Marvel or NetEase Games and does not reflect their views or opinions."
     }
@@ -249,14 +247,15 @@ async function suggestMainHeroes(userDescription: string): Promise<{
                 suggestion: {
                     hero: 'Unknown',
                     roles: [],
+                    attackRange: '',
                     tier: '',
                     winRate: 0,
                     abilities: {},
                     strengths: [],
                     weaknesses: [],
-                    playstyle: [],
                     teamup: '',
-                    tips: []
+                    tips: [],
+                    reason: 'Failed to parse suggestion from AI response.'
                 },
                 explanation: content
             };
