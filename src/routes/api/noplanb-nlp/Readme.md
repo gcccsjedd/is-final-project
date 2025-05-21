@@ -1,8 +1,10 @@
 # Documentation: Sentiment Analysis
 
-Team Members:
+# Team Members:
 API Developer: Roa, Franzine Benneth C.
-Documentation Lead: Gano, Mary Rose 
+
+Documentation Lead: Gano, Mary Rose
+
 Git workflow Manager: Gregorio, Marlyn M.
 
 
@@ -14,7 +16,7 @@ This API allows users to submit a block of text and receive a sentiment analysis
 
 ## API Endpoint
 
-**POST** `/api/noplanb-nlp`
+**POST** `/api/team-noplanb-nlp`
 
 This is the main endpoint for submitting text to be analyzed for sentiment.
 
@@ -44,7 +46,7 @@ The input should be sent in the body of the POST request as JSON.
 ### Example (JSON):
 ```bash
 {
-    curl -X POST http://localhost:5173/api/noplanb-nlp \
+    curl -X POST http://localhost:5173/api/team-noplanb-nlp \
     -H "Content-Type: application/json" \
     -d '{"text": "Attending the workshop last weekend was one of the best decisions I’ve made this year. The speakers were inspiring, the content was well-organized, and the atmosphere was incredibly welcoming. I came away with actionable insights and a renewed sense of motivation. Hats off to the organizers!"}'
 }
