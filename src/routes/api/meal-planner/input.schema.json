@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Meal Planner Input",
+  "description": "Schema for the input to the AI Meal Planner API",
+  "type": "object",
+  "properties": {
+    "dietary_restrictions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["vegetarian", "vegan", "gluten-free", "dairy-free", "nut-free", "pescatarian", "halal", "kosher"]
+      },
+      "description": "List of dietary restrictions."
+    },
+    "calorie_goal_per_day": {
+      "type": "integer",
+      "minimum": 500,
+      "maximum": 10000,
+      "description": "Target daily calorie intake."
+    },
+    "number_of_days": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 7,
+      "description": "Number of days for which the meal plan is to be generated."
+    },
+    "number_of_meals_per_day": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "default": 3,
+      "description": "Number of main meals per day (e.g., breakfast, lunch, dinner)."
+    },
+    "include_snacks": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to include snacks in the meal plan."
+    },
+    "preferred_cuisines": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of preferred cuisines (e.g., Italian, Mexican, Indian)."
+    },
+    "disliked_ingredients": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of ingredients to avoid."
+    },
+    "protein_goal_grams": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Optional: Target daily protein intake in grams."
+    },
+    "fat_goal_grams": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Optional: Target daily fat intake in grams."
+    },
+    "carb_goal_grams": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Optional: Target daily carbohydrate intake in grams."
+    }
+  },
+  "required": [
+    "number_of_days"
+  ],
+  "additionalProperties": false
+}

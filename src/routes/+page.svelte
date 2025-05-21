@@ -3,5 +3,5 @@
 </script>
 
 <main class="flex h-screen w-screen flex-col items-center justify-center p-4">
-	<Card size="lg">Test</Card>
+	<Card size="lg">Hi</Card>
 </main>
