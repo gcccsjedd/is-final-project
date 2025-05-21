@@ -14,17 +14,11 @@ interface Heroes {
     };
     strengths?: string[];
     weaknesses?: string[];
-    teamUps?: TeamUp[]; // Only include if you define and use this
+    teamUps?: TeamUps[]; // Only include if you define and use this
 }
 
-interface TeamUpTierList {
-    S: TeamUp[];
-    A: TeamUp[];
-    B: TeamUp[];
-    C: TeamUp[];
-}
 
-interface TeamUp {
+interface TeamUps {
     teamUpName: string;
     primaryHero: string;
     secondaryHeroes: string[];
@@ -36,39 +30,45 @@ interface TeamUp {
 // Load JSON data with type assertions
 import heroesDataJson from './heroes.json' assert { type: 'json' };
 const heroesData = heroesDataJson as Heroes[];
-import teamuptierlistJson from './teamuptierlist.json' assert { type: 'json' };     
-const teamuptierlist = teamuptierlistJson as TeamUpTierList;
-    
-const OLLAMA_API_URL = 'http://localhost:11434/api/chat';
-const OLLAMA_MODEL = 'llama2:latest';
+import teamupsJson from './teamups.json' assert { type: 'json' };
+const teamups = teamupsJson as TeamUps[];
 
+heroesData.forEach(hero => {
+    hero.teamUps = teamups.filter(tu =>
+        tu.primaryHero === hero.name || tu.secondaryHeroes.includes(hero.name)
+    );
+});
+
+
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GROQ_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct';
 
 // Utility function for fetch with retry
 async function fetchWithRetry(
-  url: string,
-  options: RequestInit,
-  retries = 5,
-  retryDelay = 1000 // milliseconds
+    url: string,
+    options: RequestInit,
+    retries = 5,
+    retryDelay = 1000 // milliseconds
 ): Promise<Response> {
-  try {
-    const response = await fetch(url, options);
+    try {
+        const response = await fetch(url, options);
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        return response;
+    } catch (error) {
+        if (retries > 0) {
+            console.warn(`Retrying... (${retries} attempts left)`);
+            await new Promise((resolve) => setTimeout(resolve, retryDelay));
+            return fetchWithRetry(url, options, retries - 1, retryDelay * 2); // Exponential backoff
+        }
+
+        throw error;
     }
-
-    return response;
-  } catch (error) {
-    if (retries > 0) {
-      console.warn(`Retrying... (${retries} attempts left)`);
-      await new Promise(resolve => setTimeout(resolve, retryDelay));
-      return fetchWithRetry(url, options, retries - 1, retryDelay * 2); // Exponential backoff
-    }
-
-    throw error;
-  }
 }
-
 
 function getHeroDetails(heroName: string): Heroes | undefined {
     return heroesData.find((hero) => hero.name === heroName);
@@ -78,119 +78,193 @@ function getAllHeroes(): Heroes[] {
     return heroesData;
 }
 
-async function suggestMainHeroes(userDescription: string): Promise<{ 
-    suggestion: { 
-        hero: string; 
+async function suggestMainHeroes(userDescription: string): Promise<{
+    suggestion: {
+        hero: string;
         roles: string[];
         tier: string;
-        winRate: number; 
+        winRate: number;
         abilities: Record<string, any>;
-        strengths: string[]; 
-        weaknesses: string[]; 
-        playstyle: string[]; 
-        teamup: string; 
-        tips: string[] 
-    }; 
-    explanation: string 
+        strengths: string[];
+        weaknesses: string[];
+        playstyle: string[];
+        teamup: string;
+        tips: string[];
+    };
+    explanation: string;
 }> {
     const allHeroes = getAllHeroes();
-    const teamUpData: string = Object.entries(teamuptierlist)
-        .flatMap(([tier, teamups]: [string, TeamUp[]]) => 
-            teamups.map((tu: TeamUp) => `Team-Up: ${tu.teamUpName}
-    Tier: ${tier}
-    Primary Hero: ${tu.primaryHero}
-    Secondary Heroes: ${tu.secondaryHeroes.join(', ')}
-    Effect: ${tu.effect}
-    Win Rate: ${tu.winRate}
-    `)).join('\n---\n');
-    const heroDescriptions = allHeroes.map(hero => {
-        return `Name: ${hero.name}
-                Roles: ${hero.roles.join(', ')}
-                Tier: ${hero.tier}
-                Win Rate: ${hero.winRate}
-                Attack Range: ${hero.attackRange}
-                Strengths: ${
-                Array.isArray(hero.strengths)
-                    ? hero.strengths.join('; ')
-                    : typeof hero.strengths === 'object' && hero.strengths !== null
-                    ? Object.entries(hero.strengths).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`).join('; ')
-                    : 'None'
+    const teamUpData: string = Object.entries(teamups)
+            .flatMap(([tier, tu]: [string, TeamUps]) =>
+                [ `Team-Up: ${tu.teamUpName}
+        Primary Hero: ${tu.primaryHero}
+        Secondary Heroes: ${tu.secondaryHeroes.join(', ')}
+        Effect: ${tu.effect}
+        Win Rate: ${tu.winRate}
+        `
+                ]
+            )
+            .join('\n---\n');
+        const heroDescriptions = allHeroes
+            .map((hero) => {
+                return `Name: ${hero.name}
+    Roles: ${hero.roles.join(', ')}
+    Tier: ${hero.tier}
+    Win Rate: ${hero.winRate}
+    Attack Range: ${hero.attackRange}
+    Strengths: ${
+                    Array.isArray(hero.strengths)
+                        ? hero.strengths.join('; ')
+                        : typeof hero.strengths === 'object' && hero.strengths !== null
+                        ? Object.entries(hero.strengths)
+                            .map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
+                            .join('; ')
+                        : 'None'
                 }
-                Weaknesses: ${
-                Array.isArray(hero.weaknesses)
-                    ? hero.weaknesses.join('; ')
-                    : typeof hero.weaknesses === 'object' && hero.weaknesses !== null
-                    ? Object.entries(hero.weaknesses).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`).join('; ')
-                    : 'None'
+    Weaknesses: ${
+                    Array.isArray(hero.weaknesses)
+                        ? hero.weaknesses.join('; ')
+                        : typeof hero.weaknesses === 'object' && hero.weaknesses !== null
+                        ? Object.entries(hero.weaknesses)
+                            .map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`)
+                            .join('; ')
+                        : 'None'
                 }
-                Abilities: ${Object.entries(hero.abilities || {}).map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(', ') : val}`).join(' | ')}
-                Team-Up: ${hero.teamUps}
-                `;
-                }).join('\n---\n');
+    Abilities: ${Object.entries(hero.abilities || {})
+                    .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(', ') : val}`)
+                    .join(' | ')}
+    Team-Up: ${hero.teamUps}
+    `;
+            })
+            .join('\n---\n');
 
-                const prompt = `
-                Based on the user's playstyle or preferences below, recommend the most suitable hero from the following list.
-                Only pick from these heroes, and provide details such as the hero name, reason for selection, and a summary of their abilities and strengths.
+        const prompt = `
+    You are a recommendation engine.
 
-                User Description: "${userDescription}"
+    Based on the user's preferences below, select and recommend the most suitable hero from the provided list. Only pick a hero from the list. Return only a valid JSON object, and nothing else — no text before or after.
 
-                Hero Data:
-                ${heroDescriptions}
+    User Description:
+    "${userDescription}"
 
-                A team up is when a primary hero and at least one secondary hero work is present in a team. They will acquire a bonus effect when they are in the same team.
-                Team-Up Synergies:
-                ${teamUpData}
+    Hero Data:
+    ${heroDescriptions}
+
+    Team-Up Synergies:
+    ${teamUpData}
+
+    Your output must be a single JSON object in this **exact** format, where all data is embedded directly in the 'suggestion' field. Do not place the suggestion data in the 'explanation' field. Populate all fields add at least two playstyles based on hero info, and provide at least two tips for the player.
+
+    {
+    "userDescription": "${userDescription}",
+    "suggestion": {
+        "hero": "",
+        "roles": [],
+        "tier": "",
+        "winRate": 0,
+        "abilities": {
+        "normalAttack": "",
+        "q": "",
+        "e": "",
+        "lshift": "",
+        "rightClick": ""
+        },
+        "strengths": [],
+        "weaknesses": [],
+        "playstyle": [],
+        "teamup":{
+            "teamUpName": "",
+            "effect": "",
+        },
+        "tips": []
+    },
+    "legalNotice": "rivals-comps is not endorsed by Marvel or NetEase Games and does not reflect their views or opinions."
+    }
     `;
 
 
+
     try {
-        const ollamaResponse = await fetchWithRetry(
-            OLLAMA_API_URL,
+        const response = await fetchWithRetry(
+            GROQ_API_URL,
             {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${GROQ_API_KEY}`
+                },
                 body: JSON.stringify({
-                    model: OLLAMA_MODEL,
+                    model: GROQ_MODEL,
                     messages: [{ role: 'user', content: prompt }],
-                    stream: false,
-                    options: { temperature: 0.6, num_predict: 600 },
+                    temperature: 0.3,
+                    max_tokens: 1024
                 }),
             },
+            3,
+            1000
         );
 
-        if (!ollamaResponse.ok) {
-            throw new Error(`Ollama API failed with status: ${ollamaResponse.status}`);
-        }
-
-        const responseData = await ollamaResponse.json();
-        const content = responseData.message?.content;
+        const data = await response.json();
+        const content = data.choices?.[0]?.message?.content;
 
         if (!content) {
-            throw new Error("Ollama returned an empty response");
+            throw new Error('GROQ API returned an empty response');
         }
 
-        console.log('Raw content from Ollama:', content);
+        console.log('Raw content from GROQ API:', content);
 
-        // Placeholder: parse content and return a valid suggestion object
-        // You should replace this with actual parsing logic as needed
-        return {
-            suggestion: {
-                hero: "Unknown",
-                roles: [],
-                tier: "",
-                winRate: 0,
-                abilities: {},
-                strengths: [],
-                weaknesses: [],
-                playstyle: [],
-                teamup: "",
-                tips: []
-            },
-            explanation: content
-        };
+        // TODO: Parse the content string to extract structured suggestion data.
+        // This is a placeholder return with dummy values.
+        try {
+            const parsed = JSON.parse(content);
+
+            if (!parsed?.suggestion) {
+                throw new Error('Parsed content does not contain a suggestion field.');
+            }
+
+            const heroName = parsed.suggestion.hero.toLowerCase();
+
+            const matchingTeamups = teamups.filter(
+                (tu) =>
+                    tu.primaryHero.toLowerCase() === heroName ||
+                    tu.secondaryHeroes.map(h => h.toLowerCase()).includes(heroName)
+            );
+            const firstMatch = matchingTeamups[0] || null;
+
+            if (firstMatch) {
+                parsed.suggestion.teamup = {
+                    teamUpName: firstMatch.teamUpName,
+                    effect: firstMatch.effect,
+                };
+            } else {
+                parsed.suggestion.teamup = {
+                    teamUpName: '',
+                    effect: '',
+                };
+            }   
+
+            return parsed;
+        } catch (parseError) {
+            console.warn('Failed to parse structured suggestion, returning explanation only.');
+            return {
+                suggestion: {
+                    hero: 'Unknown',
+                    roles: [],
+                    tier: '',
+                    winRate: 0,
+                    abilities: {},
+                    strengths: [],
+                    weaknesses: [],
+                    playstyle: [],
+                    teamup: '',
+                    tips: []
+                },
+                explanation: content
+            };
+        }
+
     } catch (error) {
-        console.error("AI generation failed:", error);
-        throw error; // Rethrow so the caller can handle it
+        console.error('AI generation failed:', error);
+        throw error;
     }
 }
 
@@ -206,11 +280,15 @@ export const POST: RequestHandler = async ({ request }) => {
         const result = await suggestMainHeroes(userDescription);
 
         console.log('Response:', result);
-        return json({
-            userDescription,
-            ...result,
-            legalNotice: 'rivals-comps is not endorsed by Marvel or NetEase Games and does not reflect their views or opinions.'
-        }, { status: 200 });
+        return json(
+            {
+                userDescription,
+                ...result,
+                legalNotice:
+                    'rivals-comps is not endorsed by Marvel or NetEase Games and does not reflect their views or opinions.'
+            },
+            { status: 200 }
+        );
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
         return json({ error: `Failed to process request: ${errorMessage}` }, { status: 500 });

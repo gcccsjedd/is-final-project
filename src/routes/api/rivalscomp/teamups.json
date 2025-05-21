@@ -1,5 +1,4 @@
-{
-    "S": [
+[
       {
         "teamUpName": "Ragnarok Rebirth",
         "primaryHero": "Hela",
@@ -41,9 +40,7 @@
         "secondaryHeroes": ["Human Torch"],
         "effect": "Storm and Human Torch can combine their ultimates together to create a massive, flaming tornado.",
         "winRate": 59.13
-      }
-    ],
-    "A": [
+      },
       {
         "teamUpName": "Ammo Overload",
         "primaryHero": "Rocket Raccoon",
@@ -96,12 +93,10 @@
       {
         "teamUpName": "Mental Projection",
         "primaryHero": "Emma Frost",
-        "secondaryHeroes": ["Magneto", "Psylock"],
-        "effect": "Emma Frost can link with Magneto and Psylock to create duplicates of either or both, confusing enemies. Emma Frost gets additional 100 Max Health.",
+        "secondaryHeroes": ["Magneto", "Psylocke"],
+        "effect": "Emma Frost can link with Magneto and Psylocke to create duplicates of either or both, confusing enemies. Emma Frost gets additional 100 Max Health.",
         "winRate": 53.35
-      }
-    ],
-    "B": [
+      },
       {
         "teamUpName": "Planet X Pals",
         "primaryHero": "Groot",
@@ -115,9 +110,8 @@
         "secondaryHeroes": ["Moon Knight"],
         "effect": "Cloak & Dagger grant Moon Knight a new active ability, which he can use to become temporarily invisible. Cloak & Dagger get additional 15% healing boost.",
         "winRate": 48.99
-      }
-    ],
-    "C": [
+      },
+
       {
         "teamUpName": "Chilling Charisma",
         "primaryHero": "Luna Snow",
@@ -133,4 +127,3 @@
         "winRate": 45.50
       }
     ]
-}
