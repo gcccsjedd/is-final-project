@@ -39,7 +39,19 @@
 		"vite": "^6.2.6"
 	},
 	"dependencies": {
+		"@ai-sdk/deepseek": "^0.2.14",
+		"ai": "^4.3.16",
+		"ajv": "^8.0.0",
+		"ajv-formats": "^3.0.1",
+		"mammoth": "^1.9.0",
 		"markdown-it": "^14.1.0",
-		"ollama": "^0.5.15"
+		"ollama": "^0.5.15",
+		"pdf-parse": "^1.1.1",
+		"pdfjs-dist": "^5.2.133",
+		"pdfreader": "^3.0.7",
+		"spellchecker": "^3.7.1",
+		"typo-js": "^1.2.5",
+		"uuid": "^11.1.0",
+		"zod": "^3.24.4"
 	}
 }
