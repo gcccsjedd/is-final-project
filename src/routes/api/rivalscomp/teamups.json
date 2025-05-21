@@ -1,0 +1,129 @@
+[
+      {
+        "teamUpName": "Ragnarok Rebirth",
+        "primaryHero": "Hela",
+        "secondaryHeroes": ["Loki", "Thor"],
+        "effect": "Hela gains a passive ability that allows her, after she secures the final hit on an enemy, to instantly resurrect one of her brothers if they're dead, or give them bonus health if they're living. Hela gets additional 15% Damage Boost.",
+        "winRate": 59.80
+      },
+      {
+        "teamUpName": "Symbiote Bond",
+        "primaryHero": "Venom",
+        "secondaryHeroes": ["Spider-Man", "Peni Parker"],
+        "effect": "Venom grants Spider-Man and Peni Parker an active ability, which allows them to channel a symbiote through them, dealing damage to enemies and pushing them back. Venom gets additional 150 Max Health.",
+        "winRate": 61.16
+      },
+      {
+        "teamUpName": "Gamma Charge",
+        "primaryHero": "Hulk",
+        "secondaryHeroes": ["Namor", "Iron Man"],
+        "effect": "Hulk's presence augments Iron Man's Armor Overdrive and Namor's Monstro turret, making them more powerful. Hulk gets additional 100 max health.",
+        "winRate": 59.83
+      },
+      {
+        "teamUpName": "Dimensional Shortcut",
+        "primaryHero": "Magik",
+        "secondaryHeroes": ["Black Panther"],
+        "effect": "Magik grants an active ability to Black Panther, which allows him to travel backward in time while also giving him bonus health. Magik gets additional 15% damage boost.",
+        "winRate": 61.87
+      },
+      {
+        "teamUpName": "Guardian Revival",
+        "primaryHero": "Adam Warlock",
+        "secondaryHeroes": ["Mantis", "Star-Lord"],
+        "effect": "Adam Warlock shares his cocoon revival ability with Mantis and Star-Lord, allowing them to revive mid-combat every two minutes. Adam Warlock gets additional 15% healing bonus.",
+        "winRate": 63.25
+      },
+      {
+        "teamUpName": "Storming Ignition",
+        "primaryHero": "Storm",
+        "secondaryHeroes": ["Human Torch"],
+        "effect": "Storm and Human Torch can combine their ultimates together to create a massive, flaming tornado.",
+        "winRate": 59.13
+      },
+      {
+        "teamUpName": "Ammo Overload",
+        "primaryHero": "Rocket Raccoon",
+        "secondaryHeroes": ["The Punisher"],
+        "effect": "Rocket Raccoon gains a bonus ability that allows him to place an ammo device on the ground. This device grants The Punisher faster firing weapons and unlimited ammo while he's nearby. Rocket Raccoon gets additional 5% healing boost.",
+        "winRate": 52.75
+      },
+      {
+        "teamUpName": "Atlas Bond",
+        "primaryHero": "Iron Fist",
+        "secondaryHeroes": ["Luna Snow"],
+        "effect": "Iron Fist grants Luna Snow a bonus active ability, which causes an ice ring to explode around her when activated. This ring launches enemies up and heals nearby allies. Iron Fist gets additional 15% damage boost.",
+        "winRate": 56.60
+      },
+      {
+        "teamUpName": "ESU Alumnus",
+        "primaryHero": "Spider-Man",
+        "secondaryHeroes": ["Squirrel Girl"],
+        "effect": "Spider-Man gives Squirrel Girl a bonus active ability, which allows her to web up enemies via a special web bomb. Spider-Man gets additional 10% damage boost.",
+        "winRate": 53.79
+      },
+      {
+        "teamUpName": "Fastball Special",
+        "primaryHero": "Wolverine",
+        "secondaryHeroes": ["Hulk", "The Thing"],
+        "effect": "Hulk or The Thing can agree to team-up with Wolverine with a button press, allowing either of them to throw Wolverine a great distance.",
+        "winRate": 56.65
+      },
+      {
+        "teamUpName": "Fantastic Four",
+        "primaryHero": "Invisible Woman",
+        "secondaryHeroes": ["Mister Fantastic", "Human Torch", "The Thing"],
+        "effect": "Invisible Woman grants Mister Fantastic, Human Torch, and The Thing a new ability, which gives them increased damage resistance and continually generating bonus health. Invisible Woman gets additional 15% healing boost.",
+        "winRate": 54.16
+      },
+      {
+        "teamUpName": "Arcane Order",
+        "primaryHero": "Doctor Strange",
+        "secondaryHeroes": ["Scarlet Witch"],
+        "effect": "Doctor Strange replaces Scarlet Witch's Chthonia Burst with Mystic Burst, an attack that allows her to fire a salvo of missiles. Doctor Strange gets additional 150 max health.",
+        "winRate": 53.00
+      },
+      {
+        "teamUpName": "Stars Aligned",
+        "primaryHero": "Captain America",
+        "secondaryHeroes": ["Winter Soldier"],
+        "effect": "Winter Soldier gains the ability to jump to a designated ally and do a slam attack. Captain America and Winter Soldier can agree to collide and create a slowing shockwave that damages nearby enemies. Captain America gets additional 100 Max Health and 5% Damage Boost.",
+        "winRate": 55.38
+      },
+      {
+        "teamUpName": "Mental Projection",
+        "primaryHero": "Emma Frost",
+        "secondaryHeroes": ["Magneto", "Psylocke"],
+        "effect": "Emma Frost can link with Magneto and Psylocke to create duplicates of either or both, confusing enemies. Emma Frost gets additional 100 Max Health.",
+        "winRate": 53.35
+      },
+      {
+        "teamUpName": "Planet X Pals",
+        "primaryHero": "Groot",
+        "secondaryHeroes": ["Rocket Raccoon", "Jeff the Land Shark"],
+        "effect": "Rocket Raccoon and Jeff the Land Shark can interact with Groot to ride around on his shoulders, granting them bonus damage reduction. Groot gets additional 150 Max Health.",
+        "winRate": 50.95
+      },
+      {
+        "teamUpName": "Lunar Force",
+        "primaryHero": "Cloak & Dagger",
+        "secondaryHeroes": ["Moon Knight"],
+        "effect": "Cloak & Dagger grant Moon Knight a new active ability, which he can use to become temporarily invisible. Cloak & Dagger get additional 15% healing boost.",
+        "winRate": 48.99
+      },
+
+      {
+        "teamUpName": "Chilling Charisma",
+        "primaryHero": "Luna Snow",
+        "secondaryHeroes": ["Jeff the Land Shark"],
+        "effect": "Luna Snow grants an active ability to Jeff the Land Shark. This ability infuses Jeff's attacks with a slowing field. Luna Snow gets additional 15% healing boost.",
+        "winRate": 48.33
+      },
+      {
+        "teamUpName": "Allied Agents",
+        "primaryHero": "Hawkeye",
+        "secondaryHeroes": ["Black Widow"],
+        "effect": "Hawkeye grants Black Widow a new active ability, which allows her to spot and damage enemy afterimages. Hawkeye gets additional 15% damage boost.",
+        "winRate": 45.50
+      }
+    ]

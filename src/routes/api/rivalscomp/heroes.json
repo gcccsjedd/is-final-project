@@ -1,0 +1,1316 @@
+[
+    {
+      "name": "Captain America",
+      "roles":["Vanguard", "Diver", "Tank"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.55,
+      "abilities": {
+        "normalAttack": "Sentinel Strike – Get up close to strike enemies. Landing the second hit enables a shield throw that can ricochet.",
+        "q": "Freedom Charge – Shield held high, carve a path forward, granting both himself and allies along the path continuous Bonus Health and Movement Boosts.",
+        "lshift": "Leading Dash – Boost speed, enabling Fearless Leap.",
+        "e": "Vibranium Energy Saw – Hurl the energy-charged shield to strike enemies in a path.",
+        "f": "Liberty Rush – Raise the shield and charge forward.",
+        "leftClick": "Super-Soldier Slam – Slam down from the sky onto the targeted area, knocking enemies airborne.",
+        "rightClick": "Living Legend – Raise the shield to deflect incoming projectiles, sending them ricocheting in random directions."
+      },
+      "strengths": [
+        "A sturdy and mobile diver that can storm the battlefield, specialized in hit & run tactics and capable of shielding himself to protect his allies.",
+        "Primary fire, Sentinel Strike, can launch his shield every two punches landed, keeping enemies under constant pressure.",
+        "Secondary fire, Living Legend, blocks oncoming strikes and projectiles while moving, deflecting projectiles at 50% damage, including some Ultimates.",
+        "Shield can block certain area-of-effect Ultimates if aimed correctly.",
+        "Vibranium Energy Saw allows manual shield throws that can ricochet and disrupt abilities.",
+        "Leading Dash grants increased movement speed and access to a higher jump (Fearless Leap) and Super-Soldier Slam.",
+        "Liberty Rush is a dashing charge for quick repositioning.",
+        "Ultimate, Freedom Charge, grants bonus health and movement speed to Captain America and nearby allies, making him very resilient.",
+        "Using Living Legend or Leading Dash during Freedom Charge can knock enemies upwards."
+      ],
+      "weaknesses": [
+        "Living Legend has a 1 second cooldown after lowering the shield, which can interrupt combat flow.",
+        "Struggles to block large barrages of ranged damage due to smaller shield size compared to some other heroes.",
+        "Shield cannot block splash damage, only deflect if aimed directly.",
+        "No control over where deflected projectiles ricochet."
+      ]
+    },
+    {
+      "name": "Doctor Strange",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 48.84,
+      "abilities": {
+        "normalAttack": "Daggers of Denak – Cast Daggers of Denak forward.",
+        "q": "Eye of Agamotto – Separate nearby enemies' Souls from their bodies. Damage dealt to these Souls is transferred to their physical bodies.",
+        "lshift": "Cloak of Levitation – Ascend and then enter a brief state of sustained flight.",
+        "e": "Maelstrom of Madness – Release Dark Magic to deal damage to nearby enemies.",
+        "f": "Pentagram of Farallah – Open portals between two locations, enabling all units to travel through them.",
+        "rightClick": "Shield of the Seraphim – Create a protective barrier against damage.",
+        "passive": [
+          "Price of Magic – Dark Magic accumulates with every hit on an enemy. If Dark Magic is not released, Doctor Strange will enter a state of Anti-Heal."
+        ]
+      },
+      "strengths": [
+        "Versatile mixed attacker with a flexible kit for both protection and disruption; excels in defensive objectives.",
+        "Primary fire, Daggers of Denak, can be frame-canceled with melee for burst damage and faster Dark Magic stacking.",
+        "Secondary fire, Shield of the Seraphim, projects a large shield that absorbs all projectiles and can block some Ultimates.",
+        "Can use Shield of the Seraphim while flying.",
+        "Maelstrom of Madness interacts with passive to deal more damage based on Dark Magic stacks.",
+        "Pentagram of Farallah creates portals for team and projectiles, enabling map-wide repositioning.",
+        "Ultimate, Eye of Agamotto, is a powerful crowd control tool that stuns and projects enemy souls for extra damage."
+      ],
+      "weaknesses": [
+        "Limited mobility due to long cooldown on Cloak of Levitation.",
+        "Vulnerable if Shield of the Seraphim is destroyed; shield cannot block melee attacks.",
+        "Dark Magic must be released at max stacks or it decays and cannot be regained until released.",
+        "Pentagram of Farallah has a long cooldown and is interrupted if hit while casting.",
+        "Maelstrom of Madness requires constant damage and melee range for best effect."
+      ]
+    },
+    {
+      "name": "Emma Frost",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Hitscan",
+      "tier": "A",
+      "winRate": 50.08,
+      "forms": {
+        "Human": {
+          "abilities": {
+            "normalAttack": "Telepathic Pulse – Fire a psionic beam to deal damage; the longer the beam hits, the higher the damage.",
+            "e": "Psychic Spear – Seize control of an enemy's sentience. Damage dealt to the sentience cascades to the physical form and can be pierced by Telepathic Pulse. When the sentience shatters, it unleashes extra damage on its owner.",
+            "rightClick": "Mind's Aegis – Create a levitating barrier at the designated location.",
+            "lshift": "Diamond Form – Activate Diamond Form to transform your attack style while gaining Damage Reduction and becoming Unstoppable.",
+            "q": "Psionic Seduction – Project a forward psychic assault that stuns foes and prevents them from unleashing their Ultimate Abilities. If the effect lingers, it gradually commandeers their mind, forcing them to move toward Emma Frost."
+          }
+        },
+        "Diamond": {
+          "abilities": {
+            "normalAttack": "Faceted Fury – In Diamond Form, deliver a crushing double-fisted strike to enemies.",
+            "e": "Carbon Crush – In Diamond Form, lunge forward to grab an enemy, then execute a back slam to inflict damage.",
+            "rightClick": "Crystal Kick – In Diamond Form, unleash a flying kick forward and knock back enemies. Extra damage is dealt if they're propelled into a wall."
+          }
+        }
+      },
+      "strengths": [
+        "Striking mid-range vanguard with strong damage and a resistant diamond form for close-range attacks.",
+        "Mind's Aegis creates a long-range, stationary shield with high health, useful for defending allies and blocking Ultimates.",
+        "Ultimate, Psionic Seduction, can mind control enemies and cancel their Ultimates."
+      ],
+      "weaknesses": [
+        "Telepathic Pulse has limited range, requiring mid-range positioning.",
+        "Diamond Form has no ranged attacks and limited mobility; abilities have cooldowns.",
+        "Still takes damage in Diamond Form and can be killed by high-damage Ultimates.",
+        "Mind's Aegis shield can be quickly destroyed by focused fire.",
+        "No fast mobility outside Diamond Form's Carbon Crush."
+      ]
+    },
+    {
+      "name": "Groot",
+      "roles":["Vanguard","Frontliner","Tank"],
+      "attackRange": "Close Hitscan",
+      "tier" : "B",
+      "winRate": 49.60,
+      "abilities": {
+        "normalAttack": "Vine Strike – Launch vines to attack enemies.",
+        "q": "Strangling Prison – Fire a massive vine cluster that pulls nearby enemies to its center and Imprisons them.",
+        "lshift": "Thornlash Wall – Target a location and grow a Thornlash Wall. When Awakened, it strikes nearby enemies attacked by Groot and his allies.",
+        "e": "Ironwood Wall – Target a location and grow an Ironwood Wall. When Awakened, it grants Bonus Health to Groot when nearby enemies take damage.",
+        "rightClick": "Spore Bomb – Throw an explosive Spore Bomb that splits into multiple small explosive spores.",
+        "passive": [
+          "Flora Colossus – Wooden walls near Groot will Awaken, activating an extra effect."
+        ]
+      },
+      "strengths": [
+        "Mid-range bruiser with powerful area denial and obstacle creation for ally protection.",
+        "Slightly higher health than other Vanguards.",
+        "Vine Strike has long range; Spore Bomb splits for high damage.",
+        "Can build Ironwood and Thornlash Walls for blocking, platforming, and area control.",
+        "Walls interact with passive for bonus health or damage effects.",
+        "Walls can block Ultimates and destroy certain hero-spawned obstacles.",
+        "Ultimate, Strangling Prison, pulls and imprisons enemies, especially effective when combined with walls.",
+        "Team-up with Rocket Raccoon or Jeff the Land Shark grants them damage reduction."
+      ],
+      "weaknesses": [
+        "Walls can block allies' abilities if not placed carefully.",
+        "Not effective on moving objectives; walls are destroyed if placed in their path.",
+        "Vulnerable if walls are on cooldown or destroyed.",
+        "No mobility tools; slow speed and large frame make him easy to hit.",
+        "Lower attack range compared to some ranged heroes.",
+        "Team-up ability can put Rocket/Jeff at risk on the frontlines."
+      ]
+    },
+    {
+      "name": "Hulk",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "S",
+      "winRate": 52.98,
+      "variants": [
+        {
+          "name": "Bruce Banner",
+          "abilities": {
+            "normalAttack": "Gamma Ray Gun – Fire with a Gamma Ray Gun",
+            "q": "Puny Banner – Transform from Bruce Banner into Hero Hulk.",
+            "lshift": "Gamma Grenade – Launch a Gamma Grende to inflict damage and Knock Them Airborne."
+          }
+        },
+        {
+          "name": "Hero Hulk",
+          "abilities": {
+            "normalAttack": "Heavy Blow – Swing fists forward to punch enemies",
+            "q": "Hulk Smash! – Unleash stored gamma energy, transforming from Hero Hulk into Monster Hulk for a limited period.",
+            "lshift": "Indestructible Guard – Generate gamma shields for Hero Hulk and nearby allies, absorbing and converting damage into energy for HULK SMASH!",
+            "e": "Radioactive Lockdown – Emit gamma energy to place enemies in quantum void that renders them immobilized and immune to all ability effects.",
+            "space": "Incredible Leap – Hold Space to perform a charged leap that allows Hero Hulk to Knock a flying enemy to the ground.",
+            "rightClick": "Gamma Burst – Emit gamma-ray bursts to inflict damage."
+          }
+        },
+        {
+          "name": "Monster Hulk",
+          "abilities": {
+            "normalAttack": "Heavy Blow – Swing fists forward to punch and launch frontal enemies upward.",
+            "q": "World Breaker – Grab and smash the enemy in front.",
+            "e": "Radioactive Lockdown – Emit gamma energy to inflict sustained damage and place enemies in quantum void that renders them immobilized and immune to all ability effects.",
+            "space": "Incredible Leap – Hold Space to perform a charged leap that allows Monster Hulk to Knock a flying enemy to the ground.",
+            "rightClick": "Gamma Burst – Emit gamma-ray bursts to inflict damage."
+          }
+        }
+      ],
+      "strengths": [
+        "Unique Vanguard with two base forms: frail Bruce Banner and bulky Hero Hulk.",
+        "Bruce Banner has ranged attacks and knockback; can transform into Hulk with low Ultimate cost.",
+        "Hulk is a strong melee frontliner with high mobility and two healthbars (reverts to Banner when depleted).",
+        "Gamma Grenade grants energy and can be used for mobility.",
+        "Transformation is instant and grants immunity during animation.",
+        "Hulk's Heavy Blow and Gamma Burst provide consistent melee and ranged pressure.",
+        "Radioactive Lockdown stuns and prevents objective capture.",
+        "Indestructible Guard shields Hulk and allies, converting damage into energy.",
+        "Ultimate, Hulk Smash, transforms into Monster Hulk with enhanced abilities and health.",
+        "Monster Hulk gains World Breaker Ultimate for massive damage and damage reduction.",
+        "Seasonal bonus: extra max health for Banner and Hulk."
+      ],
+      "weaknesses": [
+        "Bruce Banner is extremely frail with limited mobility and moveset.",
+        "Susceptible to long-range zoning.",
+        "Relies on allies to charge Ultimate efficiently.",
+        "Monster Hulk loses access to Indestructible Guard.",
+        "Large frame and average speed make Hulk an easy target.",
+        "Vulnerable to crowd control when Indestructible Guard is on cooldown."
+      ]
+    },
+    {
+      "name": "Magneto",
+      "roles":["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "A",
+      "winRate": 46.61,
+      "abilities": {
+        "normalAttack": "Iron Volley – Fire a volley of magnetic orbs forward.",
+        "q": "Meteor M – Alter the magnetic field to draw in matter and projectiles and forge a massive iron meteor, delivering catastrophic damage to the targeted area upon impact.",
+        "lshift": "Metallic Curtain – Change the magnetic field around to form a metallic curtain, blocking all flying projectiles.",
+        "e": "Metal Bulwark – Conjure a metal shield around a chosen ally. Damage taken will transform into rings on Magneto's back.",
+        "rightClick": "Mag-Cannon – Convert the iron rings on Magneto's back into a Mag-Cannon and launch a metallic mass forward. Higher stacks of rings increase damage, and full stacks Knock Back enemies.",
+        "passive": [
+          "Magnetic Descent – Hold Space to fall slowly."
+        ]
+      },
+      "strengths": [
+        "Defensive-oriented with strong offensive power; excels at protecting allies with shields and blocking projectiles.",
+        "Primary fire, Iron Volley, shoots projectiles that explode for area damage.",
+        "Secondary fire, Mag-Cannon, scales damage with iron ring stacks and can knockback at max stacks.",
+        "Can shield allies and himself with Metal Bulwark/Iron Bulwark, converting absorbed damage into energy.",
+        "Metallic Curtain projects a magnetic shield that absorbs all projectiles and can block Ultimates.",
+        "Ultimate, Meteor M, charges a meteor for large area damage and absorbs projectiles for extra power.",
+        "Can counter other Ultimates by absorbing projectiles during Meteor M."
+      ],
+      "weaknesses": [
+        "Limited mobility and cannot fly (only slow fall).",
+        "Frail if shields are on cooldown; shields share cooldown.",
+        "Cannot hold Metallic Curtain indefinitely.",
+        "Absorbing too many projectiles during Meteor M cancels the Ultimate.",
+        "Overload is based on projectile count, not damage."
+      ]
+    },
+    {
+      "name": "Peni Parker",
+      "roles":["Vanguard","Anti-Dive","Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 52.01,
+      "abilities": {
+        "normalAttack": "Cyber-Web Cluster – Launch forward a Cyber-Web Cluster.",
+        "rightClick": "Cyber-Web Snare – Cast futuristic webbing that immobilizes enemies upon impact and creates a Cyber-Web upon hitting the scene.",
+        "q": "Spider-Sweeper – Enhance the SP//dr suit, Knocking Back enemies in its path and deploying Arachno-Mines, Spider-Drones, and Cyber-Webs repeatedly.",
+        "lshift": "Bionic Spider-Nest – Generate a Spider-Nest at a targeted area, periodically spawning Spider-Drones and creating Cyber-Webs.",
+        "e": "Arachno-Mine – Deploy Arachno-Mines that can be concealed within the confines of a Cyber-Web.",
+        "f": "Cyber-Bond – Shoot a web strand that links to the targeted area or Cyber-Web. If stretched too far, it will trigger a pullback.",
+        "space": "Wall Crawl – Hold Space to crawl vertical surfaces."
+      },
+      "strengths": [
+        "Resilient ranged fighter with high self-sustain and strong defensive play.",
+        "Can wall crawl vertically; Cyber-Webs grant movement speed, healing, and bonus health.",
+        "Primary fire, Cyber-Web Cluster, has infinite ammo for constant pressure.",
+        "Secondary fire, Cyber-Web Snare, immobilizes targets and creates Cyber-Webs; can interrupt Ultimates and block projectiles.",
+        "Arachno-Mines can be concealed in Cyber-Webs for traps.",
+        "Bionic Spider-Nest creates Cyber-Webs and spawns mines; repositionable for area control.",
+        "Cyber-Bond enables fast repositioning and creates Cyber-Webs.",
+        "Ultimate, Spider-Sweeper, increases speed, grants bonus health, and launches Cyber-Webs/mines while running.",
+        "Team-up with Venom grants Armor Expulsion for area damage and knockback."
+      ],
+      "weaknesses": [
+        "Not effective on offensive objectives; must constantly reposition Bionic Spider-Nest.",
+        "Moving objectives destroy Bionic Spider-Nest if placed in their path.",
+        "Limited mobility tools; Cyber-Bond is not true webslinging.",
+        "Frail outside Cyber-Webs; few defensive options.",
+        "Bionic Spider-Nest has long cooldown if destroyed.",
+        "All Cyber-Webs from Spider-Sweeper disappear when Ultimate ends."
+      ]
+    },
+    {
+      "name": "The Thing",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.62,
+      "abilities": {
+        "normalAttack": "Rocky Jab – Rapidly punch forward",
+        "q": "Clobberin' Time – Launch Up enemies ahead and spiral through the air, sweeping up enemies along the path and delivering a devastating impact at the landing point. Impact deals extra damage based on Rage accumulated.",
+        "e": "Embattled Leap – Jump toward your ally and apply damage reduction to both of you",
+        "rightClick": "Stone Haymaker – Deliver a devastating Heavy Blow",
+        "shift": "Yancy Street Charge – Continuously charge forward, launching up enemies and leaving behind a zone at the final position that prevents the use of mobility abilities",
+        "passive": [
+          "Unyielding Will – Immune to launch-up, knock-back, and other displacement effects"
+        ]
+      },
+      "strengths": [
+        "Tough brawler that charges ahead, dealing damage and creating seismic zones that stun.",
+        "Passive, Unyielding Will, grants immunity to knockback, launches, and displacements.",
+        "Primary attack, Rocky Jab, delivers quick melee punches.",
+        "Secondary attack, Stone Haymaker, charges up for high melee damage and grants bonus health.",
+        "Embattled Leap lets him leap to allies, granting damage reduction shields.",
+        "Yancy Street Charge charges forward, launching enemies and creating seismic zones that prevent mobility.",
+        "Ultimate, Clobberin' Time, creates a seismic ripple that launches and stuns enemies.",
+        "Team-up with Invisible Woman grants Cooperative Comrades for bonus health conversion."
+      ],
+      "weaknesses": [
+        "Can still be stunned by certain abilities despite displacement immunity.",
+        "Melee-focused; must be up close to be effective.",
+        "Embattled Leap only works on allies; isolated Thing has no escape if mobility is on cooldown."
+      ]
+    },
+    {
+      "name": "Thor",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 51.93,
+      "abilities": {
+        "normalAttack1": "Mjolnir Bash – Wield Mjolnir to strike enemies. When Awakened, Thor can launch lightning arc waves to deal damage.",
+        "normalAttack2": "Hammer Throw – Throw Mjolnir forward and then it returns.",
+        "q": "God of Thunder – Soar upwards and smite the ground after charging for a duration, inflicting damage upon enemies in range.",
+        "lshift": "Storm Surge – Hold to spin Mjolnir before dashing forward and knocking back enemies.",
+        "e": "Lightning Realm – Summon lightning to restore Thorforce based on the number of hit enemies.",
+        "f": "Awakening Rune – Consume Thorforce to enter the Awakened state, granting bonus Health and enhancing Mjolnir Bash.",
+        "passive": [
+          "Thorforce – After using any ability, casting Mjolnir Bash grants one point of Thorforce."
+        ]
+      },
+      "strengths": [
+        "Bulky bruiser excelling at close-range bullying and gaining bonus health.",
+        "Passive, Thorforce, grants bonus health based on ability use.",
+        "Primary fire, Mjolnir Bash, replenishes Thorforce per hit.",
+        "Hammer Throw is a ranged attack that returns and costs Thorforce.",
+        "Storm Surge is a versatile mobility tool for lunging and pushing enemies.",
+        "Awakening Rune enhances Mjolnir Bash for ranged attacks and damage-over-time.",
+        "Lightning Realm creates a damaging field and restores Thorforce.",
+        "Ultimate, God of Thunder, creates a large damaging field and slam.",
+        "Team-ups with Hela and Storm grant extra revive or max health."
+      ],
+      "weaknesses": [
+        "Relatively slow and limited melee range outside Awakened Rune.",
+        "Slightly lower max health than other Vanguards.",
+        "Relies on hitting opponents to maintain Thorforce and bonus health.",
+        "Few options to protect team; functions more as a melee Duelist.",
+        "Cannot use other abilities during Awakening Rune except Ultimate."
+      ]
+    },
+    {
+      "name": "Venom",
+      "roles":["Vanguard","Diver","Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 47.73,
+      "abilities": {
+        "normalAttack": "Dark Predation – Unleash tentacles forward to attack enemies",
+        "q": "Feast of the Abyss – Burrow underground for free movement. After a duration or by pressing Left Click to devour enemies above and generate Bonus Health.",
+        "lshift": "Venom Swing – Launch webbing forward, allowing for a singular swing in the desired direction.",
+        "e": "Symbiotic Resilience – Generate Bonus Health against damage. The lower Venom's Health, the greater the Bonus Health generated.",
+        "f": "Frenzied Arrival – Dash to the target location from a certain height. Upon landing, damage nearby enemies, knocking them back towards the landing point.",
+        "rightClick": "Cellular Corrosion – Unleash tentacles to slow enemies within reach. Enemies unable to break free in time will suffer damage.",
+        "passive": [
+          "Alien Biology – Press Space to wall crawl, and while crawling, press Left Click to sprint."
+        ]
+      },
+      "strengths": [
+        "Extremely resilient bruiser with high mobility, excels at diving enemy backline.",
+        "Can websling, wallcrawl, and sprint on walls.",
+        "Primary fire, Dark Predation, deals consistent ranged damage.",
+        "Cellular Corrosion slows and damages enemies in a radius.",
+        "Symbiotic Resilience grants bonus health scaling with missing health.",
+        "Venom Swing enables fast repositioning.",
+        "Frenzied Arrival is a diving attack for backline disruption.",
+        "Ultimate, Feast of the Abyss, deals percentage damage and generates bonus health.",
+        "Most durable Vanguard if played well.",
+        "Team-up with Spider-Man or Peni Parker grants symbiote abilities for extra area damage."
+      ],
+      "weaknesses": [
+        "Relies on team follow-up for engages.",
+        "Vulnerable if Symbiotic Resilience and Venom Swing are on cooldown.",
+        "Symbiotic Resilience decays quickly and is less effective if crowd-controlled.",
+        "Enemies can escape Cellular Corrosion by moving away.",
+        "Frenzied Arrival requires height to use.",
+        "Few options to protect team; functions more as a melee Duelist.",
+        "Venom Swing has only one charge and high cooldown."
+      ]
+    },
+    {
+      "name": "Black Panther",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 49.31,
+      "abilities": {
+        "normalAttack": "Vibranium Claws – Slice Vibranium Claws forward.",
+        "q": "Bast's Descent – Summon Bast, pouncing forward, dealing damage, and attaching a Vibranium Mark to hit enemies.",
+        "lshift": "Sprint Rend – Lunge forward and deal damage to enemies. Hitting an enemy afflicted with a Vibranium Mark produces bonus Health and refreshes the ability.",
+        "e": "Spinning Kick – Spiral forward and attach a Vibranium Mark to hit enemies.",
+        "space": "Subtle Step – Hold Space to run on a wall; perform a jump after detaching from the wall.",
+        "rightClick": "Spear Toss – Toss a Vibranium energy spear forward, creating a Vibranium Force Field and attaching a Vibranium Mark to enemies in its radius.",
+        "passive": [
+          "Panther's Cunning – Deal higher damage when at low Health."
+        ]
+      },
+      "strengths": [
+        "Agile melee-focused Duelist who excels at darting around the battlefield with high-speed dash attacks and executing vulnerable targets.",
+        "Can run on walls and perform double jumps after detaching.",
+        "Slightly higher max health and base movement speed than other Duelists.",
+        "Passive, Panther's Cunning, grants 20% more damage when below 100 health.",
+        "Almost all attacks apply Vibranium Mark, refreshing cooldowns and providing bonus health.",
+        "Primary fire, Vibranium Claws, deals rapid damage and allows him to stick to targets.",
+        "Secondary fire, Spear Toss, is a high-velocity projectile that applies Vibranium Mark from range.",
+        "Spirit Rend and Spinning Kick are mobility skills that deal damage and apply Vibranium Mark.",
+        "Ultimate, Bast's Descent, summons a giant panther, applies Vibranium Marks, and refreshes Spirit Rend.",
+        "Team-up with Magik grants Wakandan Master, rewinding time and restoring health."
+      ],
+      "weaknesses": [
+        "Low melee range forces close combat, leaving him open to retaliation.",
+        "Relies on applying Vibranium Mark to maintain bonus health and refresh cooldowns.",
+        "Requires quick decision-making and accuracy; punishing cooldowns.",
+        "Very vulnerable if both Spirit Rend and Spinning Kick are on cooldown."
+      ]
+    },
+    {
+      "name": "Black Widow",
+      "roles":["Duelist","Sniper"],
+      "attackRange": "Long Hitscan",
+      "tier": "F",
+      "winRate": 39.68,
+      "abilities": {
+        "normalAttack1": "Widow's Bite Baton – Strike with the enhanced electric batons.",
+        "normalAttack2": "Red Room Rifle – Attack with the Red Room Rifle.",
+        "q": "Electro Plasma Explosion – Switch the Red Room Rifle to Destruction mode and unleash an electro-plasma blast, damaging enemies within range and leaving plasma on the ground to Slow nearby enemies.",
+        "lshift": "Fleet Foot – Dash forward and enable a powerful jump.",
+        "e": "Edge Dancer – Unleash a spinning kick to Knock enemies airborne. Landing the hit will allow her to zip to the target with a grappling hook for a second kick.",
+        "rightClick": "Straight Shooter – Switch the Red Room Rifle to Sniper mode to fire high-energy rounds."
+      },
+      "strengths": [
+        "Nimble assassin and sniper effective at both close and long range.",
+        "Can freely switch between melee and ranged modes.",
+        "Red Room Rifle deals high single-shot damage.",
+        "Straight Shooter enables precise, no-falloff sniping.",
+        "Widow's Bite Baton delivers fast melee strikes.",
+        "Edge Dancer knocks enemies airborne and allows follow-up kicks.",
+        "Fleet Foot increases movement speed and jump height for repositioning.",
+        "Ultimate, Electro-Plasma Explosion, deals high AOE damage and slows enemies by 80%.",
+        "Team-up with Hawkeye grants Supersensory Hunt for afterimage targeting."
+      ],
+      "weaknesses": [
+        "Lacks survivability for frontline combat; melee must be used sparingly.",
+        "No defensive tools for bonus health or self-healing.",
+        "Weapon switching can be unintuitive in fast situations.",
+        "Edge Dancer has low range and long cooldown.",
+        "High-mobility enemies can counter her Ultimate's slow.",
+        "Cannot critically hit afterimages from Supersensory Hunt.",
+        "Physical shields can block afterimage damage."
+      ]
+    },
+    {
+      "name": "Hawkeye",
+      "roles":["Duelist","Sniper","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 46.59,
+      "abilities": {
+        "normalAttack1": "Piercing Arrows – Shoot a powerful arrow.",
+        "normalAttack2": "Shoot three explosive arrows.",
+        "q": "Hunter's Sight – Capture Afterimages of enemies in his view. Damage dealt to an Afterimage is transferred to the corresponding enemy.",
+        "lshift": "Crescent Slash – Unsheathe a katana and slash forward, Knocking hit enemies airborne.",
+        "e": "Hypersonic Arrow – Shoot a Hypersonic Arrow, dealing additional damage to enemies in its path.",
+        "v": "Ronin Slash – Swing the kawizashi to strike frontal enemies, deflecting all incoming projectiles.",
+        "space": "Skyward Leap – Perform a double jump in the direction of movement.",
+        "passive": [
+          "Archer's Focus – Aim at an enemy to improve focus, enhancing the damage inflicted by Piercing Arrow."
+        ]
+      },
+      "strengths": [
+        "Ranged specialist capable of sniping from long distances.",
+        "Above-average health for a Duelist.",
+        "Has a double jump for mobility.",
+        "Piercing Arrow has unlimited ammo and can be charged for high damage.",
+        "Archer's Focus increases damage with careful aiming.",
+        "Blast Arrow fires explosive projectiles for AOE damage.",
+        "Hyper Sonic Arrow slows and grounds flying enemies.",
+        "Ronin Slash deflects projectiles and provides close-range defense.",
+        "Crescent Slash launches enemies upward.",
+        "Ultimate, Hunter's Sight, creates afterimages for indirect damage.",
+        "Team-up with Black Widow grants Supersensory Vision for bonus damage."
+      ],
+      "weaknesses": [
+        "Struggles to hit highly mobile enemies, especially when charging shots.",
+        "Vulnerable to dives; lacks self-sustain and defensive abilities.",
+        "Ronin Slash cannot deflect AOE or explosions.",
+        "Hunter's Sight can be negated by physical shields, like Captain America, Doctor Strange, Magneto."
+      ]
+    },
+    {
+      "name": "Hela",
+      "roles":["Duelist", "High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.12,
+      "abilities": {
+        "normalAttack1": "Nightsword Thorn – Throw Nightsword thorns.",
+        "q": "Goddess of Death – Soar into the sky and unleash Nastrond Crows from each hand at will.",
+        "lshift": "Astral Flock – Transform into a flock of Hel crows to glide forth, press again to undo the transformation.",
+        "e": "Soul Drainer – Project an explosive Hel sphere to Stun nearby enemies.",
+        "rightClick": "Piercing Night – Fire multiple Nightsword thorns that detonate after a delay.",
+        "passive": [
+          "Nastrond Crowstorm – Defeating an enemy will generate a Nastrond Crow, exploding after a duration.",
+          "Hel's Descent – Hold Space to fall slowly."
+        ]
+      },
+      "strengths": [
+        "Long-range specialist with decent mobility and high damage output.",
+        "Can fall slowly from heights.",
+        "Passive, Nastrond Crowstorm, creates AOE explosions on kills.",
+        "Primary fire, Nightsword Thorn, is a high-damage hitscan.",
+        "Piercing Night throws blades that explode after a delay.",
+        "Soul Drainer stuns multiple enemies in a small radius.",
+        "Astral Flock grants high-speed flight and immunity to damage/CC.",
+        "Ultimate, Goddess of Death, grants massive AOE damage and a separate health bar.",
+        "Team-up with Thor/Loki grants Queen of Hel for revives and bonus damage."
+      ],
+      "weaknesses": [
+        "Poor at dealing with divers if Astral Flock is on cooldown.",
+        "No self-sustain abilities.",
+        "Cannot be healed during Astral Flock.",
+        "Stationary and vulnerable during Ultimate.",
+        "Needs final hits for Queen of Hel team-up."
+      ]
+    },
+    {
+      "name": "Human Torch",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 50.61,
+      "abilities": {
+        "normalAttack": "Fire Cluster – Launch forward a splittable fireball",
+        "q": "Supernova – Explode with cosmic fire to deal damage to enemies within range. Upon skill activation, all Flame Fields will transform into Flame Tornadoes, dealing extra damage",
+        "e": "Pyro-Prison – Form a fire wall between Fire Fields to burn enemies",
+        "shift": "Plasma Body – Enter a state of accelerated ascent",
+        "f": "Flaming Meteor – Dive towards the ground, dealing damage to enemies and detonating any Flame Fields hit",
+        "rightClick": "Blazing Blast – Launch a fireball to create a Flame Field at the targeted area"
+      },
+      "strengths": [
+        "Mid-range duelist with strong AOE and area denial.",
+        "Constant free-flight for aerial advantage.",
+        "Primary fire, Fire Cluster, launches scattershot fireballs with fast regen.",
+        "Blazing Blast creates damaging AOE fields; up to 3 active at once.",
+        "Plasma Body increases flight speed.",
+        "Pyro-Prison creates firewalls between Blazing Blasts for extra AOE.",
+        "Flaming Meteor dives and explodes, destroying Blazing Blasts for bonus damage.",
+        "Ultimate, Supernova, grants infinite Blazing Blasts and Plasma Body, turning Blazing Blasts into Flame Tornadoes.",
+        "Team-ups with Invisible Woman and Storm grant bonus health and enhanced Ultimate effects."
+      ],
+      "weaknesses": [
+        "Slow projectile speed and less damage at long range.",
+        "Slower fire rate at low Fire Cluster ammo.",
+        "Pyro-Prison cannot connect Blazing Blasts on different elevations.",
+        "Blazing Blasts and Pyro-Prison are stationary.",
+        "Storm team-up requires both Ultimates ready."
+      ]
+    },
+    {
+      "name": "Iron Fist",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 50.74,
+      "abilities": {
+        "normalAttack1": "Jeet Kune Do – Strike the targeted enemy with Jeet Kune Do, reducing the cooldown of Dragon's Defense with every hit.",
+        "normalAttack2": "Yat Jee Chung Kuen – Dash forward to pursue the targeted enemy and unleash a flurry of attacks.",
+        "q": "Living Chi – Become living Chi to boost his speed, damage, and attack range, delivering stronger punches while reducing the cooldown of Dragon's Defense.",
+        "lshift": "K'un-Lun Kick – Dash forward, delivering a flying kick when hitting an enemy or reaching full range, dealing damage to nearby enemies. Damage increased with lower enemy health.",
+        "e": "Harmony Recovery – Cross legs and channel Chi, recovering health. Excess healing converts to bonus health.",
+        "space": "Crane Leap – Perform up to three consecutive jumps while airborne.",
+        "rightClick": "Dragon's Defense – Assume a defensive stance with a boost of Chi to block incoming attacks and gain damage reduction. Once he exits the defensive stance, he gains bonus health and can strike back with Yat Jee Chung Kuen.",
+        "passive": [
+          "Wall Runner – Run horizontally along walls.",
+          "Chi Absorption – Assists in taking down enemies allow him to absorb their Chi and gain bonus health"
+        ]
+      },
+      "strengths": [
+        "Nimble martial artist with high mobility and survivability.",
+        "Can triple jump and run along walls.",
+        "Passive, Chi Absorption, grants bonus health on assists.",
+        "Primary fire, Jeet Kune Do, delivers rapid strikes and reduces Dragon's Defense cooldown.",
+        "Secondary fire, Dragon's Defense, blocks attacks and converts damage to bonus health.",
+        "Can parry almost any attack, including some Ultimates.",
+        "After Dragon's Defense, gains Yat Jee Chung Kuen for fast, auto-locking attacks.",
+        "Harmony Recovery heals and converts excess to bonus health.",
+        "K'un-Lun Kick is a versatile gap-closer/finisher with double damage on low-health enemies.",
+        "Ultimate, Living Chi, enhances attacks and reduces cooldowns.",
+        "Team-up with Luna Snow grants bonus damage."
+      ],
+      "weaknesses": [
+        "Very low attack range outside Magik Slash.",
+        "Requires careful resource management for offense/defense.",
+        "Vulnerable if defensive/evasive tools are on cooldown."
+      ]
+    },
+    {
+      "name": "Iron Man",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 52.72,
+      "abilities": {
+        "normalAttack1": "Repulsor Blast – Fire nano pulse cannons forward.",
+        "normalAttack2": "Unibeam – Fire a unibeam forward.",
+        "q": "Invincible Pulse Cannon – Fire a devastating pulse cannon in the targeted direction, delivering catastrophic damage to the targeted area upon impact.",
+        "lshift": "Hyper-Velocity – Activate Hyper-Velocity state for swift forward flight.",
+        "e": "Armor Overdrive – Activate Armor Overdrive state, enhancing damage of Repulsor Blast and Unibeam.",
+        "f": "Micro-Missile Barrage – When Hyper-Velocity or Armor Overdrive is used, Iron Man can launch a missile bombardment."
+      },
+      "strengths": [
+        "Long-range specialist with strong AOE and single-target damage.",
+        "Continuous free flight for high-ground advantage.",
+        "Primary fire, Repulsor Blast, deals direct and AOE damage.",
+        "Third Repulsor Blast is a stronger projectile.",
+        "Secondary fire, Unibeam, is a high-DPS mid-range beam.",
+        "Hyper-Velocity grants fast repositioning and escape.",
+        "Armor Overdrive amplifies damage and refreshes Hyper-Velocity.",
+        "Micro-Missile Barrage provides AOE damage during flight/overdrive.",
+        "Ultimate, Invincible Pulse Cannon, deals massive AOE damage.",
+        "Team-up with Hulk grants Gamma Overdrive for improved damage."
+      ],
+      "weaknesses": [
+        "Vulnerable in the air if caught out.",
+        "Slow movement outside Hyper-Velocity.",
+        "No defensive or self-sustain tools.",
+        "Repulsor Blast and Unibeam share ammo.",
+        "Ultimate only deals full damage at center impact."
+      ]
+    },
+    {
+      "name": "Magik",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.88,
+      "abilities": {
+        "normalAttack": "Soulsword – Slash forward with the Soulsword.",
+        "q": "Darkchild – Transform into Darkchild, gaining enhancements to all her abilities.",
+        "lshift": "Stepping Discs – Jump through a Stepping Disc, teleporting a short distance in the direction of movement.",
+        "e": "Umbral Incursion – Dash forward and launch an enemy upward.",
+        "leftClick": "Eloritch Whirl – Spin while swinging the Soulsword after exiting a Stepping Disc.",
+        "rightClick": [
+          "Magik Slash – Strike forward an air slash.",
+          "Demon's Rage – Summon a Limbo demon that attacks enemies after exiting a Stepping Disc."
+        ],
+        "passive": [
+          "Limbo's Might – Convert damage inflicted on enemies into Bonus Health to herself."
+        ]
+      },
+      "strengths": [
+        "Sword-wielding skirmisher with great survivability and close-range power.",
+        "Highest melee range in the game.",
+        "Passive, Limbo's Might, converts 30% of damage dealt into bonus health.",
+        "Primary fire, Soulsword, has wide arc and can be frame-canceled.",
+        "Secondary fire, Magik Slash, is a charge-up ranged projectile.",
+        "Umbral Incursion is a dash that launches enemies upward.",
+        "Stepping Discs provide invulnerability and fast repositioning.",
+        "Eldritch Whirl and Demon's Rage provide AOE after exiting portals.",
+        "Ultimate, Darkchild, enhances all abilities and survivability.",
+        "Team-up with Black Panther/Psylocke grants bonus damage."
+      ],
+      "weaknesses": [
+        "Normal attacks are affected by damage falloff; must be close for max damage.",
+        "Survivability depends on dealing constant damage.",
+        "Limited ranged attacks; Magik Slash has cooldown."
+      ]
+    },
+    {
+      "name": "Mister Fantastic",
+      "roles":["Duelist","Frontliner","Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.90,
+      "abilities": {
+        "passive": [
+          "Elastic Strength – Using abilities generates Elasticity, boosting attack power. Reaching full Elasticity triggers an Inflated state that grants Shield and boosts even more damage."
+        ],
+        "normalAttack": "Stretch Punch – Stretch out a forward punch to attack enemies.",
+        "rightClick": "Distended Grip – Extend arms forward to entangle an enemy, then press Primary Attack to pull the hit enemy toward him, or select and yank another enemy, Knocking Them Airborne against each other.",
+        "lshift": "Reflexive Rubber – Stretch the body to absorb damage before launching stored damage in the targeted direction.",
+        "e": "Flexible Elongation – Gain a Shield, select a target and dash towards them, dealing damage to enemies or granting a Shield to allies.",
+        "q": "Braniac Bounce – Leap upward and smash the ground, slowing enemies within range. Mister Fantastic can leap again upon landing a hit."
+      },
+      "strengths": [
+        "Durable mid-range brawler who disrupts with stretchy powers.",
+        "Higher max health than other Duelists.",
+        "Passive, Elastic Strength, grants inflated state for bonus health and AOE attacks.",
+        "Primary fire, Stretch Punch, hits multiple enemies at range.",
+        "Secondary fire, Distended Grip, pulls or slams enemies together.",
+        "Flexible Elongation dashes to enemies/allies and grants bonus health.",
+        "Reflexive Rubber absorbs and redirects damage, grants CC immunity.",
+        "Ultimate, Brainiac Bounce, deals AOE damage and slows in leaps.",
+        "Team-up with Invisible Woman grants Wedded Harmony for bonus health."
+      ],
+      "weaknesses": [
+        "Cannot fully replace a Vanguard as solo frontline.",
+        "Cannot use other abilities while inflated or stretched.",
+        "Reduced attack range and speed while inflated.",
+        "Reduced movement speed while stretched."
+      ]
+    },
+    {
+      "name": "Moon Knight",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 45.27,
+      "abilities": {
+        "normalAttack1": "Crescent Dart – Unleash Crescent Darts forward that can bounce between enemies and Ankhs, dealing damage to enemies.",
+        "normalAttack2": "Moon Blade – Launch forward a Moon Blade that can bounce between enemies and Ankhs, dealing damage to enemies.",
+        "e": "Ancient Ankh – Fire an Ankh to Knock enemies within its radius airborne towards the center",
+        "f": "Moonlight Hook – Launch a frontal grappling hook that pulls Moon Knight towards it",
+        "lshift": "Night Glider – Enter a gliding state.",
+        "q": "Hand of Khonshu – Open a portal that allows Khonshu to bombard enemies with his talons.",
+        "space": "Rising Leap – Perform a double jump."
+      },
+      "strengths": [
+        "Long-ranged AOE specialist with high mobility.",
+        "Has double jump and can glide.",
+        "Grappling hook for repositioning and vertical movement.",
+        "Primary fire, Crescent Dart, bounces between enemies and Ankhs.",
+        "Secondary fire, Moon Blade, is a high-damage projectile with ricochet.",
+        "Ancient Ankh enables more ricochets and AOE.",
+        "Triple Eclipse melee combo for close defense.",
+        "Ultimate, Hand of Konshu, creates large AOE portal for multi-hit damage.",
+        "Team-up with Cloak & Dagger grants invisibility field."
+      ],
+      "weaknesses": [
+        "Relies on grouped enemies for max damage.",
+        "Poor single-target damage unless using Ankh.",
+        "Damage falloff per bounce on projectiles.",
+        "Less effective on large maps with spread-out enemies.",
+        "Effectiveness drops when Ankh is on cooldown.",
+        "Ultimate is easy to avoid without crowd control."
+      ]
+    },
+    {
+      "name": "Namor",
+      "roles":["Duelist","Anti-Dive"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 48.33,
+      "abilities": {
+        "normalAttack": "Trident of Neptune – Toss the trident forward, reducing Aquatic Dominion's cooldown upon enemy impact.",
+        "q": "Horn of Proteus – Summon Giganto to leap atop enemies within range.",
+        "lshift": "Blessing of the Deep – Summon a protective barrier while flying upwards, shielding Namor while disabling movement and skills use during its duration.",
+        "e": "Aquatic Dominion – Summon a Monstro Spawn that can autonomously attack enemies.",
+        "rightClick": "Wrath of the Seven Seas – Launch the trident forward to damage nearby enemies, then direct all Monstro Spawn to perform an enhanced attack on the nearest hit enemy."
+      },
+      "strengths": [
+        "Long-range specialist who summons sea creatures for attacks.",
+        "Slightly higher base health than other Duelists.",
+        "Trident attacks are not affected by damage falloff.",
+        "Aquatic Dominion summons Monstro Spawns for auto-attacks.",
+        "Primary fire, Trident of Neptune, has infinite ammo and reduces cooldowns.",
+        "Critical hits enrage Monstro Spawns for faster attacks.",
+        "Secondary fire, Wrath of the Seven Seas, deals AOE and commands Spawns.",
+        "Blessing of the Deep grants temporary immunity and flight.",
+        "Ultimate, Horn of Proteus, summons Giganto for massive AOE and buffs Spawns.",
+        "Excellent anti-dive Duelist."
+      ],
+      "weaknesses": [
+        "Relatively slow attack speed.",
+        "Lacks high mobility and is susceptible to dives.",
+        "Vulnerable when Blessing of the Deep is on cooldown.",
+        "Damage drops when out of Aquatic Dominion charges.",
+        "Monstro Spawns can be destroyed and have low health.",
+        "Limited to two Monstro Spawns at once."
+      ]
+    },
+    {
+      "name": "Psylocke",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Short Hitscan",
+      "tier": "B",
+      "winRate": 48.87,
+      "abilities": {
+        "normalAttack": "Psionic Crossbow – Unleash bolts with psionic crossbows to damage enemies and reduce the cooldowns of all her abilities.",
+        "q": "Dance of the Butterfly – Slash nearby enemies with a psionic katana, dealing massive damage.",
+        "lshift": "Psi-Blade Dash – Dash forward and slice through enemies along the path with psionic blades.",
+        "e": "Psychic Stealth – Enter stealth and gain a Movement Boost.",
+        "rightClick": "Wing Shurikens – Launch a volley of psionic shurikens that stick to enemies, dealing damage and granting herself Bonus Health. Press again to recall the shurikens."
+      },
+      "strengths": [
+        "Swift mid-close ranged assassin with high mobility and burst damage.",
+        "Primary fire, Psionic Crossbow, fires four bolts for high damage if all hit.",
+        "Each hit reduces cooldowns of all abilities.",
+        "Secondary fire, Wing Shurikens, sticks to targets and can be recalled for extra damage.",
+        "Successful hits grant bonus health.",
+        "Psi-Blade Dash is a quick lunge with two charges and recalls shurikens.",
+        "Psychic Stealth grants invisibility and 50% movement speed.",
+        "Ultimate, Dance of the Butterfly, deals multi-hit AOE damage and prioritizes marked enemies."
+      ],
+      "weaknesses": [
+        "No double jump or wall running.",
+        "Vulnerable if Psi-Blade Dash and Psychic Stealth are on cooldown.",
+        "Struggles to hit moving or distant targets due to spread attacks.",
+        "Not immune to damage while in stealth; briefly visible if hit."
+      ]
+    },
+    {
+      "name": "Scarlet Witch",
+      "roles":["Duelist","Airborne"],
+      "attackRange": "Close Hitscan",
+      "tier": "C",
+      "winRate": 47.62,
+      "abilities": {
+        "normalAttack": "Chaos Control – Use Chaos Magic to attack enemies and restore Chaos Energy.",
+        "q": "Reality Erasure – Engage in free-flight while charging energy, then unleash it to deal massive damage.",
+        "lshift": "Mystic Projection – Enter the Projection state for free-flight. Press again to exit early.",
+        "e": "Dark Seal – Land a hit on a target or the scene, or press again to generate a Force Field that periodically Stuns enemies within range.",
+        "space": "Telekinesis – Space Hold Space to fall slowly.",
+        "rightClick": "Chthonian Burst – Consume Chaos Energy to fire explosive magic missiles, damaging enemies.",
+        "passive": [
+          "Chaos Energy – Hitting with Chaos Control builds up Chaos Energy, which is used for Chthonian Burst."
+        ]
+      },
+      "strengths": [
+        "Long-range specialist with high damage and area control.",
+        "Strong zoning and teamfight presence.",
+        "Can heal herself and allies.",
+        "High mobility and escape potential.",
+        "Ultimate, Reality Erasure, is a powerful nuke with a large radius.",
+        "Team-up with Doctor Strange grants additional crowd control and damage."
+      ],
+      "weaknesses": [
+        "Skillshot-dependent; requires landing abilities for effectiveness.",
+        "No hard crowd control or stuns.",
+        "Can be countered by mobility or damage reduction abilities.",
+        "Ultimate can be interrupted or avoided."
+      ]
+    },
+    {
+      "name": "Spider-Man",
+      "roles":["Duelist","Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.60,
+      "abilities": {
+        "normalAttack": "Spider-Power – Swing fists forward to strike, dealing extra damage to the enemy with a Spider-Tracer.",
+        "rightClick": "Web-Cluster – Shoot a Web-Cluster that deals damage and attaches a Spider-Tracer to the hit enemy.",
+        "q": "Spectacular Spin – Launch Web-Clusters all around to damage and Stun enemies.",
+        "lshift": "Web-Swing – Shoot a strand of webbing to swing.",
+        "e": "Get Over Here! – Shoot webbing to reel in the hit enemy. If the enemy is tagged with a Spider-Tracer, Spider-Man will get pulled to them instead.",
+        "f": "Amazing Combo – Launch an enemy upward, dealing extra damage to the enemy with a Spider-Tracer.",
+        "space": "Thwip and Flip – Perform a double jump.",
+        "passive": [
+          "Spider-Sense – Give a warning of enemies that have been around.",
+          "Wall Crawl – Press Space to crawl on vertical surfaces, and Press Left Click to run on them."
+        ]
+      }
+    },
+    {
+      "name": "Squirrel Girl",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "D",
+      "winRate": 45.25,
+      "abilities": {
+        "normalAttack": "Burst Acorn – Shoot bouncing Burst Acorns.",
+        "q": "Unbeatable Squirrel Tsunami – Summon a horde of squirrels to charge forward, dealing damage while bouncing against structures.",
+        "lshift": "Tail Bounce – Rocket upwards with a bounce of her tail.",
+        "e": "Mammal Bond – Reload Burst Acorns and can use an ability without cooldown once in a short duration.",
+        "rightClick": "Squirrel Blockade – Launch an acorn to unleash Squirrel Guards, Imprisoning the first hit enemy",
+        "passive": [
+          "Unbeatable – Squirrel Girl cannot be defeated by squirrels."
+        ]
+      },
+      "strengths": [
+        "High mobility and evasiveness with Tail Bounce and Squirrel Tsunami.",
+        "Can reload Burst Acorns and use an ability instantly with Mammal Bond.",
+        "Squirrel Blockade can Imprison enemies and block paths.",
+        "Unbeatable passive provides unique survivability against squirrels."
+      ],
+      "weaknesses": [
+        "Abilities require careful aiming and timing.",
+        "Mammal Bond has a short window and can be wasted.",
+        "Squirrel Blockade can be destroyed or bypassed.",
+        "Ultimate can be countered by certain abilities."
+      ]
+    },
+    {
+      "name": "Star-Lord",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Close Hitscan",
+      "tier": "B",
+      "winRate": 47.45,
+      "abilities": {
+        "normalAttack": "Element Guns – Shoot enemies with dual Element Guns.",
+        "q": "Galactic Legend – Engage in free-flight and lock onto enemies in sight.",
+        "lshift": "Rocket Propulsion – Boost and soar forward.",
+        "e": "Blaster Barrage – Fire a frenzy of shots, causing damage to enemies within range.",
+        "rightClick": "Stellar Shift – Dodge in the direction of movement and swiftly reload."
+      }
+    },
+    {
+      "name": "Storm",
+      "roles":["Duelist","Airborne","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 53.83,
+      "abilities": {
+        "normalAttack": "Wind Blade – Launch forward-piercing Wind Blades.",
+        "q": "Omega Hurricane – Transform into a hurricane to draw in nearby enemies and deal damage.",
+        "lshift": "Weather Control – Switch the weather to empower allies: Tornado grants a Movement Boost; Thunder grants a Damage Boost.",
+        "e": "Goddess Boost – Channel the power of the weather to empower Storm; Tornado grants a Movement Boost; Thunder grants a Damage Boost and summons lightning to inflict damage.",
+        "rightClick": "Bolt Rush – Unleash a lightning bolt forward."
+      }
+    },
+    {
+      "name": "The Punisher",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "C",
+      "winRate": 45.58,
+      "abilities": {
+        "normalAttack1": "Adjudication – Fire at enemies with Adjudication, his Automatic Rifle",
+        "normalAttack2": "Deliverance – Fire at enemies with Deliverance, his Shotgun",
+        "q": "Final Judgement – Unleash two gatling guns and missiles to attack enemies.",
+        "lshift": "Vantage Connection – Launch a hook to generate a cable that enables Punisher to move rapidly by pressing F.",
+        "e": "Culling Turret – Deploy a Culling Turret that grounds Punisher while dealing massive damage.",
+        "rightClick": "Scourge Grenade – Throw a Smoke Grenade forward to Obscure enemy vision.",
+        "passive": [
+          "Warrior's Gaze – Retain vision of enemies that disappear from view for a short duration."
+        ]
+      },
+      "strengths": [
+        "Strong sustained damage and area denial with explosives.",
+        "Can reveal and execute low-health enemies.",
+        "Culling Turret provides additional damage and zoning.",
+        "Smoke Grenade offers utility and vision denial.",
+        "Vantage Connection enables fast movement and repositioning.",
+        "Final Judgement is a powerful AOE attack."
+      ],
+      "weaknesses": [
+        "Vulnerable to flanking and burst damage.",
+        "No mobility or escape abilities.",
+        "Ultimate requires setup and can be interrupted."
+      ]
+    },
+    {
+      "name": "Winter Soldier",
+      "roles":["Duelist","High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 46.67,
+      "abilities": {
+        "normalAttack": "Roterstern – Fire explosive rounds with his blaster, Roterstern, damaging the target hit and enemies behind them.",
+        "q": "Kraken Impact – Leap high, then dash forward and slam down with the bionic arm, dealing damage to enemies in range, marking them for culling. Marked enemies will perish instantly if their health falls below a certain threshold, recharging the bionic arm for another Kraken Impact within a short period.",
+        "lshift": "Trooper's Fist – Dash forward, seizing enemies along the path, and knock enemies in front airborne at the end of the dash.",
+        "e": "Tainted Voltage – Charge up and launch a powerful electrical punch with the bionic arm in the target direction, dealing damage to enemies within range and slowing them.",
+        "rightClick": "Bionic Hook – Charge up and launch a hook with his bionic arm, reeling in the first target hit and enemies lurking behind.",
+        "passive": [
+          "Ceaseless Charge – Roterstern reloads automatically while the bionic arm is in action, granting the Winter Soldier bonus health."
+        ]
+      },
+      "strengths": [
+        "Strong melee and ranged hybrid with self-sustain and utility.",
+        "Can mark and execute low-health enemies.",
+        "Trooper's Fist and Kraken Impact provide strong engage and damage.",
+        "Tainted Voltage offers damage and crowd control.",
+        "Bionic Hook enables repositioning and combo potential.",
+        "Ceaseless Charge provides bonus health and ammo sustain."
+      ],
+      "weaknesses": [
+        "Vulnerable to crowd control and burst damage.",
+        "Requires skillful aim and timing for abilities.",
+        "Passive relies on consistent damage output."
+      ]
+    },
+    {
+      "name": "Wolverine",
+      "roles":["Duelist","Diver","Anti-Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 48.36,
+      "abilities": {
+        "normalAttack": "Savage Claw – Slash with Adamantium claws for a Claw Strike. Unleashing Feral Leap will enhance it to Berserk Claw Strike for a brief period.",
+        "q": "Last Stand – Launch Up enemies ahead and spiral through the air, sweeping up enemies along the path and delivering a devastating impact at the landing point. Impact deals extra damage based on Rage accumulated.",
+        "lshift": "Feral Leap – Leap like an animal to snatch the first enemy upon impact and Smash them to the ground. Unleashing this ability will enhance his normal attack to Berserk Claw Strike for a brief period.",
+        "e": "Undying Animal – Unleash a fierce howl to briefly reduce incoming damage.",
+        "rightClick": "Vicious Rampage – Dash forward and unleash a Claw Strike.",
+        "passive": [
+          "Regenerative Healing Factor – Begin to heal and rise with a hefty Bonus Health, shaking off all debuffs. After a brief moment, any remaining Bonus Health morphs into a one-off heal, zeroing out his Rage. Assists in KOs reduce this cooldown.",
+          "Berserker Rage – Rage builds when Wolverine attacks or takes hits, boosting the damage of his Claw Strikes and the Bonus Health from his regenerative healing factor."
+        ]
+      },"strengths": [
+        "High mobility and survivability with healing factor.",
+        "Strong melee damage and area control.",
+        "Feral Leap and Last Stand provide strong engage.",
+        "Berserk Claw Strike enhances normal attack for burst damage.",
+        "Vicious Rampage offers quick repositioning and damage.",
+        "Regenerative Healing Factor provides bonus health and debuff removal."
+      ],
+      "weaknesses": [
+        "Vulnerable to crowd control and burst damage.",
+        "Passive relies on consistent damage output.",
+        "Limited ranged options."
+      ]
+    },
+    {
+      "name": "Adam Warlock",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.99,
+      "abilities": {
+        "normalAttack": "Quantum Magic – Launch quantum energy to deal damage.",
+        "q": "Karmic Revival – Awaken the karma of allies to revive them. Allies revived have lower health but enjoy a brief period of invincibility.",
+        "lshift": "Soul Bond – Unite the souls of allies in a bond, granting them healing over time and distributing damage taken across the bond.",
+        "e": "Avatar Life Stream – Target an ally for a bouncing stream of healing energy, which also heals himself upon casting; self-targets if no ally is selected.",
+        "rightClick": "Cosmic Cluster – Gather quantum energy into a cluster and then swiftly launch it at the enemy.",
+        "passive": [
+          "Regenerative Cocoon – Once his body perishes, Adam can freely move as a soul and reforge his body at a chosen spot."
+        ]
+      },
+      "strengths": [
+        "Long-range support with high conditional area-of-effect burst healing",
+        "Ability to share damage among teammates",
+        "Capable of reviving multiple allies",
+        "Regenerative Cocoon allows respawning at chosen spot instead of base",
+        "Cosmic Cluster can fire multiple energy bolts when charged",
+        "Soul Bond distributes damage and provides heal-over-time",
+        "Karmic Revival can revive multiple allies in a quantum zone",
+        "When paired with Mantis or Star-Lord, grants them Regenerative Cocoon"
+      ],
+      "weaknesses": [
+        "Lacks any mobility tools, making him susceptible to dives and flanking",
+        "Regenerative Cocoon has a very long cooldown (105 seconds)",
+        "Cosmic Cluster shares ammo with Quantum Magic",
+        "Lacks sustained healing due to long cooldown on Avatar Life Stream",
+        "Relies heavily on ally positioning for effective healing",
+        "Karmic Revival has limited range for reviving allies",
+        "Revived characters only come back with 30% max health",
+        "Vulnerable while channeling Karmic Revival",
+        "Low Healing Output. He has byfay the lowest healing output of all strategist characters"
+      ]
+    },
+    {
+      "name": "Cloak & Dagger",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 48.35,
+      "abilities": {
+        "normalAttackDagger": "Lightforce Dagger – Unleash a bouncing Lightforce Dagger to damage enemies and heal nearby allies.",
+        "lshiftDagger": "Shadow's Embrace – Switch to Cloak.",
+        "eDagger": "Veil of Lightforce – Deploy a Veil of Lightforce to heal allies upon touch and grant them a healing boost.",
+        "rightClickDagger": "Dagger Storm – Launch a volley of daggers, creating a Healing Over Time field in the impact area.",
+        "normalAttackCloak": "Darkforce Cloak – Inflict continuous damage on an enemy.",
+        "lshiftCloak": "Light's Embrace – Switch to Dagger.",
+        "eCloak": "Terror Cape – Deploy a Veil of Darkforce to damage enemies upon touch, applying Blind and Vulnerability.",
+        "rightClickCloak": "Dark Teleportation – Enshroud nearby allies in the Darkforce Dimension, making them untargetable and invisible, and granting a Movement Boost.",
+        "q": "Eternal Bond – Perform four rapid dashes, healing allies and damaging enemies along the path."
+      },
+      "strengths": {
+        "Dagger": [
+          "Lightforce Dagger bounces on terrain and can heal/damage",
+          "Dagger Storm creates large healing bubble that persists when switching",
+          "Veil of Lightforce provides healing and healing bonus",
+          "Eternal Bond provides rapid movement and persistent healing/damage fields",
+          "High Healing Output"
+        ],
+        "Cloak": [
+          "Darkforce Cloak has infinite ammo and auto-aims nearest enemy",
+          "Dark Teleportation grants invulnerability and invisibility to nearby allies",
+          "Can avoid ultimates with Dark Teleportation",
+          "Terror Cape blinds enemies and applies Vulnerability",
+          "Shares Eternal Bond ultimate with Dagger"
+        ]
+      },
+      "weaknesses": {
+        "Dagger": [
+          "Shares healthbar with Cloak",
+          "Susceptible to dives with no mobility outside ultimate",
+          "Lightforce Dagger doesn't auto-lock on deployable units",
+          "Veil of Lightforce doesn't pass through terrain",
+          "Can be damaged during Eternal Bond",
+          "May get stuck on terrain during Eternal Bond"
+        ],
+        "Cloak": [
+          "Darkforce Cloak has limited range requiring close engagement",
+          "Low max health makes direct engagement risky",
+          "Vulnerable when Dark Teleportation is on cooldown",
+          "Dark Teleportation effects only last 2 seconds",
+          "Terror Cape's blind only lasts 1.5 seconds"
+        ]
+      }
+    },
+    {
+      "name": "Invisible Woman",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 46.63,
+      "abilities": {
+        "passive": [
+          "Covert Advance – Enter Invisible state some time after disengaging from combat and grant yourself healing over time."
+        ],
+        "normalAttack": "Orb Projection – Launch a force field that pierces enemies, damages foes, and heals allies before returning.",
+        "rightClick": "Guardian Shield – Generate a force shield in front of an ally. Blocks damage and heals nearby allies. Slows enemies passing through.",
+        "lshift": "Psionic Vortex – Cast a vortex that draws in enemies and deals damage.",
+        "e": "Force Physics – Push or pull enemies in front of you with psionic energy.",
+        "melee": "Agile Strike – Release a three-hit combo; the third attack launches enemies.",
+        "jump": "Veiled Step – Create a force field at your feet. Stepping on it turns you invisible.",
+        "q": "Invisible Boundary – Manifest a hidden field rendering allies inside undetectable and providing healing over time. Slows enemies that pass through."
+      },
+      "strengths": [
+        "Elusive with invisibility and healing while invisible",
+        "Higher max health than other Strategists",
+        "Immune to auto-target abilities while invisible",
+        "Orb Projection pierces and affects multiple targets",
+        "Guardian Shield blocks damage and provides area healing",
+        "Psionic Vortex pulls and slows enemies",
+        "Force Physics can push/pull enemies",
+        "Invisible Boundary makes allies invisible and slows enemies",
+        "Can counter certain ultimates with Invisible Boundary",
+        "High Healing Output"
+      ],
+      "weaknesses": [
+        "Limited self-sustain outside invisibility/Ultimate",
+        "Damage breaks invisibility",
+        "Reliant on positioning for effective damage/healing",
+        "Orb Projection has relatively low range",
+        "Cannot deal critical hits with primary fire",
+        "Guardian Shield can't be cast on herself",
+        "Allies in Invisible Boundary can still be damaged"
+      ]
+    },
+    {
+      "name": "Jeff the Land Shark",
+      "roles":["Strategist","Support","Healer","Diver"],
+      "attackRange": "Long Projectile",
+      "tier": "E",
+      "winRate": 42.07,
+      "abilities": {
+        "normalAttack1": "Joyful Splash – Unleash a healing splash.",
+        "normalAttack2": "Aqua Burst – Launch a high-speed water sphere that bursts, damaging nearby enemies.",
+        "lshift": "Hide and Seek – Dive underground with only your fin visible, gaining a movement boost and wall-crawl.",
+        "e": "Healing Bubble – Spit a bubble that heals the ally who collects it and boosts all healing received.",
+        "q": "It's Jeff! – Dive underground and resurface to swallow allies and enemies, activating Hide and Seek and then ejecting them forward.",
+        "passive": [
+          "Oblivious Cuteness – Reduces damage taken from critical strikes."
+        ]
+      },
+      "strengths": [
+        "Versatile with high healing output and mobility",
+        "Oblivious Cuteness gives 50% damage reduction vs critical hits",
+        "Joyful Splash has infinite range and highest HPS in game",
+        "Aqua Burst effective against clustered enemies",
+        "Healing Bubbles can be placed strategically around map",
+        "Hide and Seek provides mobility and CC immunity",
+        "It's Jeff! provides powerful crowd control",
+        "When paired with Groot, gains damage reduction"
+        
+      ],
+      "weaknesses": [
+        "Large hurtbox makes him easy to crit despite passive",
+        "Vulnerable to burst damage characters",
+        "Struggles to heal when team spreads out",
+        "Joyful Splash hard to aim against mobile heroes",
+        "Aqua Burst can't deal critical hits",
+        "Can't capture objectives while in Hide and Seek",
+        "Ultimate can be countered by certain abilities",
+        "Risky if Ultimate misses",
+        "Low Healing Output"
+      ]
+    },
+    {
+      "name": "Loki",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 51.09,
+      "abilities": {
+        "normalAttack": "Mystical Missile – Fire missiles that heal allies or damage enemies.",
+        "q": "God of Mischief – Shapeshift into a selected ally or enemy hero and use their abilities.",
+        "lshift": "Regeneration Domain – Create a magical field that converts ally damage into healing.",
+        "e": "Doppelganger – Project an illusion that can cast some of Loki's abilities.",
+        "f": "Devious Exchange – Swap positions with your selected illusion.",
+        "v": "Backstab – Stab enemies for extra damage when attacking from behind.",
+        "rightClick": "Deception – Become invisible and summon an illusion to mislead enemies.",
+        "passive": [
+          "God of Mischief – Master of deception and illusion."
+        ]
+      },
+      "strengths": [
+        "Elusive with illusions and position swapping",
+        "Doppelgangers increase damage/healing output",
+        "Mystical Missile can simultaneously heal/damage",
+        "Deception provides invisibility and heal-over-time",
+        "Backstab deals extra damage from behind",
+        "Regeneration Domain converts damage to healing",
+        "God of Mischief can copy any hero's abilities",
+        "Can use enemy ultimates when shapeshifted"
+      ],
+      "weaknesses": [
+        "Illusions are stationary and can be destroyed",
+        "Reliant on proper illusion placement",
+        "Limited mobility outside Devious Exchange",
+        "Shapeshifting has limited duration",
+        "Vulnerable if illusions are destroyed",
+        "Requires high skill to maximize deception",
+        "Healing output is inconsistent"
+      ]
+    },
+    {
+      "name": "Luna Snow",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 45.22,
+      "abilities": {
+        "normalAttack": "Light & Dark Ice – Fire ice shots that heal allies or damage enemies.",
+        "q": "Fate of Both Worlds – Toggle between healing allies or granting them a Damage Boost through a performance.",
+        "lshift": "Ice Arts – Fire ice shards to damage enemies or heal allies and self-heal.",
+        "e": "Share the Stage – Attach Idol Aura to an ally. Allies restore Health when Luna heals others.",
+        "rightClick": "Absolute Zero – Freeze the enemy and restore health.",
+        "passive":[
+          "Cryo Heart – Automatically restore Health when using Ice Arts or Absolute Zero.",
+          "Smooth Skate – Begin ice skating when in continuous movement."
+        ]
+      },
+      "strengths": [
+        "High healing output and enhancement abilities",
+        "Higher max health than other Strategists",
+        "Two key passives (Cryo Heart and Smooth Skate)",
+        "Light & Dark Ice affects both allies and enemies",
+        "Absolute Zero can freeze enemies and interrupt ultimates",
+        "Share the Stage boosts healing on key targets",
+        "Fate of Both Worlds provides massive healing or damage boost",
+        "Immune to CC during ultimate",
+        "High Healing Output"
+      ],
+      "weaknesses": [
+        "Smooth Skate ends if movement stops",
+        "Limited self-sustain",
+        "Susceptible to dives",
+        "Reliant on positioning for Ice Arts",
+        "Share the Stage lost when allies die",
+        "Can't use Share the Stage on herself",
+        "Can't use other abilities during ultimate"
+      ]
+    },
+    {
+      "name": "Mantis",
+      "roles":["Strategist","Support","Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 52.80,
+      "abilities": {
+        "normalAttack": "Life Energy Blast – Fire an energy thorn. Gain one Life Orb on critical hits.",
+        "q": "Soul Resurgence – Move while releasing healing energy and granting Movement Boost to allies.",
+        "lshift": "Spore Slumber – Throw a spore that sedates the nearest enemy.",
+        "e": "Allied Inspiration – Consume Life Orbs to grant allies a Damage Boost.",
+        "f": "Natural Anger – Consume Life Orbs to gain a personal Damage Boost.",
+        "rightClick": "Healing Flower – Consume Life Orbs to grant Healing Over Time to allies.",
+        "passive": [
+          "Nature's Favor – Gain Movement Boost when uninjured and healing over time when consuming Life Orbs."
+        ]
+      },
+      "strengths": [
+        "Long-range with high sustained healing",
+        "Life Orb mechanic fuels heals and buffs",
+        "Nature's Favor provides movement speed when unharmed",
+        "Life Energy Blast has no damage falloff",
+        "Spore Slumber can stun key targets",
+        "Soul Resurgence provides powerful area healing",
+        "Can convert excess healing to bonus health",
+        "When paired with Adam Warlock, gains cocoon respawn"
+      ],
+      "weaknesses": [
+        "Limited mobility tools",
+        "Lacks burst healing outside ultimate",
+        "Spore Slumber illusion can be destroyed",
+        "Nature's Soul has long cooldown (120s)",
+        "Reliant on Life Orb management",
+        "Vulnerable when overwhelmed",
+        "Low Healing Output"
+      ]
+    },
+    {
+      "name": "Rocket Raccoon",
+      "roles":["Strategist","Support","Healer", "Anti-Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "S",
+      "winRate": 53.55,
+      "abilities": {
+        "normalAttack": "Bombard Mode – Fire energy projectiles that deal damage.",
+        "rightClick": "Repair Mode – Shoot bouncing spheres to heal allies.",
+        "q": "C.Y.A. – Deploy a Cosmic Yarn Amplifier that grants allies a Damage Boost.",
+        "lshift": "Jetpack Dash – Dash forward.",
+        "e": "B.R.B. – Deploy a Battle Rebirth Beacon that revives a fallen ally and periodically produces armor packs and rocket jet packs."
+      },
+      "passive": {
+        "Flying Ace": "Hold Space to fall slowly.",
+        "Wild Crawl": "Hold Space to run on a wall."
+      },
+      "strengths": [
+        "Long-range support with high mobility",
+        "Small size helps find cover easily",
+        "Wall crawling at increased speed",
+        "Slow fall from high heights",
+        "Bombard Mode has high rate-of-fire",
+        "Repair Mode spheres bounce off surfaces",
+        "B.R.B. revives allies and provides packs",
+        "C.Y.A. grants powerful damage boost",
+        "Jetpack Dash provides flexible mobility",
+        "High Healing Output"
+      ],
+      "weaknesses": [
+        "Vulnerable when Jetpack Dash is on cooldown",
+        "Bombard Mode has damage falloff",
+        "Repair Mode lacks burst healing",
+        "B.R.B. limitations (can't revive self, etc)",
+        "Gadgets can be destroyed by enemies",
+        "Jetpack Dash only goes forward",
+        "Vulnerable when riding Groot"
+      ]
+    }
+]
