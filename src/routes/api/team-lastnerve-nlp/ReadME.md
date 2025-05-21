@@ -9,7 +9,14 @@ This API provides natural language processing capabilities for analyzing news ar
 ## Prerequisites
 
 - Ollama service running on `localhost:11434`
-- At least one compatible language model installed (preferably `deepseek-r1-7b1.5b`)
+- At least one compatible language model installed (preferably `deepseek-r1-1.5b`)
+
+## Fallback Model feature
+* Reliability: The code ensures the service can continue operating even if the preferred model isn't available, making the system more resilient.
+* Flexibility: It allows the service to work with different model configurations without requiring code changes.
+* Graceful Degradation: The three-tier fallback system ensures the service can still function with alternative models while maintaining reasonable quality standards.
+* Maintainability: The structured approach to model selection makes it easy to update the preferred models or fallback options in the future.
+* Debugging Support: The extensive logging helps track which model is being used and why, making it easier to diagnose issues.
 
 ## API Endpoints
 A. POST ENDPOINT
@@ -125,16 +132,23 @@ Analyzes provided text content and returns structured analysis.
     }
 }
 ```
-## Test 2
-POST
+## POSTMAN RAW BODY INPUT TEST INPUT
+
+** SAMPLE 1
+
 ```json
 {
   "content": "In the gripping game of thrones of Philippine politics, voters have delivered former Philippine President Rodrigo Duterte a sweeping mayoral victory in his hometown stronghold of Davao – predictable for a family that has held the job for more than 20 years.\n\nBut this latest landslide win creates a predicament for the Philippines, as the mayor-elect is thousands of miles away behind bars awaiting trial on charges of crimes against humanity.\n\nProsecutors at the International Criminal Court (ICC) in The Hague accuse the 80-year-old political patriarch of carrying out a brutal war on drugs that killed possibly thousands of people, including many innocents and bystanders. Though he openly boasted about the crackdown, Duterte has long denied accusations of human rights abuses and has repeatedly said he will not kowtow to a foreign court.\n\nHis next hearing is in September, but before then experts say he faces a new, complicated legal battle between the ICC and Philippine jurisdiction over whether he will be allowed to take the oath of office.\n\nDuterte can potentially be sworn in by proxy or in absentia – possibly by a video call, but only if The Hague-based court allows it, experts say.\n\nIf he’s allowed to assume the role, questions will be asked about how he could administer the southern city from a detention center in another time zone, where he has access to a computer and phone calls to family, but no internet.\n\nUnder Philippine law, day-to-day duties could fall to his youngest son, Sebastian Duterte, who was elected as vice mayor of Davao City.\n\nIf the senior Duterte isn’t allowed to take the oath, experts say the role of mayor could fall to election runner-up Karlo Nograles, of the Nograles political dynasty, longtime Duterte rivals in Davao, where both families tussle for influence.\n\nRamon Beleno, a political analyst and former professor from Ateneo de Davao University, said handing the job to Nograles could trigger a separate legal challenge from the Dutertes.\n\nDuterte remains a powerful yet divisive figure in the Philippines. In Davao City, where he served as mayor for over two decades before becoming president in 2016, fervent supporters credit his iron grip over the city with bolstering law and order.\n\nDuterte’s lawyer, Nicholas Kaufman, was quoted by Philippine news outlet ABS-CBN as saying the “overwhelming” support for Duterte in the 2025 midterm elections showed the public’s “total rejection” of the national government’s “attempt to stamp out” the former president’s legacy.\n\nIn a reply to CNN, Kaufman said “any swearing in ceremony would be dictated by and conform to the law of the Republic of the Philippines. Accordingly, a decision on this issue will be taken in the very near future after all options have been discussed with the former President’s Filipino lawyers.”\n\nIs he allowed to be mayor?\nThe main legal hurdle Duterte faces, despite his landslide mayoral win, is whether he would be allowed to swear the oath during his enforced absence.\n\nAll elected public officials are supposed to take their oath within 30 days of their supposed assumption of office on July 1, according to Joel Butuyan, an ICC-accredited lawyer and president of human rights NGO CenterLaw.\n\nUnable to be sworn in at home, Duterte would need to take the oath in the presence of a Philippine ambassador or consul in The Hague, which seems unlikely, Butuyan said.\n\n“I don’t think he’s going to be allowed to get out just to take office because it’s not in the enumerated rights of an accused (person) in the ICC,” he said.",
   "comprehensive": true
 }
 
-
-
+** SAMPLE 2
+```json
+{
+  "content": "Bangkok, Thailand\nCNN — \nPolice in Thailand have arrested a man on suspicion of wildlife trafficking after he was found with two baby orangutans in a basket at a gas station in the Thai capital.\n\nThe 47-year-old suspect was apprehended Wednesday as he was about to deliver the two primates to a customer, Thai police said in a statement on Thursday.\n\nOfficers discovered the orangutans – one about 1-year-old and the other 1 month-old – in plastic baskets, police said.\n\nImages released by authorities showed one of the orangutans in a plastic basket, wearing a diaper and hugging a soft toy alongside feeding bottles.\n\nThe man was arrested on charges of “illegally possessing protected wildlife” under Thai law and could face up to four years in prison, police said.\n\nInvestigators are working to determine the origin of the baby orangutans, Kasidach Charoenlap, a police officer with the Central Investigation Bureau, told CNN on Friday.\n\nThe man had admitted he was delivering the animals, “but he didn’t say where he got the babies from,” Kasidach said.\n\nPolice said they had uncovered an illegal wildlife trade network and were working to find out whether the orangutans had been bred in Thailand or abroad, he added.\n\nThe operation was carried out in collaboration with the US Fish and Wildlife Service, the Wildlife Justice Commission in the Netherlands, and the United Nations Office on Drugs and Crime, the police statement said.\n\nThe orangutans, named Christopher and Stefan, are now under the care of wildlife officials from the Department of National Parks, Wildlife and Plant Conservation, authorities told CNN.\n\nThe department said that Stefan, the 1-month-old, is in an incubator because of weak health and Christopher, the 1-year-old, has been relocated to a sanctuary run by the agency.\n\nAuthorities said the orangutans are believed to have been sold for around 300,000 Thai baht ($9,050).",
+  "comprehensive": true
+}
+``` 
 
 Error codes include:
 - `VALIDATION_FAILED`: Invalid request data

@@ -124,6 +124,8 @@ async function initializeLLMClient() {
 
 /**
      * MODEL DISCOVERY
+     -This function is designed to find and select an appropriate language model for content analysis. 
+     It returns either the name of an available model or null if no suitable model is found.
  * Discovers the available language model
  * Returns the name of the available model
  * Handles model discovery errors gracefully
@@ -138,10 +140,10 @@ async function discoverAvailableModel(): Promise<string | null> {
     try {
         const llmClient = await initializeLLMClient();
         
-        // Directly use deepseek-r1-1.5b which is confirmed to be installed
+        // Directly use deepseek-r1-1.5b which is confirmed to be installed |  tries to use 'deepseek-r1-1.5b' as the primary model.
         const targetModel = 'deepseek-r1-1.5b';
         
-        // Retrieve available models from Ollama
+        // Retrieve available models from Ollama | The function queries the Ollama service to get a list of all available models installed on the system.
         const availableModels: ModelsListResponse = await llmClient.list();
         console.log("Available LLM models:", availableModels.models.map(m => m.name).join(', '));
         
