@@ -979,7 +979,19 @@
           "Regenerative Healing Factor – Begin to heal and rise with a hefty Bonus Health, shaking off all debuffs. After a brief moment, any remaining Bonus Health morphs into a one-off heal, zeroing out his Rage. Assists in KOs reduce this cooldown.",
           "Berserker Rage – Rage builds when Wolverine attacks or takes hits, boosting the damage of his Claw Strikes and the Bonus Health from his regenerative healing factor."
         ]
-      }
+      },"strengths": [
+        "High mobility and survivability with healing factor.",
+        "Strong melee damage and area control.",
+        "Feral Leap and Last Stand provide strong engage.",
+        "Berserk Claw Strike enhances normal attack for burst damage.",
+        "Vicious Rampage offers quick repositioning and damage.",
+        "Regenerative Healing Factor provides bonus health and debuff removal."
+      ],
+      "weaknesses": [
+        "Vulnerable to crowd control and burst damage.",
+        "Passive relies on consistent damage output.",
+        "Limited ranged options."
+      ]
     },
     {
       "name": "Adam Warlock",

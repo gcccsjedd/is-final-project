@@ -1,0 +1,642 @@
+[
+    {
+      "name": "Captain America",
+      "roles": ["Vanguard", "Diver", "Tank"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.55,
+      "abilities": "Captain America wields his shield for melee strikes and ricochet throws, charges forward to grant health and speed boosts, dashes for mobility, hurls an energy-charged shield, and deflects projectiles. His ultimate enhances team resilience with bonus health and speed, enabling knock-up attacks.",
+      "strengths": [
+        "Living Legend blocks projectiles and some Ultimates while moving.",
+        "Ultimate, Freedom Charge, grants bonus health and speed to allies."
+      ],
+      "weaknesses": [
+        "Struggles to block large barrages due to smaller shield size.",
+        "Shield cannot block splash damage."
+      ]
+    },
+    {
+      "name": "Doctor Strange",
+      "roles": ["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 48.84,
+      "abilities": "Doctor Strange casts magical daggers, creates protective shields, and uses portals for team mobility. He can ascend briefly, release dark magic for damage, and his ultimate stuns enemies by separating their souls, transferring damage. His passive accumulates dark magic, risking anti-heal if not released.",
+      "strengths": [
+        "Shield of the Seraphim absorbs all projectiles and some Ultimates.",
+        "Ultimate, Eye of Agamotto, stuns and deals extra damage via soul projection."
+      ],
+      "weaknesses": [
+        "Limited mobility due to long cooldown on Cloak of Levitation.",
+        "Vulnerable if Shield of the Seraphim is destroyed."
+      ]
+    },
+    {
+      "name": "Emma Frost",
+      "roles": ["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Hitscan",
+      "tier": "A",
+      "winRate": 50.08,
+      "forms": {
+        "Human": {
+          "abilities": "Emma Frost fires psionic beams that scale with duration, controls enemy minds for cascading damage, creates levitating barriers, and transforms into Diamond Form. Her ultimate stuns and manipulates enemies, canceling their ultimates."
+        },
+        "Diamond": {
+          "abilities": "In Diamond Form, Emma delivers crushing melee strikes, lunges to slam enemies, and unleashes a knockback kick with bonus damage against walls."
+        }
+      },
+      "strengths": [
+        "Ultimate, Psionic Seduction, cancels enemy Ultimates.",
+        "Mind's Aegis creates a high-health shield for ally defense."
+      ],
+      "weaknesses": [
+        "Diamond Form has no ranged attacks and limited mobility.",
+        "Mind's Aegis shield can be quickly destroyed by focused fire."
+      ]
+    },
+    {
+      "name": "Groot",
+      "roles": ["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Hitscan",
+      "tier": "B",
+      "winRate": 49.60,
+      "abilities": "Groot attacks with vines, creates thorn and ironwood walls that awaken for bonus effects, and throws explosive spore bombs. His ultimate pulls and imprisons enemies with a massive vine cluster. His passive enhances walls when nearby, boosting health or damage.",
+      "strengths": [
+        "Ultimate, Strangling Prison, pulls and imprisons enemies effectively.",
+        "Ironwood and Thornlash Walls provide strong area control."
+      ],
+      "weaknesses": [
+        "No mobility tools; slow speed makes him easy to hit.",
+        "Vulnerable if walls are on cooldown or destroyed."
+      ]
+    },
+    {
+      "name": "Hulk",
+      "roles": ["Vanguard", "Diver", "Tank"],
+      "attackRange": "Melee",
+      "tier": "S",
+      "winRate": 52.98,
+      "variants": [
+        {
+          "name": "Bruce Banner",
+          "abilities": "Bruce Banner fires a gamma ray gun, launches grenades for knockback, and transforms into Hero Hulk."
+        },
+        {
+          "name": "Hero Hulk",
+          "abilities": "Hero Hulk delivers melee punches, emits gamma bursts, stuns with a quantum void, leaps to knock enemies down, and generates shields. His ultimate transforms him into Monster Hulk with enhanced abilities."
+        },
+        {
+          "name": "Monster Hulk",
+          "abilities": "Monster Hulk punches to launch enemies, grabs and smashes foes, emits gamma bursts, stuns with a quantum void, and leaps to knock enemies down."
+        }
+      ],
+      "strengths": [
+        "Ultimate, Hulk Smash, transforms into Monster Hulk with enhanced abilities.",
+        "Indestructible Guard shields Hulk and allies, converting damage to energy."
+      ],
+      "weaknesses": [
+        "Bruce Banner is extremely frail with limited mobility.",
+        "Vulnerable to crowd control when Indestructible Guard is on cooldown."
+      ]
+    },
+    {
+      "name": "Magneto",
+      "roles": ["Vanguard", "Frontliner", "Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "A",
+      "winRate": 46.61,
+      "abilities": "Magneto fires magnetic orbs, creates shields for allies, blocks projectiles with a metallic curtain, and launches a powerful mag-cannon. His ultimate forms a massive meteor for catastrophic damage, absorbing projectiles for extra power. His passive allows slow falling.",
+      "strengths": [
+        "Ultimate, Meteor M, deals large area damage and absorbs projectiles.",
+        "Metallic Curtain absorbs all projectiles and blocks Ultimates."
+      ],
+      "weaknesses": [
+        "Frail if shields are on cooldown; shields share cooldown.",
+        "Absorbing too many projectiles during Meteor M cancels the Ultimate."
+      ]
+    },
+    {
+      "name": "Peni Parker",
+      "roles": ["Vanguard", "Anti-Dive", "Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 52.01,
+      "abilities": "Peni Parker launches cyber-web clusters, immobilizes enemies with snares, deploys spider-mines, and creates spider-nests for area control. She can wall crawl and swing with webs. Her ultimate enhances her suit, deploying mines and webs while knocking back enemies.",
+      "strengths": [
+        "Cyber-Web Snare immobilizes targets and interrupts Ultimates.",
+        "Ultimate, Spider-Sweeper, grants bonus health and rapid web/mine deployment."
+      ],
+      "weaknesses": [
+        "Frail outside Cyber-Webs; few defensive options.",
+        "Bionic Spider-Nest has long cooldown if destroyed."
+      ]
+    },
+    {
+      "name": "The Thing",
+      "roles": ["Vanguard", "Diver", "Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.62,
+      "abilities": "The Thing delivers rapid punches and heavy blows, charges to launch enemies, and leaps to allies for damage reduction. His ultimate creates seismic zones to stun and launch enemies. His passive grants immunity to displacement effects.",
+      "strengths": [
+        "Passive, Unyielding Will, grants immunity to displacement effects.",
+        "Ultimate, Clobberin' Time, stuns and launches enemies."
+      ],
+      "weaknesses": [
+        "Melee-focused; must be up close to be effective.",
+        "Embattled Leap only works on allies; no escape if isolated."
+      ]
+    },
+    {
+      "name": "Thor",
+      "roles": ["Vanguard", "Diver", "Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 51.93,
+      "abilities": "Thor wields Mjolnir for melee and ranged attacks, dashes with a knockback spin, and summons lightning to restore Thorforce. His ultimate smites the ground for area damage, and his passive enhances attacks with Thorforce, boosting health in an awakened state.",
+      "strengths": [
+        "Ultimate, God of Thunder, creates a large damaging field.",
+        "Passive, Thorforce, grants bonus health based on ability use."
+      ],
+      "weaknesses": [
+        "Relies on hitting opponents to maintain Thorforce and bonus health.",
+        "Few options to protect team; functions more as a melee Duelist."
+      ]
+    },
+    {
+      "name": "Venom",
+      "roles": ["Vanguard", "Diver", "Tank"],
+      "attackRange": "Close Projectile",
+      "tier": "B",
+      "winRate": 47.73,
+      "abilities": "Venom attacks with tentacles, slows enemies, and generates bonus health that scales with damage taken. He can wall crawl, swing, and dive from heights. His ultimate burrows underground, devouring enemies for bonus health. His passive enhances mobility on walls.",
+      "strengths": [
+        "Ultimate, Feast of the Abyss, deals percentage damage and grants bonus health.",
+        "High mobility with webslinging, wall-crawling, and sprinting."
+      ],
+      "weaknesses": [
+        "Vulnerable if Symbiotic Resilience and Venom Swing are on cooldown.",
+        "Few options to protect team; functions more as a melee Duelist."
+      ]
+    },
+    {
+      "name": "Black Panther",
+      "roles": ["Duelist", "Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 49.31,
+      "abilities": "Black Panther slashes with vibranium claws, dashes and spins to mark enemies, and tosses spears to create force fields. His ultimate summons a panther for damage and marks. His passive boosts damage at low health, and he can wall run and double jump.",
+      "strengths": [
+        "High mobility with wall-running and double jumps.",
+        "Ultimate, Bast's Descent, summons a panther and refreshes abilities."
+      ],
+      "weaknesses": [
+        "Low melee range forces close combat, risking retaliation.",
+        "Vulnerable if Spirit Rend and Spinning Kick are on cooldown."
+      ]
+    },
+    {
+      "name": "Black Widow",
+      "roles": ["Duelist", "Sniper"],
+      "attackRange": "Long Hitscan",
+      "tier": "F",
+      "winRate": 39.68,
+      "abilities": "Black Widow switches between electric batons for melee and a rifle for sniping. She dashes for mobility, performs spinning kicks with grappling follow-ups, and her ultimate unleashes an electro-plasma blast that damages and slows enemies.",
+      "strengths": [
+        "Ultimate, Electro-Plasma Explosion, deals high AOE damage and slows.",
+        "Versatile with melee and long-range sniping modes."
+      ],
+      "weaknesses": [
+        "No defensive tools for bonus health or self-healing.",
+        "Weapon switching can be unintuitive in fast situations."
+      ]
+    },
+    {
+      "name": "Hawkeye",
+      "roles": ["Duelist", "Sniper", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 46.59,
+      "abilities": "Hawkeye shoots piercing and explosive arrows, slashes with a katana, and fires hypersonic arrows to slow enemies. His ultimate creates afterimages for indirect damage. His passive enhances arrow damage with focus, and he can double jump for mobility.",
+      "strengths": [
+        "Ultimate, Hunter's Sight, creates afterimages for indirect damage.",
+        "Piercing Arrow can be charged for high damage."
+      ],
+      "weaknesses": [
+        "Vulnerable to dives; lacks self-sustain and defensive abilities.",
+        "Struggles to hit highly mobile enemies when charging shots."
+      ]
+    },
+    {
+      "name": "Hela",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.12,
+      "abilities": "Hela throws explosive thorns, stuns with a Hel sphere, and transforms into crows for mobility. Her ultimate unleashes massive crow-based damage from the sky. Her passives create explosions on kills and allow slow falling.",
+      "strengths": [
+        "Ultimate, Goddess of Death, grants massive AOE damage.",
+        "Astral Flock provides high-speed flight and damage immunity."
+      ],
+      "weaknesses": [
+        "No self-sustain abilities.",
+        "Stationary and vulnerable during Ultimate."
+      ]
+    },
+    {
+      "name": "Human Torch",
+      "roles": ["Duelist", "Airborne", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 50.61,
+      "abilities": "Human Torch launches scattershot fireballs, creates flame fields, and forms firewalls for area denial. He can fly freely, dive with explosive meteors, and his ultimate triggers a supernova, enhancing flame fields into tornadoes for extra damage.",
+      "strengths": [
+        "Constant free-flight for aerial advantage.",
+        "Ultimate, Supernova, enhances Blazing Blasts into Flame Tornadoes."
+      ],
+      "weaknesses": [
+        "Slow projectile speed and less damage at long range.",
+        "Blazing Blasts and Pyro-Prison are stationary."
+      ]
+    },
+    {
+      "name": "Iron Fist",
+      "roles": ["Duelist", "Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 50.74,
+      "abilities": "Iron Fist delivers rapid martial arts strikes, dashes with kicks, and blocks attacks for bonus health. He heals with Chi, triple jumps, and wall runs. His ultimate enhances speed and damage, reducing cooldowns. His passives grant bonus health on assists.",
+      "strengths": [
+        "High mobility with triple jumps and wall-running.",
+        "Dragon's Defense parries attacks, including some Ultimates."
+      ],
+      "weaknesses": [
+        "Very low attack range outside Magik Slash.",
+        "Vulnerable if defensive/evasive tools are on cooldown."
+      ]
+    },
+    {
+      "name": "Iron Man",
+      "roles": ["Duelist", "Airborne", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 52.72,
+      "abilities": "Iron Man fires repulsor blasts and unibeams, flies at high speed, and launches missile barrages. His ultimate delivers a devastating pulse cannon. Armor Overdrive enhances damage, and he maintains continuous flight for positioning.",
+      "strengths": [
+        "Continuous free flight for high-ground advantage.",
+        "Ultimate, Invincible Pulse Cannon, deals massive AOE damage."
+      ],
+      "weaknesses": [
+        "No defensive or self-sustain tools.",
+        "Vulnerable in the air if caught out."
+      ]
+    },
+    {
+      "name": "Magik",
+      "roles": ["Duelist", "Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.88,
+      "abilities": "Magik slashes with her Soulsword, teleports via Stepping Discs, and dashes to launch enemies. She summons demons or spins for AOE damage after teleporting, and her ultimate enhances all abilities as Darkchild. Her passive converts damage into bonus health.",
+      "strengths": [
+        "Stepping Discs provide invulnerability and fast repositioning.",
+        "Passive, Limbo's Might, converts 30% of damage dealt into bonus health."
+      ],
+      "weaknesses": [
+        "Survivability depends on dealing constant damage.",
+        "Limited ranged attacks; Magik Slash has cooldown."
+      ]
+    },
+    {
+      "name": "Mister Fantastic",
+      "roles": ["Duelist", "Frontliner", "Diver"],
+      "attackRange": "Melee",
+      "tier": "A",
+      "winRate": 52.90,
+      "abilities": "Mister Fantastic stretches to punch multiple enemies, pulls or slams foes together, and dashes to allies or enemies with a shield. He absorbs and redirects damage, and his ultimate slows enemies with ground-smashing leaps. His passive boosts damage and grants shields at full elasticity.",
+      "strengths": [
+        "Reflexive Rubber absorbs and redirects damage with CC immunity.",
+        "Higher max health than other Duelists."
+      ],
+      "weaknesses": [
+        "Cannot use other abilities while inflated or stretched.",
+        "Reduced movement speed while stretched."
+      ]
+    },
+    {
+      "name": "Moon Knight",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "C",
+      "winRate": 45.27,
+      "abilities": "Moon Knight throws ricocheting Crescent Darts and Moon Blades, deploys Ankhs for AOE knockback, and glides or grapples for mobility. His ultimate summons a portal for multi-hit talon attacks, and he can double jump for positioning.",
+      "strengths": [
+        "High mobility with double jump and grappling hook.",
+        "Ultimate, Hand of Konshu, creates large AOE multi-hit damage."
+      ],
+      "weaknesses": [
+        "Relies on grouped enemies for max damage.",
+        "Ultimate is easy to avoid without crowd control."
+      ]
+    },
+    {
+      "name": "Namor",
+      "roles": ["Duelist", "Anti-Dive"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 48.33,
+      "abilities": "Namor throws his trident to damage enemies and reduce cooldowns, summons Monstro Spawns for auto-attacks, and commands them for enhanced strikes. He gains a protective barrier with flight, and his ultimate calls Giganto for massive AOE damage.",
+      "strengths": [
+        "Ultimate, Horn of Proteus, summons Giganto for massive AOE.",
+        "Trident attacks have infinite ammo and no damage falloff."
+      ],
+      "weaknesses": [
+        "Lacks high mobility and is susceptible to dives.",
+        "Monstro Spawns can be destroyed and have low health."
+      ]
+    },
+    {
+      "name": "Psylocke",
+      "roles": ["Duelist", "Diver"],
+      "attackRange": "Short Hitscan",
+      "tier": "B",
+      "winRate": 48.87,
+      "abilities": "Psylocke fires psionic crossbow bolts to reduce cooldowns, dashes with psi-blades, and launches shurikens for damage and bonus health. She enters stealth for speed, and her ultimate delivers multi-hit AOE slashes with a psionic katana.",
+      "strengths": [
+        "Psychic Stealth grants invisibility and 50% movement speed.",
+        "Ultimate, Dance of the Butterfly, deals multi-hit AOE damage."
+      ],
+      "weaknesses": [
+        "Vulnerable if Psi-Blade Dash and Psychic Stealth are on cooldown.",
+        "Struggles to hit moving or distant targets due to spread attacks."
+      ]
+    },
+    {
+      "name": "Scarlet Witch",
+      "roles": ["Duelist", "Airborne"],
+      "attackRange": "Close Hitscan",
+      "tier": "C",
+      "winRate": 47.62,
+      "abilities": "Scarlet Witch attacks with Chaos Magic to build energy, fires explosive missiles, and creates stunning force fields. She can fly freely, fall slowly, and her ultimate unleashes a massive energy blast during flight. Her passive fuels abilities with Chaos Energy.",
+      "strengths": [
+        "High mobility with free flight and slow fall.",
+        "Ultimate, Reality Erasure, is a powerful large-radius nuke."
+      ],
+      "weaknesses": [
+        "Skillshot-dependent; requires landing abilities for effectiveness.",
+        "Ultimate can be interrupted or avoided."
+      ]
+    },
+    {
+      "name": "Spider-Man",
+      "roles": ["Duelist", "Diver"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 47.60,
+      "abilities": "Spider-Man swings fists and shoots web-clusters to mark enemies with Spider-Tracers, enhancing damage. He swings, pulls enemies or himself, and launches foes upward. His ultimate stuns with widespread web-clusters. His passives enable wall-crawling and enemy detection.",
+      "strengths": [
+        "High mobility with web-swinging and wall-crawling.",
+        "Ultimate, Spectacular Spin, stuns with widespread web-clusters."
+      ],
+      "weaknesses": [
+        "Abilities require careful aiming and timing.",
+        "Ultimate can be countered by certain abilities."
+      ]
+    },
+    {
+      "name": "Squirrel Girl",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "D",
+      "winRate": 45.25,
+      "abilities": "Squirrel Girl shoots bouncing acorns, summons squirrel guards to imprison enemies, and rockets upward with her tail. Her ultimate unleashes a squirrel horde for AOE damage. Her passive grants immunity to squirrel-based damage, and she can reload abilities instantly.",
+      "strengths": [
+        "High mobility with Tail Bounce for evasion.",
+        "Ultimate, Squirrel Tsunami, deals AOE damage with squirrel horde."
+      ],
+      "weaknesses": [
+        "Abilities require careful aiming and timing.",
+        "Squirrel Blockade can be destroyed or bypassed."
+      ]
+    },
+    {
+      "name": "Star-Lord",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Close Hitscan",
+      "tier": "B",
+      "winRate": 47.45,
+      "abilities": "Star-Lord fires dual Element Guns, dodges to reload swiftly, and boosts forward with rockets. His ultimate allows free-flight and enemy lock-on for rapid attacks, delivering high damage and mobility in close-range combat.",
+      "strengths": [
+        "High mobility with Rocket Propulsion and Stellar Shift.",
+        "Ultimate, Galactic Legend, enables free-flight and lock-on attacks."
+      ],
+      "weaknesses": [
+        "Abilities require careful aiming and timing.",
+        "Ultimate can be countered by certain abilities."
+      ]
+    },
+    {
+      "name": "Storm",
+      "roles": ["Duelist", "Airborne", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 53.83,
+      "abilities": "Storm launches piercing wind blades and lightning bolts, switches weather to boost allies’ movement or damage, and channels weather for personal boosts and lightning strikes. Her ultimate transforms her into a hurricane, drawing in and damaging enemies.",
+      "strengths": [
+        "Ultimate, Omega Hurricane, draws in and damages enemies.",
+        "Weather Control boosts allies’ movement or damage."
+      ],
+      "weaknesses": [
+        "Abilities require careful aiming and timing.",
+        "Ultimate can be countered by certain abilities."
+      ]
+    },
+    {
+      "name": "The Punisher",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Long Hitscan",
+      "tier": "C",
+      "winRate": 45.58,
+      "abilities": "The Punisher fires an automatic rifle or shotgun, deploys a damaging turret, and throws smoke grenades to obscure vision. He uses a grappling hook for rapid movement, and his ultimate unleashes gatling guns and missiles. His passive retains enemy vision briefly.",
+      "strengths": [
+        "Final Judgement delivers powerful AOE damage.",
+        "Vantage Connection enables fast repositioning."
+      ],
+      "weaknesses": [
+        "Vulnerable to flanking and burst damage.",
+        "No mobility or escape abilities."
+      ]
+    },
+    {
+      "name": "Winter Soldier",
+      "roles": ["Duelist", "High DPS"],
+      "attackRange": "Long Projectile",
+      "tier": "B",
+      "winRate": 46.67,
+      "abilities": "Winter Soldier fires explosive rounds, dashes to seize enemies, and uses his bionic arm for hooks and electrical punches that slow foes. His ultimate slams down to mark and execute low-health enemies. His passive reloads and grants bonus health during arm abilities.",
+      "strengths": [
+        "Kraken Impact marks and executes low-health enemies.",
+        "Ceaseless Charge provides bonus health and ammo sustain."
+      ],
+      "weaknesses": [
+        "Vulnerable to crowd control and burst damage.",
+        "Requires skillful aim and timing for abilities."
+      ]
+    },
+    {
+      "name": "Wolverine",
+      "roles": ["Duelist", "Diver", "Anti-Tank"],
+      "attackRange": "Melee",
+      "tier": "B",
+      "winRate": 48.36,
+      "abilities": "Wolverine slashes with Adamantium claws, enhanced by leaping attacks, and dashes for claw strikes. He howls to reduce damage, and his ultimate spirals through enemies for high damage based on Rage. His passives heal, clear debuffs, and boost damage with Rage accumulation.",
+      "strengths": [
+        "Regenerative Healing Factor provides bonus health and debuff removal.",
+        "Ultimate, Last Stand, deals high damage based on Rage."
+      ],
+      "weaknesses": [
+        "Vulnerable to crowd control and burst damage.",
+        "Limited ranged options."
+      ]
+    },
+    {
+      "name": "Adam Warlock",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 48.99,
+      "abilities": "Adam Warlock fires quantum energy, heals allies with bouncing streams, and links teammates to share damage and heal over time. His ultimate revives allies with brief invincibility, and his passive allows respawning at a chosen spot after death.",
+      "strengths": [
+        "Karmic Revival revives multiple allies with invincibility.",
+        "Regenerative Cocoon allows respawning at a chosen spot."
+      ],
+      "weaknesses": [
+        "Lacks any mobility tools, making him susceptible to dives.",
+        "Low healing output, the lowest among Strategists."
+      ]
+    },
+    {
+      "name": "Cloak & Dagger",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 48.35,
+      "abilities": "Cloak & Dagger switch between forms: Dagger throws bouncing daggers to heal and damage, creates healing veils, and launches healing fields; Cloak deals continuous damage, blinds enemies, and grants allies invisibility. Their shared ultimate dashes to heal allies and damage enemies.",
+      "strengths": {
+        "Dagger": [
+          "Dagger Storm creates a persistent healing bubble.",
+          "High Healing Output."
+        ],
+        "Cloak": [
+          "Dark Teleportation grants ally invulnerability and invisibility.",
+          "Terror Cape blinds enemies and applies Vulnerability."
+        ]
+      },
+      "weaknesses": {
+        "Dagger": [
+          "Susceptible to dives with no mobility outside ultimate.",
+          "Shares healthbar with Cloak."
+        ],
+        "Cloak": [
+          "Low max health makes direct engagement risky.",
+          "Dark Teleportation effects only last 2 seconds."
+        ]
+      }
+    },
+    {
+      "name": "Invisible Woman",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Short Projectile",
+      "tier": "B",
+      "winRate": 46.63,
+      "abilities": "Invisible Woman launches piercing force fields to damage and heal, creates shields for allies, and manipulates enemies with push/pull or vortexes. She turns invisible with healing over time, and her ultimate hides allies while healing and slowing enemies.",
+      "strengths": [
+        "Invisible Boundary makes allies invisible and heals.",
+        "High Healing Output."
+      ],
+      "weaknesses": [
+        "Damage breaks invisibility, exposing her.",
+        "Guardian Shield can't be cast on herself."
+      ]
+    },
+    {
+      "name": "Jeff the Land Shark",
+      "roles": ["Strategist", "Support", "Healer", "Diver"],
+      "attackRange": "Long Projectile",
+      "tier": "E",
+      "winRate": 42.07,
+      "abilities": "Jeff the Land Shark heals allies with splashes, damages enemies with bursting water spheres, and dives underground for mobility and wall-crawling. He spits healing bubbles to boost ally healing, and his ultimate swallows and ejects allies and enemies. His passive reduces critical strike damage.",
+      "strengths": [
+        "Joyful Splash has infinite range and high HPS.",
+        "It's Jeff! provides powerful crowd control."
+      ],
+      "weaknesses": [
+        "Large hurtbox makes him easy to crit despite passive.",
+        "Vulnerable to burst damage characters."
+      ]
+    },
+    {
+      "name": "Loki",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Long Projectile",
+      "tier": "A",
+      "winRate": 51.09,
+      "abilities": "Loki fires missiles to heal or damage, creates illusions that mimic abilities, and swaps positions with them. He turns invisible, stabs from behind for extra damage, and his ultimate shapeshifts into another hero to use their abilities. His passive enhances deception.",
+      "strengths": [
+        "God of Mischief copies any hero’s abilities, including Ultimates.",
+        "Deception provides invisibility and heal-over-time."
+      ],
+      "weaknesses": [
+        "Requires high skill to maximize deception.",
+        "Vulnerable if illusions are destroyed."
+      ]
+    },
+    {
+      "name": "Luna Snow",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 45.22,
+      "abilities": "Luna Snow fires ice shots to heal or damage, freezes enemies for health restoration, and attaches an aura to allies for shared healing. She toggles between healing or damage boosts with her ultimate, and her passives grant self-healing and skating mobility.",
+      "strengths": [
+        "Fate of Both Worlds provides massive healing or damage boost.",
+        "High Healing Output."
+      ],
+      "weaknesses": [
+        "Susceptible to dives.",
+        "Can't use other abilities during ultimate."
+      ]
+    },
+    {
+      "name": "Mantis",
+      "roles": ["Strategist", "Support", "Healer"],
+      "attackRange": "Long Hitscan",
+      "tier": "B",
+      "winRate": 52.80,
+      "abilities": "Mantis fires energy thorns to collect Life Orbs, which fuel healing fields, damage boosts for allies, or personal boosts. She sedates enemies with spores, and her ultimate heals and speeds up allies. Her passive grants movement and healing when uninjured or using orbs.",
+      "strengths": [
+        "Soul Resurgence provides powerful area healing.",
+        "Life Orb mechanic fuels heals and buffs."
+      ],
+      "weaknesses": [
+        "Limited mobility tools.",
+        "Lacks burst healing outside ultimate."
+      ]
+    },
+    {
+      "name": "Rocket Raccoon",
+      "roles": ["Strategist", "Support", "Healer", "Anti-Tank"],
+      "attackRange": "Long Projectile",
+      "tier": "S",
+      "winRate": 53.55,
+      "abilities": "Rocket Raccoon fires energy projectiles for damage or bouncing spheres to heal, dashes with a jetpack, and deploys a beacon to revive allies and provide packs. His ultimate amplifies ally damage, and his passives allow slow falling and wall-running.",
+      "strengths": [
+        "B.R.B. revives allies and provides armor/jet packs.",
+        "High mobility with Jetpack Dash and wall-running."
+      ],
+      "weaknesses": [
+        "Vulnerable when Jetpack Dash is on cooldown.",
+        "Gadgets can be destroyed by enemies."
+      ]
+    }
+]
