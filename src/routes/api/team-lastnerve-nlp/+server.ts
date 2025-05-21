@@ -2,73 +2,104 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
 // OpenRouter API constants
-const API_KEY = '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';
+const API_KEY = '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';
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 export const POST: RequestHandler = async ({ request }) => {
+    // Debugging: Log headers for inspection
+    const headersObj: Record<string, string> = {};
+    request.headers.forEach((value, key) => {
+        headersObj[key] = value;
+    });
+    console.log('Request headers:', headersObj);
+
     try {
-        const { message } = await request.json();
+        // Get the request body (SvelteKit already parses it for us)
+        const requestData = await request.json();
+        console.log('Parsed request data:', requestData);
         
-        if (!message || typeof message !== 'string') {
+        if (!requestData) {
+            console.error('Empty request body received');
             return json({
                 success: false,
-                error: 'Invalid message format'
+                error: 'Request body cannot be empty'
             }, { status: 400 });
         }
 
-        console.log('Sending request to OpenRouter API');
+        // Validate the message field
+        if (!requestData.message || typeof requestData.message !== 'string') {
+            console.error('Invalid message field:', requestData);
+            return json({
+                success: false,
+                error: 'Message must be a non-empty string'
+            }, { status: 400 });
+        }
+
+        console.log('Processing message:', requestData.message.substring(0, 50) + '...');
         
         // Make the API request to OpenRouter
-        const response = await fetch(API_URL, {
+        const openRouterResponse = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${API_KEY}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': 'https://nlp-processor.app', // Replace with your actual site URL
+                'HTTP-Referer': 'https://nlp-processor.app',
                 'X-Title': 'NLP Processor App'
             },
             body: JSON.stringify({
-                model: "mistralai/mistral-7b-instruct:free", // Updated model name format
-                messages: [{ role: "user", content: message }],
+                model: "mistralai/mistral-7b-instruct:free",
+                messages: [{ role: "user", content: requestData.message }],
                 temperature: 0.7
             })
         });
 
         // Check if the response is successful
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
+        if (!openRouterResponse.ok) {
+            let errorData;
+            try {
+                errorData = await openRouterResponse.json();
+            } catch (e) {
+                errorData = { error: 'Failed to parse error response' };
+            }
+            
             console.error('OpenRouter API error:', {
-                status: response.status,
-                statusText: response.statusText,
+                status: openRouterResponse.status,
+                statusText: openRouterResponse.statusText,
                 error: errorData
             });
             
             return json({
                 success: false,
-                error: errorData.error?.message || errorData.message || `API returned status code ${response.status}: ${response.statusText}`
-            }, { status: 500 });
+                error: errorData.error?.message || 
+                      errorData.message || 
+                      `API request failed with status ${openRouterResponse.status}`,
+                details: openRouterResponse.statusText
+            }, { status: 502 });
         }
 
-        const data = await response.json();
+        const result = await openRouterResponse.json();
         
         // Verify the expected data structure exists
-        if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-            console.error('Unexpected response format:', data);
+        if (!result.choices?.[0]?.message?.content) {
+            console.error('Unexpected response format:', result);
             return json({
                 success: false,
-                error: 'Unexpected response format from API'
-            }, { status: 500 });
+                error: 'Unexpected response format from AI service',
+                receivedData: result
+            }, { status: 502 });
         }
 
         return json({
             success: true,
-            response: data.choices[0].message.content
+            response: result.choices[0].message.content
         });
+
     } catch (error) {
-        console.error('Error processing NLP request:', error);
+        console.error('Unexpected error in API handler:', error);
         return json({
             success: false,
-            error: error instanceof Error ? error.message : 'Failed to process NLP request'
+            error: error instanceof Error ? error.message : 'Unexpected server error',
+            stack: process.env.NODE_ENV === 'development' && error instanceof Error ? error.stack : undefined
         }, { status: 500 });
     }
 };
