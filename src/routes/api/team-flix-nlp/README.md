@@ -1,5 +1,11 @@
 flix-nlp
 
+Team Contributors:
+
+Caiga, John Dominic 
+Bati, Dencelle
+De Guzman, Sherwin
+
 This API analyzes a given text and returns its detected language, overall sentiment, and a concise summary.
 
 API Endpoint
