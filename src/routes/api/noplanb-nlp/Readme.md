@@ -14,7 +14,7 @@ This API allows users to submit a block of text and receive a sentiment analysis
 
 ## API Endpoint
 
-**POST** `/api/team-noplanb-nlp`
+**POST** `/api/noplanb-nlp`
 
 This is the main endpoint for submitting text to be analyzed for sentiment.
 
@@ -44,9 +44,9 @@ The input should be sent in the body of the POST request as JSON.
 ### Example (JSON):
 ```bash
 {
-    curl -X POST http://localhost:5173/api/team-noplanb-nlp \
+    curl -X POST http://localhost:5173/api/noplanb-nlp \
     -H "Content-Type: application/json" \
-    -d '{"text": "I absolutely love this product! It exceeded all my expectations."}'
+    -d '{"text": "Attending the workshop last weekend was one of the best decisions I’ve made this year. The speakers were inspiring, the content was well-organized, and the atmosphere was incredibly welcoming. I came away with actionable insights and a renewed sense of motivation. Hats off to the organizers!"}'
 }
 ```
 
@@ -58,21 +58,30 @@ The API outputs a JSON object containing the following data:
 
 ```json
 {
-  "sentiment": "positive",
-  "confidence": 0.95,
-  "explanation": "The text expresses strong positive emotions such as love and satisfaction.",
-  "model": "deepseek-r1"
+  "original": "Attending the workshop last weekend was one of the best decisions I’ve made this year. The speakers were inspiring, the content was well-organized, and the atmosphere was incredibly welcoming. I came away with actionable insights and a renewed sense of motivation. Hats off to the organizers!",
+  "analysis": {
+    "score": 5,
+    "sentiment": "very positive",
+    "explanation": "The sentiment of the text is clearly very positive. The speaker describes the workshop as one of the best decisions they've made, which expresses strong satisfaction. They praise the speakers, highlight how well-organized the content was, and emphasize the welcoming atmosphere. The mention of actionable insights and renewed motivation further reinforces the overall positive tone."
+  },
+  "model": "deepseek-r1:1.5b",
+  "raw_response": "<think>Alright, so the user has given me a query where they want me to analyze the sentiment of a text and return a JSON with specific fields: score, sentiment, and explanation.\n\nFirst, I need to understand what each field means. The score ranges from -5 to 5, indicating how positive or negative the sentiment is. \"Very negative\" would be strong negatives, while \"Very positive\" is strong positives. Neutral is in between.\n\nLooking at the text: \"Attending the workshop last weekend was one of the best decisions I’ve made this year. The speakers were inspiring, the content was well-organized, and the atmosphere was incredibly welcoming. I came away with actionable insights and a renewed sense of motivation. Hats off to the organizers!\"\n\nThe sentiment is clearly positive here. The speaker mentions being a \"best decision\" they've made, which adds positivity. They praise the speakers for their inspiration and well-organized content, which also boosts the score. The welcoming atmosphere and the outcomes they received are all positives too.\n\nI don’t see any negative words or strong negatives mentioned. So, I think the sentiment should be positive. \n\nFor the explanation part, I need to describe why it’s positive. It includes things like being a best decision, praise from others, welcoming atmosphere, and actionable insights. These all contribute to a positive overall feeling.\n\nPutting it all together, I’ll write a JSON object reflecting these points.\n\n```json\n{\n  \"score\": 5,\n  \"sentiment\": \"very positive\",\n  \"explanation\": \"The sentiment of the text is clearly very positive. The speaker describes the workshop as one of the best decisions they've made, which expresses strong satisfaction. They praise the speakers, highlight how well-organized the content was, and emphasize the welcoming atmosphere. The mention of actionable insights and renewed motivation further reinforces the overall positive tone.\"\n}\n```"
 }
+
 ```
 
 ### Response Fields:
 
-| Field       | Data Type | Description                                                            |
-| ----------- | --------- | ---------------------------------------------------------------------- |
-| sentiment   | string    | The detected sentiment: `positive`, `negative`, or `neutral`.          |
-| confidence  | number    | A value between 0 and 1 indicating the confidence level of the result. |
-| explanation | string    | A brief explanation of why this sentiment was assigned.                |
-| model       | string    | The AI model used for sentiment analysis.                              |
+| Field           | Type   | Description                                                                          |
+| --------------- | ------ | -------------------------------------------------------------------------------------|
+| `original`      | string | The original input text.                                                             |
+| `analysis`      | object | Sentiment analysis result.                                                           |
+| `score`         | number | Ranges from -5 (very negative) to 5 (very positive).                                 |
+| `sentiment`     | string | One of: `"very negative"`, `"negative"`, `"neutral"`, `"positive"`, `"very positive"`.|
+| `explanation`   | string | A brief explanation of the sentiment result.                                         |
+| `model`         | string | The AI model used (`deepseek-r1:1.5b`).                                              |
+| `raw_response`  | string | The raw string response returned by Deepseek.                                        |
+
 
 
 ## Error Handling
@@ -116,6 +125,4 @@ If an error occurs, the API will return a JSON error message.
 
 ### Different Localhost Number:
 - make sure that the POST API call is using http://localhost:5173.
-
-
 
