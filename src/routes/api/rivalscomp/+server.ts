@@ -68,10 +68,10 @@ async function getAIHeroSuggestion(userDescription: string) {
     const OLLAMA_API_URL = 'http://localhost:11434/api/chat';
     const OLLAMA_MODEL = 'gemma2:latest';
 
-    const prompt = `From this list of Marvel Rivals heroes, each with their roles and abilities:
+    const prompt = `From this list of Marvel Rivals heroes, each with their roles.:
 
     ${heroesData.map(h => 
-    `${h.name} - Roles: ${h.roles.join(', ')}, Abilities: ${h.abilities}`
+    `${h.name} - Roles: ${h.roles.join(', ')}`
     ).join('\n')}
 
     Select the single hero that best matches this description: "${userDescription}".
