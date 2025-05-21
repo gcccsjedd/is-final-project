@@ -48,28 +48,27 @@ async function fetchWithRetry(
   url: string,
   options: RequestInit,
   retries = 5,
+  retryDelay = 1000 // milliseconds
 ): Promise<Response> {
-  const controller = new AbortController();
-  
   try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    
+    const response = await fetch(url, options);
+
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     return response;
   } catch (error) {
     if (retries > 0) {
-      console.log(`Retrying... (${retries} attempts left)`);
-      await new Promise(resolve => setTimeout(resolve, 3000)); // wait 1 second before retry
-      return fetchWithRetry(url, options, retries - 1);
+      console.warn(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, retryDelay));
+      return fetchWithRetry(url, options, retries - 1, retryDelay * 2); // Exponential backoff
     }
+
     throw error;
   }
 }
+
 
 function getHeroDetails(heroName: string): Heroes | undefined {
     return heroesData.find((hero) => hero.name === heroName);
@@ -95,39 +94,54 @@ async function suggestMainHeroes(userDescription: string): Promise<{
     explanation: string 
 }> {
     const allHeroes = getAllHeroes();
+    const teamUpData: string = Object.entries(teamuptierlist)
+        .flatMap(([tier, teamups]: [string, TeamUp[]]) => 
+            teamups.map((tu: TeamUp) => `Team-Up: ${tu.teamUpName}
+    Tier: ${tier}
+    Primary Hero: ${tu.primaryHero}
+    Secondary Heroes: ${tu.secondaryHeroes.join(', ')}
+    Effect: ${tu.effect}
+    Win Rate: ${tu.winRate}
+    `)).join('\n---\n');
+    const heroDescriptions = allHeroes.map(hero => {
+        return `Name: ${hero.name}
+                Roles: ${hero.roles.join(', ')}
+                Tier: ${hero.tier}
+                Win Rate: ${hero.winRate}
+                Attack Range: ${hero.attackRange}
+                Strengths: ${
+                Array.isArray(hero.strengths)
+                    ? hero.strengths.join('; ')
+                    : typeof hero.strengths === 'object' && hero.strengths !== null
+                    ? Object.entries(hero.strengths).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`).join('; ')
+                    : 'None'
+                }
+                Weaknesses: ${
+                Array.isArray(hero.weaknesses)
+                    ? hero.weaknesses.join('; ')
+                    : typeof hero.weaknesses === 'object' && hero.weaknesses !== null
+                    ? Object.entries(hero.weaknesses).map(([k, v]) => `${k}: ${(v as string[]).join(', ')}`).join('; ')
+                    : 'None'
+                }
+                Abilities: ${Object.entries(hero.abilities || {}).map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(', ') : val}`).join(' | ')}
+                Team-Up: ${hero.teamUps}
+                `;
+                }).join('\n---\n');
 
-    const prompt = `
-        You are an expert in Marvel Rivals hero selection. Given a user's description, suggest exactly 1 hero that suits them best as their main hero. If the user explicitly names a hero (e.g., "I want to main Namor"), prioritize that hero if they exist in the available heroes list. Otherwise, suggest a hero based on their description. For the suggested hero, provide:
+                const prompt = `
+                Based on the user's playstyle or preferences below, recommend the most suitable hero from the following list.
+                Only pick from these heroes, and provide details such as the hero name, reason for selection, and a summary of their abilities and strengths.
 
-        Their role (Vanguard, Duelist, or Strategist)
-        Current tier and win rate
-        All abilities (only from provided data)
-        All key strengths
-        All key weaknesses
-        Complete playstyle description
-        One good team composition
-        2-3 tips for playing this hero effectively
-        User description: "${userDescription}"
+                User Description: "${userDescription}"
 
-        Available Heroes:"${allHeroes}"
+                Hero Data:
+                ${heroDescriptions}
 
-        Response format (JSON):
-        {
-        "suggestion": {
-        "hero": "Hero Name",
-        "roles": ["Vanguard", "Frontliner", "Tank"],
-        "tier": "S/A/B/C/D/E/F",
-        "winRate": number,
-        "abilities": {"ability1": "description1", "ability2": "description2", ...},
-        "strengths": ["strength1", "strength2", ...],
-        "weaknesses": ["weakness1", "weakness2", ...],
-        "playstyle": ["playstyle1", "playstyle2", ...],
-        "teamup": "single best partner",
-        "tips": ["tip1", "tip2", "tip3"]
-        },
-        "explanation": "Explanation connecting user's preferences to the suggested hero"
-        }
+                A team up is when a primary hero and at least one secondary hero work is present in a team. They will acquire a bonus effect when they are in the same team.
+                Team-Up Synergies:
+                ${teamUpData}
     `;
+
 
     try {
         const ollamaResponse = await fetchWithRetry(
@@ -155,47 +169,28 @@ async function suggestMainHeroes(userDescription: string): Promise<{
             throw new Error("Ollama returned an empty response");
         }
 
-        // Extract JSON from response (handles both raw JSON and markdown code blocks)
-        let jsonText: string;
-        let jsonResponse: any;
-        try {
-            const jsonMatch = content.match(/```json\s*([\s\S]*?)```/i);
-            jsonText = jsonMatch ? jsonMatch[1].trim() : content.trim();
+        console.log('Raw content from Ollama:', content);
 
-            // Normalize potential single quotes or unquoted keys if needed (optional safety)
-            jsonResponse = JSON.parse(jsonText);
-        } catch (parseError) {
-            console.error('Raw content from Ollama:', content);
-            throw new Error(`Failed to parse Ollama response: ${parseError instanceof Error ? parseError.message : 'Invalid JSON format'}`);
-        }
-
-        // Validate required fields
-        if (!jsonResponse.suggestion || !jsonResponse.explanation) {
-            throw new Error("Ollama response missing required fields");
-        }
-
-        return jsonResponse;
-
-    } catch (error) {
-        console.error("AI generation failed:", error);
-        // Mock response for testing
+        // Placeholder: parse content and return a valid suggestion object
+        // You should replace this with actual parsing logic as needed
         return {
             suggestion: {
-                hero: "Namor",
-                roles: ["Vanguard", "Diver", "Tank"],
-                tier: "A",
-                winRate: 50.0,
-                abilities: { normalAttack: "Trident Strike" },
-                strengths: ["High mobility", "Strong melee"],
-                weaknesses: ["Low range", "Squishy without abilities"],
-                playstyle: ["Aggressive", "Dive-oriented"],
-                teamup: "Hulk",
-                tips: ["Use mobility to flank", "Coordinate with tanks"]
+                hero: "Unknown",
+                roles: [],
+                tier: "",
+                winRate: 0,
+                abilities: {},
+                strengths: [],
+                weaknesses: [],
+                playstyle: [],
+                teamup: "",
+                tips: []
             },
-            explanation: "Namor suits your preference for a mobile, aggressive hero."
+            explanation: content
         };
-        // throw new Error("AI generation failed: " + (error instanceof Error ? error.message : String(error)));
-        
+    } catch (error) {
+        console.error("AI generation failed:", error);
+        throw error; // Rethrow so the caller can handle it
     }
 }
 
