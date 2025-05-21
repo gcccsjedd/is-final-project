@@ -1,8 +1,65 @@
 {
-    "type": "object",
-    "properties": {
-        "userDescription": { "type": "string" }
+  "definitions": {
+    "teamup": {
+      "type": ["object", "null"],
+      "properties": {
+        "teamUpName": { "type": "string" },
+        "effect": { "type": "string" }
+      },
+      "required": ["teamUpName", "effect"],
+      "additionalProperties": false
     },
-    "required": ["userDescription"],
-    "additionalProperties": false
+    "suggestion": {
+      "type": "object",
+      "properties": {
+        "hero": { "type": "string" },
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "attackRange": { "type": "string" },
+        "tier": { "type": "string" },
+        "winRate": { "type": "number" },
+        "abilities": { "type": "string" },
+        "strengths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "weaknesses": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "teamup": { "$ref": "#/definitions/teamup" }
+      },
+      "required": [
+        "hero", "roles", "attackRange", "tier", "winRate", "abilities",
+        "strengths", "weaknesses", "teamup"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "object",
+      "properties": {
+        "userDescription": { "type": "string" }
+      },
+      "required": ["userDescription"],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "userDescription": { "type": "string" },
+        "suggestion": { "$ref": "#/definitions/suggestion" },
+        "explanation": { "type": "string" },
+        "legalNotice": { "type": "string" }
+      },
+      "required": ["userDescription", "suggestion", "explanation", "legalNotice"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["request", "response"],
+  "additionalProperties": false
 }
