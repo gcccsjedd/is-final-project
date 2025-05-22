@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TextAnalysisRequest",
+  "type": "object",
+  "required": ["text"],
+  "properties": {
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "description": "The text to analyze (must not be empty)"
+    }
+  },
+  "additionalProperties": false
+}
