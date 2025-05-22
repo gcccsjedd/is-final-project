@@ -48,6 +48,7 @@ The API may return the following errors:
 Status Code	Response	Description
 400	{ "error": "Missing text" }	Request did not include the text field or it was empty.
 500	{ "error": "Failed to process request" }	Server encountered an unexpected error processing the request.
+
 Troubleshooting
 
 Empty or missing text: Make sure the JSON body includes the text field and that it is not an empty string.
