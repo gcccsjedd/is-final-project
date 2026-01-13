@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "SentimentAnalysisRequest": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "The text to analyze for sentiment"
+        }
+      }
+    },
+    
+    "SentimentResult": {
+      "type": "object",
+      "required": ["score", "sentiment", "explanation"],
+      "properties": {
+        "score": {
+          "type": "number",
+          "description": "Sentiment score from -5 (very negative) to 5 (very positive)"
+        },
+        "sentiment": {
+          "type": "string",
+          "enum": ["very negative", "negative", "neutral", "positive", "very positive"],
+          "description": "Categorical sentiment label"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Brief explanation of the sentiment detection"
+        }
+      }
+    },
+    
+    "SentimentAnalysisResponse": {
+      "type": "object",
+      "required": ["original", "analysis", "model", "raw_response"],
+      "properties": {
+        "original": {
+          "type": "string",
+          "description": "Original text that was analyzed"
+        },
+        "analysis": {
+          "$ref": "#/definitions/SentimentResult"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model used for analysis"
+        },
+        "raw_response": {
+          "type": "string",
+          "description": "Raw response from the LLM"
+        }
+      }
+    },
+    
+    "ErrorResponse": {
+      "type": "object",
+      "required": ["error"],
+      "properties": {
+        "error": {
+          "type": "string",
+          "description": "Error message"
+        },
+        "details": {
+          "type": "string",
+          "description": "Optional additional error details"
+        }
+      }
+    }
+  },
+  
+  "POST /api/sentiment": {
+    "request": {
+      "$ref": "#/definitions/SentimentAnalysisRequest"
+    },
+    "responses": {
+      "200": {
+        "$ref": "#/definitions/SentimentAnalysisResponse"
+      },
+      "400": {
+        "$ref": "#/definitions/ErrorResponse",
+        "example": {
+          "error": "Missing required field: text"
+        }
+      },
+      "500": {
+        "$ref": "#/definitions/ErrorResponse",
+        "example": {
+          "error": "Failed to process request",
+          "details": "Error details here"
+        }
+      },
+      "502": {
+        "$ref": "#/definitions/ErrorResponse",
+        "example": {
+          "error": "Failed to connect to Ollama API",
+          "details": "Error details here"
+        }
+      }
+    }
+  }
+}
