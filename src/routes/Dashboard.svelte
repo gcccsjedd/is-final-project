@@ -5,9 +5,8 @@
   import { supabase } from '../lib/supabase';
   import { loadUserAssessments, deleteAssessment as deleteAssessmentUtil, type SavedAssessment } from '../lib/assessmentUtils';
   
-  // Import jsPDF and html2canvas for PDF generation
-  import jsPDF from 'jspdf';
-  import html2canvas from 'html2canvas';
+  // REMOVED: import jsPDF from 'jspdf';
+  // REMOVED: import html2canvas from 'html2canvas';
   
   // Types
   interface CareerMatch {
@@ -1162,45 +1161,300 @@
     resumeData.certifications = resumeData.certifications.filter((_, i) => i !== index);
   }
 
-  // Generate PDF Resume
+  // Generate PDF Resume using browser's print functionality
   async function generatePDFResume() {
     try {
       isGeneratingPDF = true;
       error = '';
 
-      const resumeElement = document.getElementById('resume-preview-content');
+      const resumeElement = document.getElementById('printable-resume');
       if (!resumeElement) {
         throw new Error('Resume content not found');
       }
 
-      // Use html2canvas to capture the resume
-      const canvas = await html2canvas(resumeElement, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff'
-      });
+      // Create a print-friendly version
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) {
+        throw new Error('Failed to open print window. Please allow popups for this site.');
+      }
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-      });
+      // Generate print-friendly HTML
+      const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Resume - ${userProfile?.first_name || 'User'} ${userProfile?.last_name || ''}</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+                
+                body {
+                    font-family: 'Inter', sans-serif;
+                    color: #1e293b;
+                    margin: 0;
+                    padding: 40px;
+                    line-height: 1.6;
+                }
+                
+                .resume-print {
+                    max-width: 800px;
+                    margin: 0 auto;
+                }
+                
+                .resume-header-section {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px solid #6366f1;
+                }
+                
+                .resume-name {
+                    font-size: 32px;
+                    font-weight: 700;
+                    color: #1e293b;
+                    margin-bottom: 10px;
+                    font-family: 'Poppins', sans-serif;
+                }
+                
+                .resume-contact {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 15px;
+                    font-size: 14px;
+                    color: #475569;
+                }
+                
+                .resume-contact span {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                }
+                
+                .career-match-badge {
+                    background: linear-gradient(135deg, #6366f1, #818cf8);
+                    color: white;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 16px;
+                    margin-bottom: 24px;
+                    max-width: 400px;
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+                
+                .badge-label {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                
+                .badge-value {
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+                
+                .badge-career {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+                
+                .resume-section-print {
+                    margin-bottom: 24px;
+                    page-break-inside: avoid;
+                }
+                
+                .section-title-print {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #4f46e5;
+                    margin-bottom: 12px;
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid #e2e8f0;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                
+                .section-content-print {
+                    font-size: 14px;
+                    line-height: 1.6;
+                    color: #475569;
+                }
+                
+                .skills-grid-print {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                }
+                
+                .skill-item-print {
+                    background: #f1f5f9;
+                    color: #475569;
+                    padding: 6px 12px;
+                    border-radius: 16px;
+                    font-size: 12px;
+                }
+                
+                .experience-item-print {
+                    margin-bottom: 16px;
+                    page-break-inside: avoid;
+                }
+                
+                .experience-header-print {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 4px;
+                }
+                
+                .experience-title-print {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #1e293b;
+                }
+                
+                .experience-date-print {
+                    font-size: 12px;
+                    color: #64748b;
+                    white-space: nowrap;
+                }
+                
+                .experience-company-print {
+                    font-size: 14px;
+                    color: #475569;
+                    margin-bottom: 8px;
+                    font-style: italic;
+                }
+                
+                .experience-description-print {
+                    font-size: 14px;
+                    color: #475569;
+                    line-height: 1.5;
+                }
+                
+                .experience-description-print p {
+                    margin-bottom: 4px;
+                }
+                
+                .education-item-print {
+                    margin-bottom: 16px;
+                }
+                
+                .education-header-print {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    margin-bottom: 4px;
+                }
+                
+                .education-degree-print {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #1e293b;
+                }
+                
+                .education-date-print {
+                    font-size: 12px;
+                    color: #64748b;
+                    white-space: nowrap;
+                }
+                
+                .education-institution-print {
+                    font-size: 14px;
+                    color: #475569;
+                    margin-bottom: 4px;
+                }
+                
+                .education-details-print {
+                    font-size: 14px;
+                    color: #64748b;
+                }
+                
+                .certifications-list-print {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                
+                .certification-item-print {
+                    font-size: 14px;
+                    color: #475569;
+                }
+                
+                .assessment-footer-print {
+                    margin-top: 32px;
+                    padding-top: 16px;
+                    border-top: 1px dashed #e2e8f0;
+                    font-size: 12px;
+                    color: #94a3b8;
+                    text-align: center;
+                }
+                
+                .footer-note-print {
+                    margin-bottom: 8px;
+                    font-style: italic;
+                }
+                
+                .footer-date-print {
+                    color: #cbd5e1;
+                }
+                
+                @media print {
+                    body {
+                        padding: 20px;
+                    }
+                    
+                    .resume-print {
+                        max-width: 100%;
+                    }
+                    
+                    .no-print {
+                        display: none !important;
+                    }
+                    
+                    .section-title-print {
+                        page-break-after: avoid;
+                    }
+                    
+                    .experience-item-print,
+                    .education-item-print {
+                        page-break-inside: avoid;
+                    }
+                }
+                
+                @page {
+                    margin: 20mm;
+                    size: A4;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="resume-print">
+                ${resumeElement.outerHTML}
+            </div>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(function() {
+                        window.close();
+                    }, 1000);
+                };
+            <\/script>
+        </body>
+        </html>
+      `;
 
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      printWindow.document.write(printContent);
+      printWindow.document.close();
 
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-      // Generate filename with user name and date
+      // Generate filename
       const userName = `${userProfile?.first_name || 'User'}_${userProfile?.last_name || ''}`.replace(/\s+/g, '_');
       const dateStr = new Date().toISOString().split('T')[0];
       const filename = `Resume_${userName}_${dateStr}.pdf`;
 
-      pdf.save(filename);
-
-      success = 'Resume downloaded successfully!';
+      success = 'Opening print dialog for resume...';
       setTimeout(() => success = '', 3000);
 
     } catch (err: any) {
@@ -2945,14 +3199,14 @@
                 {#if isGeneratingPDF}
                   <i class="fa-solid fa-spinner fa-spin"></i> Generating...
                 {:else}
-                  <i class="fa-solid fa-download"></i> Download PDF
+                  <i class="fa-solid fa-print"></i> Print/Download PDF
                 {/if}
               </button>
             </div>
             
             <div class="resume-preview-content" id="resume-preview-content">
-              <!-- Professional Resume Template -->
-              <div class="resume-template">
+              <!-- Printable Resume Template -->
+              <div class="resume-template" id="printable-resume">
                 <!-- Header -->
                 <div class="resume-header-section">
                   <h1 class="resume-name">{userProfile?.first_name} {userProfile?.last_name}</h1>
