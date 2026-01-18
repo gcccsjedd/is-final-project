@@ -3,7 +3,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { Groq } from 'groq-sdk';
 
-// Define TypeScript interfaces
+// Define TypeScript interfaces (keep as is)
 interface UserPreferences {
   workTypes: string[];
   salaryExpectation: string;
@@ -69,27 +69,31 @@ interface RecommendationResponse {
   };
 }
 
+// IMPORTANT: Use process.env for server-side environment variables
+// Vercel automatically provides these from your environment variables dashboard
+const GROQ_API_KEY = process.env.GROQ_API_KEY || import.meta.env.VITE_GROQ_API_KEY;
+
 // Initialize Groq
 const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
+  apiKey: GROQ_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
 // Function to validate API key
 function validateApiKey(): boolean {
-  const apiKey = import.meta.env.VITE_GROQ_API_KEY;
   console.log('API Key check:', {
-    hasKey: !!apiKey,
-    keyLength: apiKey?.length,
-    firstChars: apiKey?.substring(0, 10) + '...'
+    hasKey: !!GROQ_API_KEY,
+    keyLength: GROQ_API_KEY?.length,
+    firstChars: GROQ_API_KEY?.substring(0, 4) + '...',
+    // Don't log the full key for security
   });
   
-  if (!apiKey) {
-    console.error('API key is missing');
+  if (!GROQ_API_KEY) {
+    console.error('API key is missing. Please set GROQ_API_KEY environment variable.');
     return false;
   }
   
-  if (apiKey.includes('placeholder') || apiKey === 'your_groq_api_key_here') {
+  if (GROQ_API_KEY.includes('placeholder') || GROQ_API_KEY === 'your_groq_api_key_here') {
     console.error('Using placeholder API key');
     return false;
   }
@@ -97,7 +101,7 @@ function validateApiKey(): boolean {
   return true;
 }
 
-// Function to analyze user data with Groq AI
+// Function to analyze user data with Groq AI (keep as is)
 async function analyzeWithGroq(userData: UserPreferences): Promise<any> {
   try {
     // Prepare the prompt for Groq AI
@@ -290,7 +294,7 @@ async function analyzeWithGroq(userData: UserPreferences): Promise<any> {
   }
 }
 
-// Function to generate job search links
+// Function to generate job search links (keep as is)
 function generateJobLinks(recommendations: CareerMatch[]): string[] {
   const links: string[] = [];
   
@@ -314,7 +318,7 @@ function generateJobLinks(recommendations: CareerMatch[]): string[] {
   return links;
 }
 
-// Improved validation function
+// Improved validation function (keep as is)
 function validateUserData(userData: UserPreferences): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
@@ -379,7 +383,7 @@ function validateUserData(userData: UserPreferences): { isValid: boolean; errors
   };
 }
 
-// Function to enhance recommendations with additional data
+// Function to enhance recommendations with additional data (keep as is)
 function enhanceRecommendations(recommendations: CareerMatch[]): CareerMatch[] {
   const icons = [
     'fa-solid fa-code',
@@ -417,7 +421,7 @@ function enhanceRecommendations(recommendations: CareerMatch[]): CareerMatch[] {
   }));
 }
 
-// Function to enhance alternate paths
+// Function to enhance alternate paths (keep as is)
 function enhanceAlternatePaths(alternatePaths: AlternatePath[]): AlternatePath[] {
   const icons = [
     'fa-solid fa-palette',
@@ -444,7 +448,7 @@ function enhanceAlternatePaths(alternatePaths: AlternatePath[]): AlternatePath[]
   }));
 }
 
-// Helper functions for enhancement
+// Helper functions for enhancement (keep as is)
 function getCertificationPaths(industry: string): string[] {
   const certifications: Record<string, string[]> = {
     'Technology': ['Google IT Support', 'AWS Cloud Practitioner', 'CompTIA A+'],
@@ -657,7 +661,7 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
-// Fallback function in case AI fails
+// Fallback function in case AI fails (keep as is)
 function getFallbackRecommendations(): RecommendationResponse {
   return {
     recommendations: [
@@ -834,7 +838,9 @@ export const GET: RequestHandler = async () => {
     aiModel: 'GPT-OSS-120B (Groq)',
     version: '2.0.0',
     timestamp: new Date().toISOString(),
-    note: apiKeyValid ? 'API key is configured' : 'Please configure VITE_GROQ_API_KEY in environment variables'
+    note: apiKeyValid ? 
+      'API key is configured' : 
+      `Please configure GROQ_API_KEY in environment variables. Current: ${GROQ_API_KEY ? 'Present but invalid' : 'Missing'}`
   }, {
     status: 200,
     headers: {
