@@ -24,6 +24,13 @@
     skillsToDevelop?: string[];
     certificationPaths?: string[];
     localCompanies?: string[];
+    jobLinks?: JobLink[];
+  }
+
+  interface JobLink {
+    platform: string;
+    url: string;
+    title?: string;
   }
 
   interface AlternatePath {
@@ -43,26 +50,6 @@
   }
 
   type ToastType = 'success' | 'warning' | 'info' | 'error';
-
-  // Modern color palette
-  const colors = {
-    primary: '#6366f1',
-    primaryLight: '#818cf8',
-    primaryDark: '#4f46e5',
-    secondary: '#f59e0b',
-    secondaryLight: '#fbbf24',
-    accent: '#ec4899',
-    accentLight: '#f472b6',
-    success: '#10b981',
-    warning: '#f59e0b',
-    error: '#ef4444',
-    background: '#0f172a',
-    surface: '#1e293b',
-    surfaceLight: '#334155',
-    text: '#f8fafc',
-    textSecondary: '#cbd5e1',
-    textMuted: '#94a3b8'
-  };
 
   export let recommendations: CareerMatch[] = [];
   export let alternatePaths: AlternatePath[] = [];
@@ -123,6 +110,22 @@
     'education': 'from-yellow-500 to-amber-500',
     'engineering': 'from-violet-500 to-purple-500',
     'default': 'from-slate-500 to-gray-500'
+  };
+
+  // Platform configurations for job search URLs - ONLY LINKEDIN AND INDEED
+  const jobPlatforms = {
+    linkedin: {
+      name: 'LinkedIn',
+      baseUrl: 'https://www.linkedin.com/jobs/search/?keywords=',
+      icon: 'fa-brands fa-linkedin',
+      color: '#0A66C2'
+    },
+    indeed: {
+      name: 'Indeed',
+      baseUrl: 'https://www.indeed.com/jobs?q=',
+      icon: 'fa-solid fa-briefcase',
+      color: '#2164F3'
+    }
   };
 
   // Calculate summary statistics from data
@@ -215,6 +218,55 @@
     return careerGradients['default'];
   };
 
+  // Generate job search URLs for a career title - ONLY LINKEDIN AND INDEED
+  const generateJobLinks = (careerTitle: string): JobLink[] => {
+    const encodedTitle = encodeURIComponent(careerTitle);
+    
+    return [
+      {
+        platform: 'linkedin',
+        url: `${jobPlatforms.linkedin.baseUrl}${encodedTitle}`,
+        title: careerTitle
+      },
+      {
+        platform: 'indeed',
+        url: `${jobPlatforms.indeed.baseUrl}${encodedTitle}`,
+        title: careerTitle
+      }
+    ];
+  };
+
+  // Validate and fix job links
+  const getValidJobLinks = (careerTitle: string): JobLink[] => {
+    // If career has its own jobLinks property, use those and filter to only LinkedIn/Indeed
+    const career = recommendations.find(r => r.title === careerTitle);
+    if (career?.jobLinks && career.jobLinks.length > 0) {
+      // Filter to only include LinkedIn and Indeed if they exist in the provided links
+      return career.jobLinks.filter(link => 
+        link.platform.toLowerCase() === 'linkedin' || 
+        link.platform.toLowerCase() === 'indeed'
+      );
+    }
+    
+    // Otherwise generate links for LinkedIn and Indeed only
+    return generateJobLinks(careerTitle);
+  };
+
+  // Get platform display info
+  const getPlatformInfo = (platform: string) => {
+    const platformKey = platform.toLowerCase();
+    if (platformKey === 'linkedin' || platformKey === 'indeed') {
+      return jobPlatforms[platformKey as keyof typeof jobPlatforms];
+    }
+    
+    // Default fallback
+    return {
+      name: platform.charAt(0).toUpperCase() + platform.slice(1),
+      icon: 'fa-solid fa-globe',
+      color: '#64748b'
+    };
+  };
+
   // Toast system
   const showToast = (message: string, type: ToastType = 'info') => {
     if (activeToast?.message === message) return;
@@ -232,16 +284,7 @@
     expandedDetails = [...expandedDetails];
   };
 
-  // Platform name from URL
-  const getPlatformName = (url: string) => {
-    if (url.includes('linkedin.com')) return 'LinkedIn';
-    if (url.includes('indeed.com')) return 'Indeed';
-    if (url.includes('jobstreet.com')) return 'JobStreet';
-    if (url.includes('kalibrr.com')) return 'Kalibrr';
-    return 'Job Search';
-  };
-
-  // Save results and navigate to dashboard - FIXED VERSION
+  // Save results and navigate to dashboard
   const handleContinueToDashboard = async () => {
     try {
       isLoading = true;
@@ -305,8 +348,8 @@
   };
 
   // Copy link
-  const copyLink = (link: string) => {
-    navigator.clipboard.writeText(link);
+  const copyLink = (url: string) => {
+    navigator.clipboard.writeText(url);
     showToast('Link copied to clipboard', 'success');
   };
 
@@ -319,6 +362,11 @@
   // Start new assessment
   const startNewAssessment = () => {
     dispatch('navigateToHome');
+  };
+
+  // Open job search in new tab
+  const openJobSearch = (url: string) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 </script>
 
@@ -587,12 +635,26 @@
                   </div>
                 {/if}
 
-                {#if jobLinks[i]}
-                  <a href={jobLinks[i]} target="_blank" rel="noopener noreferrer" class="job-link-btn">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    Find {match.title} Jobs on {getPlatformName(jobLinks[i])}
-                  </a>
-                {/if}
+                <!-- Job Links Section - Now only LinkedIn and Indeed -->
+                <div class="job-links-section">
+                  <h5 class="job-links-title">
+                    <i class="fa-solid fa-briefcase"></i>
+                    Find {match.title} Jobs
+                  </h5>
+                  <div class="job-links-grid two-columns">
+                    {#each getValidJobLinks(match.title) as jobLink}
+                      <button 
+                        class="job-platform-btn"
+                        on:click={() => openJobSearch(jobLink.url)}
+                        style="--platform-color: {getPlatformInfo(jobLink.platform).color}"
+                        title="Search on {getPlatformInfo(jobLink.platform).name}"
+                      >
+                        <i class="{getPlatformInfo(jobLink.platform).icon}"></i>
+                        <span>{getPlatformInfo(jobLink.platform).name}</span>
+                      </button>
+                    {/each}
+                  </div>
+                </div>
               </div>
             {/each}
           </div>
@@ -652,16 +714,16 @@
         </div>
       {/if}
 
-      <!-- Job Search Resources -->
-      {#if jobLinks.length > 0}
+      <!-- Job Search Resources - Using generated links from recommendations -->
+      {#if recommendations.length > 0}
         <div class="section-card">
           <div class="section-header">
             <div class="title-icon" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(96, 165, 250, 0.1)); border-color: rgba(59, 130, 246, 0.3); color: #60a5fa;">
               <i class="fa-solid fa-link"></i>
             </div>
             <div class="title-content">
-              <h3>Job Search Resources</h3>
-              <span class="section-subtitle">Start your job search with these curated resources</span>
+              <h3>Quick Job Search</h3>
+              <span class="section-subtitle">Start your job search with these trusted platforms</span>
             </div>
             <div class="section-badge">
               <i class="fa-solid fa-rocket"></i>
@@ -670,29 +732,54 @@
           </div>
 
           <div class="resources-grid">
-            {#each jobLinks as link, i}
-              {#if i < 3}
-                <div class="resource-card">
-                  <div class="resource-icon">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                  </div>
-                  <div class="resource-content">
-                    <h4>{recommendations[i]?.title || 'Career Search'}</h4>
-                    <p class="resource-platform">
-                      <i class="fa-solid fa-globe"></i> {getPlatformName(link)}
-                    </p>
-                    <div class="resource-actions">
-                      <a href={link} target="_blank" rel="noopener noreferrer" class="resource-link">
-                        View Jobs
-                        <i class="fa-solid fa-external-link-alt"></i>
-                      </a>
-                      <button class="copy-link" on:click={() => copyLink(link)} aria-label="Copy link to clipboard">
-                        <i class="fa-solid fa-copy"></i>
-                      </button>
-                    </div>
+            <!-- Show links for top 3 recommendations -->
+            {#each recommendations.slice(0, 3) as match}
+              {@const linkedinUrl = `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(match.title)}`}
+              {@const indeedUrl = `https://www.indeed.com/jobs?q=${encodeURIComponent(match.title)}`}
+              
+              <!-- LinkedIn Card -->
+              <div class="resource-card">
+                <div class="resource-icon" style="background: #0A66C2">
+                  <i class="fa-brands fa-linkedin"></i>
+                </div>
+                <div class="resource-content">
+                  <h4>{match.title}</h4>
+                  <p class="resource-platform">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                  </p>
+                  <div class="resource-actions">
+                    <button class="resource-link" on:click={() => openJobSearch(linkedinUrl)}>
+                      View Jobs
+                      <i class="fa-solid fa-external-link-alt"></i>
+                    </button>
+                    <button class="copy-link" on:click={() => copyLink(linkedinUrl)} aria-label="Copy link to clipboard">
+                      <i class="fa-solid fa-copy"></i>
+                    </button>
                   </div>
                 </div>
-              {/if}
+              </div>
+
+              <!-- Indeed Card -->
+              <div class="resource-card">
+                <div class="resource-icon" style="background: #2164F3">
+                  <i class="fa-solid fa-briefcase"></i>
+                </div>
+                <div class="resource-content">
+                  <h4>{match.title}</h4>
+                  <p class="resource-platform">
+                    <i class="fa-solid fa-briefcase"></i> Indeed
+                  </p>
+                  <div class="resource-actions">
+                    <button class="resource-link" on:click={() => openJobSearch(indeedUrl)}>
+                      View Jobs
+                      <i class="fa-solid fa-external-link-alt"></i>
+                    </button>
+                    <button class="copy-link" on:click={() => copyLink(indeedUrl)} aria-label="Copy link to clipboard">
+                      <i class="fa-solid fa-copy"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
             {/each}
           </div>
         </div>
@@ -1253,7 +1340,7 @@
   /* Matches Grid */
   .matches-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1.5rem;
   }
 
@@ -1412,6 +1499,7 @@
     margin-top: 1rem;
     padding-top: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
   }
 
   .detail-section {
@@ -1455,27 +1543,69 @@
     border-color: rgba(251, 191, 36, 0.2);
   }
 
-  .job-link-btn {
+  /* Job Links Section */
+  .job-links-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .job-links-title {
+    font-size: 1rem;
+    color: #f8fafc;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .job-links-title i {
+    color: #6366f1;
+  }
+
+  .job-links-grid {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .job-links-grid.two-columns {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .job-platform-btn {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    width: 100%;
-    padding: 1rem;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
-    color: white;
+    padding: 0.875rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.75rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
     font-weight: 500;
-    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
   }
 
-  .job-link-btn:hover {
-    background: linear-gradient(135deg, #818cf8, #6366f1);
+  .job-platform-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: var(--platform-color, #6366f1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .job-platform-btn i {
+    font-size: 1.1rem;
+    color: var(--platform-color, #6366f1);
+    transition: all 0.2s ease;
+  }
+
+  .job-platform-btn:hover i {
+    transform: scale(1.1);
   }
 
   /* Paths Grid */
@@ -1586,7 +1716,6 @@
     width: 48px;
     height: 48px;
     border-radius: 0.875rem;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1634,6 +1763,8 @@
     font-weight: 500;
     text-decoration: none;
     transition: all 0.2s;
+    border: none;
+    cursor: pointer;
   }
 
   .resource-link:hover {
@@ -1819,7 +1950,7 @@
 
   @media (max-width: 1200px) {
     .matches-grid {
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     }
     
     .paths-grid, .resources-grid, .next-steps {
@@ -1915,6 +2046,10 @@
 
     .section-badge {
       align-self: flex-start;
+    }
+
+    .job-links-grid.two-columns {
+      grid-template-columns: 1fr;
     }
   }
 

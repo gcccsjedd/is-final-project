@@ -4,10 +4,8 @@
   import { fade, scale } from 'svelte/transition';
   import { supabase } from '../lib/supabase';
   import { loadUserAssessments, deleteAssessment as deleteAssessmentUtil, type SavedAssessment } from '../lib/assessmentUtils';
-  
-  // REMOVED: import jsPDF from 'jspdf';
-  // REMOVED: import html2canvas from 'html2canvas';
-  
+  import { getSalaryData, formatSalary, getSalaryRange, enhanceCareerWithSalary, type SalaryData } from '../lib/salaryData';
+ 
   // Types
   interface CareerMatch {
     title: string;
@@ -15,6 +13,19 @@
     strengths: string[];
     growthOpportunity?: string;
     salary?: string;
+    salaryData?: {
+        min: number;
+        max: number;
+        average: number;
+        currency: string;
+        experienceLevel: string;
+        lastUpdated: string;
+        source: string;
+    };
+    salaryMin?: number;
+    salaryMax?: number;
+    salaryAverage?: number;
+    salaryCurrency?: string;
     industry?: string;
     responsibilities?: string;
     requiredSkills?: string[];
@@ -26,7 +37,6 @@
     skillsToDevelop?: string[];
     certificationPaths?: string[];
     localCompanies?: string[];
-    // New fields for detailed explanations
     description?: string;
     dailyTasks?: string[];
     workEnvironment?: string;
@@ -143,7 +153,7 @@
     education: [] as Array<{
       degree: string;
       institution: string;
-      location: string; // This field is now editable
+      location: string;
       graduationDate: string;
       gpa: string;
     }>,
@@ -183,7 +193,7 @@
   };
 
   // Career descriptions database
-  const careerDescriptions = {
+  const careerDescriptions: Record<string, any> = {
     'Software Developer': {
       description: 'Software developers design, build, and maintain computer programs and applications. They solve problems through code and create solutions that power businesses, entertainment, and daily life.',
       dailyTasks: [
@@ -308,6 +318,32 @@
         'Diverse career opportunities',
         'Fast-paced environment'
       ]
+    },
+    'Medical Laboratory Technician': {
+      description: 'Medical laboratory technicians perform tests on blood, tissue, and other bodily fluids to help doctors diagnose and treat diseases. They work in clinical laboratories using sophisticated equipment.',
+      dailyTasks: [
+        'Collecting and preparing patient samples',
+        'Operating laboratory equipment',
+        'Performing routine tests and analyses',
+        'Recording and reporting test results',
+        'Maintaining laboratory equipment',
+        'Following safety protocols and procedures'
+      ],
+      workEnvironment: 'Clinical laboratories in hospitals, diagnostic labs, or research facilities. Requires attention to detail and adherence to strict protocols.',
+      careerPath: ['Lab Assistant', 'Medical Lab Technician', 'Senior Lab Technician', 'Lab Supervisor', 'Laboratory Manager'],
+      typicalDay: 'Receive samples, perform scheduled tests, calibrate equipment, record results, maintain cleanliness, and follow safety procedures.',
+      challenges: [
+        'Working with potentially infectious materials',
+        'Maintaining strict quality control',
+        'Keeping up with new testing methods',
+        'Working in a fast-paced environment'
+      ],
+      benefits: [
+        'Essential role in healthcare',
+        'Stable career with regular hours',
+        'Opportunities for specialization',
+        'Direct impact on patient care'
+      ]
     }
   };
 
@@ -336,9 +372,9 @@
   // Check screen size for responsive sidebar
   function checkScreenSize() {
     if (window.innerWidth < 1024) {
-      sidebarOpen = false; // Auto-close sidebar on mobile
+      sidebarOpen = false;
     } else {
-      sidebarOpen = true; // Auto-open sidebar on desktop
+      sidebarOpen = true;
     }
   }
 
@@ -400,6 +436,9 @@
         if (!parsed) return;
         
         const topCareers = parsed.top_careers || parsed.full_results?.recommendations || [];
+        // Enhance careers with salary data
+        const enhancedCareers = topCareers.map((career: any) => enhanceCareerWithSalary(career));
+        
         const fullResults = parsed.full_results || {};
         const matchScore = parsed.match_score || 0;
         
@@ -409,13 +448,13 @@
           date: parsed.date || new Date().toISOString().split('T')[0],
           time: parsed.time || new Date().toLocaleTimeString(),
           match_score: matchScore,
-          top_careers: topCareers,
+          top_careers: enhancedCareers,
           full_results: {
-            recommendations: topCareers,
+            recommendations: enhancedCareers,
             summaryData: fullResults.summaryData || {
               topMatch: matchScore,
               averageMatch: 0,
-              totalRecommendations: topCareers.length,
+              totalRecommendations: enhancedCareers.length,
               suggestedNextSteps: [
                 'Update your resume with relevant skills',
                 'Network with professionals in your field',
@@ -558,9 +597,9 @@
     if (latestAssessment) {
       const topCareer = latestAssessment.top_careers?.[0];
       if (topCareer) {
-        resumeData.summary = `Results-driven professional with strong alignment to ${topCareer.title} role. ${getExperienceLevelDescription(topCareer.experienceLevel ?? '')} Demonstrated strengths in ${topCareer.strengths?.slice(0, 3).join(', ') || 'relevant technical and interpersonal skills'}. Seeking opportunities to leverage expertise in ${topCareer.industry || 'the industry'} with a ${latestAssessment.match_score}% career match based on comprehensive assessment. Committed to ${getCareerGoal(topCareer.title)}`;
+        resumeData.summary = `Results-driven professional with strong alignment to ${topCareer.title} role. ${getExperienceLevelDescription(topCareer.experienceLevel ?? '')} Demonstrated strengths in ${topCareer.strengths?.slice(0, 3).join(', ') || 'relevant technical and interpersonal skills'}. Seeking opportunities to leverage expertise in ${topCareer.industry || 'the industry'} with a strong career match based on comprehensive assessment. Committed to ${getCareerGoal(topCareer.title)}`;
       } else {
-        resumeData.summary = `Professional with strong career alignment based on comprehensive assessment. Achieved ${latestAssessment.match_score}% career match score. Seeking opportunities to leverage skills and experience in a suitable role.`;
+        resumeData.summary = `Professional with strong career alignment based on comprehensive assessment. Achieved a strong career match score. Seeking opportunities to leverage skills and experience in a suitable role.`;
       }
     } else {
       resumeData.summary = 'Experienced professional seeking new career opportunities. Skilled in various domains with a proven track record of success.';
@@ -573,7 +612,7 @@
       resumeData.experiences = [{
         title: getRelevantJobTitle(careerTitle),
         company: 'Your Company',
-        location: 'City, State', // FIXED: Added location field
+        location: 'City, State',
         startDate: '2020-01',
         endDate: 'Present',
         current: true,
@@ -581,12 +620,12 @@
       }];
     }
     
-    // Add sample education if none exists - FIXED: Added location field
+    // Add sample education if none exists
     if (resumeData.education.length === 0) {
       resumeData.education = [{
         degree: getRelevantDegree(latestAssessment?.top_careers?.[0]?.title ?? ''),
         institution: 'Your University',
-        location: 'City, State', // This is now editable
+        location: 'City, State',
         graduationDate: '2019-05',
         gpa: '3.5'
       }];
@@ -639,8 +678,8 @@
       return 'creating intuitive user experiences and visually compelling designs';
     } else if (titleLower.includes('manager')) {
       return 'leading teams to achieve organizational goals and deliver exceptional results';
-    } else if (titleLower.includes('medical') || titleLower.includes('health')) {
-      return 'providing excellent patient care and contributing to healthcare improvements';
+    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return 'providing accurate diagnostic results and contributing to excellent patient care';
     }
     return 'contributing to organizational success and professional growth';
   }
@@ -655,8 +694,8 @@
       return 'UX Designer';
     } else if (titleLower.includes('manager')) {
       return 'Project Manager';
-    } else if (titleLower.includes('medical') || titleLower.includes('health')) {
-      return 'Healthcare Professional';
+    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return 'Medical Laboratory Technician';
     } else if (titleLower.includes('market')) {
       return 'Marketing Specialist';
     }
@@ -673,8 +712,8 @@
       return 'Designed user interfaces and experiences for digital products.\nConducted user research and usability testing to inform design decisions.\nCreated wireframes, prototypes, and design specifications.\nCollaborated with developers to ensure design implementation fidelity.';
     } else if (titleLower.includes('manager')) {
       return 'Led project teams to deliver successful outcomes within budget and timeline.\nManaged stakeholder communications and expectations.\nDeveloped project plans, tracked progress, and mitigated risks.\nCoordinated resources and facilitated team collaboration.';
-    } else if (titleLower.includes('medical') || titleLower.includes('health')) {
-      return 'Provided high-quality patient care following established protocols.\nDocumented patient information and treatment plans accurately.\nCollaborated with healthcare team members for comprehensive care.\nMaintained up-to-date knowledge of medical best practices.';
+    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return 'Performed accurate laboratory tests and analyses following established protocols.\nMaintained and calibrated laboratory equipment for optimal performance.\nDocumented test results and maintained quality control records.\nCollaborated with healthcare team to ensure timely and accurate diagnoses.';
     }
     return 'Responsible for key duties and achievements in this role.\nManaged projects and collaborated with teams.\nImproved processes and increased efficiency.';
   }
@@ -687,8 +726,8 @@
       return "Bachelor of Science in Data Science";
     } else if (titleLower.includes('design')) {
       return "Bachelor of Fine Arts in Design";
-    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('nurse')) {
-      return "Bachelor of Science in Nursing";
+    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return "Associate Degree in Medical Laboratory Technology";
     } else if (titleLower.includes('business') || titleLower.includes('manager')) {
       return "Bachelor of Business Administration";
     } else if (titleLower.includes('finance') || titleLower.includes('account')) {
@@ -707,8 +746,8 @@
       return ['Google UX Design Professional', 'Adobe Certified Professional'];
     } else if (titleLower.includes('project') || titleLower.includes('manager')) {
       return ['Project Management Professional (PMP)', 'Certified ScrumMaster'];
-    } else if (titleLower.includes('medical') || titleLower.includes('health')) {
-      return ['Basic Life Support (BLS) Certification', 'Certified Medical Assistant'];
+    } else if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return ['Medical Laboratory Technician (MLT) Certification', 'Clinical Laboratory Improvement Amendments (CLIA)'];
     }
     return ['Professional Certification'];
   }
@@ -720,7 +759,7 @@
     if (industryLower.includes('tech') || industryLower.includes('software')) {
       return ['Agile Methodology', 'Scrum', 'Version Control', 'Code Review'];
     } else if (industryLower.includes('health') || industryLower.includes('medical')) {
-      return ['Medical Ethics', 'Patient Privacy', 'HIPAA', 'Clinical Documentation'];
+      return ['Medical Ethics', 'Patient Privacy', 'HIPAA', 'Clinical Documentation', 'Laboratory Safety', 'Quality Control'];
     } else if (industryLower.includes('finance') || industryLower.includes('banking')) {
       return ['Financial Regulation', 'Compliance', 'Risk Management', 'Investment Strategies'];
     } else if (industryLower.includes('education')) {
@@ -751,15 +790,63 @@
 
       if (assessmentError) {
         console.error('Assessment load error:', assessmentError);
-        // Don't throw - just show empty state
         assessments = [];
         latestAssessment = null;
         updateAssessmentPagination();
         return;
       }
 
-      assessments = assessmentData as Assessment[] || [];
-      latestAssessment = latest as Assessment | null;
+      // Type assertion to handle the mapping correctly
+      const loadedAssessments = (assessmentData as any[] || []) as Assessment[];
+      
+      // Enhance assessments with salary data
+      assessments = loadedAssessments.map(assessment => ({
+        ...assessment,
+        top_careers: (assessment.top_careers || []).map((career: any) => enhanceCareerWithSalary(career)),
+        full_results: assessment.full_results
+          ? {
+              ...assessment.full_results,
+              recommendations: (assessment.full_results.recommendations || []).map((career: any) => enhanceCareerWithSalary(career)),
+              alternatePaths: assessment.full_results.alternatePaths ?? [],
+              jobLinks: assessment.full_results.jobLinks ?? [],
+              summaryData: assessment.full_results.summaryData ?? {
+                topMatch: assessment.match_score || 0,
+                averageMatch: 0,
+                totalRecommendations: (assessment.top_careers || []).length,
+                suggestedNextSteps: [],
+                timelineSuggestions: []
+              },
+              userName: assessment.full_results.userName ?? userName ?? 'User'
+            }
+          : {
+              recommendations: (assessment.top_careers || []).map((career: any) => enhanceCareerWithSalary(career)),
+              alternatePaths: [],
+              jobLinks: [],
+              summaryData: {
+                topMatch: assessment.match_score || 0,
+                averageMatch: 0,
+                totalRecommendations: (assessment.top_careers || []).length,
+                suggestedNextSteps: [],
+                timelineSuggestions: []
+              },
+              userName: userName ?? 'User'
+            }
+      }));
+      
+      // Enhance latest assessment
+      if (latest) {
+        latestAssessment = {
+          ...latest,
+          top_careers: (latest.top_careers || []).map((career: any) => enhanceCareerWithSalary(career)),
+          full_results: latest.full_results ? {
+            ...latest.full_results,
+            recommendations: (latest.full_results.recommendations || []).map((career: any) => enhanceCareerWithSalary(career))
+          } : undefined
+        } as Assessment;
+      } else {
+        latestAssessment = null;
+      }
+      
       updateAssessmentPagination();
       
     } catch (err: any) {
@@ -899,7 +986,7 @@
     }
   }
 
-  // Generate skills based on assessment results
+  // Generate skills based on assessment results - FIXED VERSION
   function generateSkillsFromAssessment() {
     if (!latestAssessment) return;
     
@@ -909,15 +996,36 @@
     const careerTitle = topCareer.title || '';
     const industry = topCareer.industry || '';
     const experienceLevel = topCareer.experienceLevel || '';
+    const requiredSkills = topCareer.requiredSkills || [];
+    const strengths = topCareer.strengths || [];
     
     let suggestedSkills: string[] = [];
     
-    // Remove any existing skills before generating new ones
+    // Clear existing skills
     resumeData.skills = [];
     
     // Define skill sets for different career fields
     const skillSets = {
-      // Technology/Software Development
+      // Medical/Healthcare
+      'medical': [
+        'Patient Care', 'Medical Terminology', 'Clinical Procedures', 'Emergency Response',
+        'Medical Documentation', 'Healthcare Protocols', 'Patient Assessment',
+        'Treatment Planning', 'Medical Equipment', 'HIPAA Compliance', 'Anatomy/Physiology',
+        'Pharmaceutical Knowledge', 'Laboratory Techniques', 'Medical Ethics',
+        'Team Collaboration', 'Attention to Detail', 'Empathy', 'Stress Management',
+        'Infection Control', 'Specimen Collection', 'Diagnostic Testing', 'Quality Control'
+      ],
+      
+      'medical technician': [
+        'Lab Safety Protocols', 'Specimen Processing', 'Quality Assurance',
+        'Equipment Maintenance', 'Data Recording', 'Analytical Testing',
+        'Laboratory Information Systems', 'Clinical Chemistry', 'Hematology',
+        'Microbiology', 'Blood Banking', 'Molecular Diagnostics',
+        'Regulatory Compliance', 'Test Validation', 'Result Interpretation',
+        'Microscopy', 'Cell Counting', 'Culture Media Preparation'
+      ],
+      
+      // Software/IT
       'software': [
         'JavaScript/TypeScript', 'Python', 'Java', 'C++', 'React/Vue/Angular',
         'Node.js', 'Git/GitHub', 'REST APIs', 'Database Design', 'Agile/Scrum',
@@ -925,7 +1033,7 @@
         'CI/CD', 'Microservices', 'Containerization', 'Problem Solving', 'Code Review'
       ],
       
-      // Data Science/Analytics
+      // Data Science
       'data': [
         'Python/R', 'SQL', 'Data Analysis', 'Machine Learning', 'Statistical Modeling',
         'Data Visualization', 'Pandas/NumPy', 'TensorFlow/PyTorch', 'Big Data',
@@ -933,7 +1041,7 @@
         'Data Mining', 'Statistical Analysis', 'Research Skills', 'Critical Thinking'
       ],
       
-      // Design/UX
+      // Design
       'design': [
         'UI/UX Design', 'Figma/Adobe XD', 'Wireframing', 'Prototyping', 'User Research',
         'Design Systems', 'Visual Design', 'Typography', 'Color Theory', 'Illustration',
@@ -950,16 +1058,7 @@
         'Change Management', 'Performance Metrics', 'Customer Relations'
       ],
       
-      // Healthcare/Medical
-      'healthcare': [
-        'Patient Care', 'Medical Terminology', 'Clinical Procedures', 'Emergency Response',
-        'Medical Documentation', 'Healthcare Protocols', 'Patient Assessment',
-        'Treatment Planning', 'Medical Equipment', 'HIPAA Compliance', 'Anatomy/Physiology',
-        'Pharmaceutical Knowledge', 'Laboratory Techniques', 'Medical Ethics',
-        'Team Collaboration', 'Attention to Detail', 'Empathy', 'Stress Management'
-      ],
-      
-      // Marketing/Sales
+      // Marketing
       'marketing': [
         'Digital Marketing', 'SEO/SEM', 'Social Media Marketing', 'Content Strategy',
         'Email Marketing', 'Marketing Analytics', 'Brand Management', 'Market Research',
@@ -967,7 +1066,7 @@
         'Conversion Rate Optimization', 'Public Relations', 'Advertising', 'Event Planning'
       ],
       
-      // Finance/Accounting
+      // Finance
       'finance': [
         'Financial Analysis', 'Accounting Principles', 'Budgeting/Forecasting',
         'Financial Modeling', 'Risk Assessment', 'Tax Compliance', 'Auditing',
@@ -976,16 +1075,21 @@
       ]
     };
     
-    // Determine which skill set to use based on career title and industry
+    // Determine which skill set to use based on career title
+    const titleLower = careerTitle.toLowerCase();
     let selectedSkillSet: string[] = [];
     
-    // Check career title for keywords
-    const titleLower = careerTitle.toLowerCase();
-    const industryLower = (industry || '').toLowerCase();
-    
-    if (titleLower.includes('developer') || titleLower.includes('engineer') || 
-        titleLower.includes('programmer') || titleLower.includes('software') ||
-        titleLower.includes('tech') || titleLower.includes('it')) {
+    // Check for specific career patterns
+    if (titleLower.includes('medical') || titleLower.includes('health') || titleLower.includes('nurse') || 
+        titleLower.includes('doctor') || titleLower.includes('therapist')) {
+      selectedSkillSet = skillSets.medical;
+      
+      // Add technician-specific skills if applicable
+      if (titleLower.includes('technician') || titleLower.includes('lab') || titleLower.includes('laboratory')) {
+        selectedSkillSet = [...selectedSkillSet, ...skillSets['medical technician']];
+      }
+    } else if (titleLower.includes('developer') || titleLower.includes('engineer') || 
+               titleLower.includes('programmer') || titleLower.includes('software')) {
       selectedSkillSet = skillSets.software;
     } else if (titleLower.includes('data') || titleLower.includes('analyst') || 
                titleLower.includes('scientist') || titleLower.includes('machine learning')) {
@@ -996,10 +1100,6 @@
     } else if (titleLower.includes('manager') || titleLower.includes('director') || 
                titleLower.includes('business') || titleLower.includes('operations')) {
       selectedSkillSet = skillSets.business;
-    } else if (titleLower.includes('medical') || titleLower.includes('health') || 
-               titleLower.includes('nurse') || titleLower.includes('doctor') ||
-               titleLower.includes('therapist')) {
-      selectedSkillSet = skillSets.healthcare;
     } else if (titleLower.includes('market') || titleLower.includes('sales') || 
                titleLower.includes('advertising')) {
       selectedSkillSet = skillSets.marketing;
@@ -1007,7 +1107,7 @@
                titleLower.includes('banking')) {
       selectedSkillSet = skillSets.finance;
     } else {
-      // Default to a mix of general skills
+      // Default to general professional skills
       selectedSkillSet = [
         'Communication', 'Problem Solving', 'Teamwork', 'Time Management',
         'Adaptability', 'Critical Thinking', 'Attention to Detail', 'Leadership',
@@ -1016,59 +1116,21 @@
       ];
     }
     
-    // Adjust skills based on experience level
-    if (experienceLevel && (experienceLevel.toLowerCase().includes('senior') || 
-        experienceLevel.toLowerCase().includes('lead') || 
-        experienceLevel.toLowerCase().includes('manager'))) {
-      // Add leadership and advanced skills
-      suggestedSkills = [
-        ...selectedSkillSet.filter(skill => !skill.toLowerCase().includes('basic')),
-        'Strategic Planning',
-        'Team Leadership',
-        'Mentoring',
-        'Process Optimization',
-        'Stakeholder Management',
-        'Budget Management',
-        'Decision Making',
-        'Cross-functional Collaboration'
-      ];
-    } else if (experienceLevel && (experienceLevel.toLowerCase().includes('junior') || 
-               experienceLevel.toLowerCase().includes('entry'))) {
-      // Focus on fundamental and learning skills
-      suggestedSkills = [
-        ...selectedSkillSet.filter(skill => 
-          skill.toLowerCase().includes('basic') || 
-          skill.toLowerCase().includes('fundamental') ||
-          !skill.toLowerCase().includes('advanced') &&
-          !skill.toLowerCase().includes('senior') &&
-          !skill.toLowerCase().includes('leadership')
-        ).slice(0, 10),
-        'Eagerness to Learn',
-        'Adaptability',
-        'Attention to Detail',
-        'Time Management',
-        'Communication',
-        'Team Collaboration'
-      ];
-    } else {
-      // Mid-level - balanced mix
-      suggestedSkills = selectedSkillSet;
+    // Start with the selected skill set
+    suggestedSkills = [...selectedSkillSet];
+    
+    // Add required skills from assessment
+    if (requiredSkills.length > 0) {
+      suggestedSkills = [...suggestedSkills, ...requiredSkills];
     }
     
-    // Add career-specific required skills
-    if (topCareer.requiredSkills && topCareer.requiredSkills.length > 0) {
-      suggestedSkills = [...suggestedSkills, ...topCareer.requiredSkills];
-    }
-    
-    // Add strengths as skills (but filter out duplicates)
-    if (topCareer.strengths && topCareer.strengths.length > 0) {
-      const uniqueStrengths = topCareer.strengths.filter(
-        strength => !suggestedSkills.some(skill => 
-          skill.toLowerCase().includes(strength.toLowerCase()) || 
-          strength.toLowerCase().includes(skill.toLowerCase())
-        )
+    // Add strengths as skills
+    if (strengths.length > 0) {
+      // Convert strengths to skill-like format
+      const strengthSkills = strengths.map(strength => 
+        strength.charAt(0).toUpperCase() + strength.slice(1)
       );
-      suggestedSkills = [...suggestedSkills, ...uniqueStrengths];
+      suggestedSkills = [...suggestedSkills, ...strengthSkills];
     }
     
     // Add industry-specific skills
@@ -1077,9 +1139,30 @@
       suggestedSkills = [...suggestedSkills, ...industrySkills];
     }
     
-    // Remove duplicates (case insensitive) and limit to 15 skills
-    const uniqueSkills = [];
-    const seenSkills = new Set();
+    // Adjust for experience level
+    if (experienceLevel) {
+      const levelLower = experienceLevel.toLowerCase();
+      if (levelLower.includes('senior') || levelLower.includes('lead') || levelLower.includes('manager')) {
+        // Add leadership skills
+        suggestedSkills = [...suggestedSkills, 
+          'Strategic Planning', 'Team Leadership', 'Mentoring', 
+          'Process Optimization', 'Stakeholder Management', 'Budget Management'
+        ];
+      } else if (levelLower.includes('junior') || levelLower.includes('entry')) {
+        // Focus on fundamental skills
+        suggestedSkills = suggestedSkills.filter(skill => 
+          !skill.toLowerCase().includes('leadership') &&
+          !skill.toLowerCase().includes('management') &&
+          !skill.toLowerCase().includes('strategic')
+        );
+        // Add learning skills
+        suggestedSkills = [...suggestedSkills, 'Eagerness to Learn', 'Adaptability', 'Quick Learner'];
+      }
+    }
+    
+    // Remove duplicates and limit to 15 skills
+    const uniqueSkills: string[] = [];
+    const seenSkills = new Set<string>();
     
     for (const skill of suggestedSkills) {
       const lowerSkill = skill.toLowerCase();
@@ -1104,7 +1187,7 @@
     resumeData.skills = resumeData.skills.filter((_, i) => i !== index);
   }
 
-  // Add experience to resume - FIXED: This function now works properly
+  // Add experience to resume
   function addExperience() {
     if (newExperience.title.trim() && newExperience.company.trim()) {
       resumeData.experiences = [...resumeData.experiences, { ...newExperience }];
@@ -1125,7 +1208,7 @@
     resumeData.experiences = resumeData.experiences.filter((_, i) => i !== index);
   }
 
-  // Add education to resume - FIXED: This function now works properly
+  // Add education to resume
   function addEducation() {
     if (newEducation.degree.trim() && newEducation.institution.trim()) {
       resumeData.education = [...resumeData.education, { ...newEducation }];
@@ -1144,7 +1227,7 @@
     resumeData.education = resumeData.education.filter((_, i) => i !== index);
   }
 
-  // Add certification to resume - FIXED: This function now works properly
+  // Add certification to resume
   function addCertification() {
     if (newCertification.name.trim() && newCertification.issuer.trim()) {
       resumeData.certifications = [...resumeData.certifications, { ...newCertification }];
@@ -1178,7 +1261,7 @@
         throw new Error('Failed to open print window. Please allow popups for this site.');
       }
 
-      // Generate print-friendly HTML
+      // Generate print-friendly HTML - REMOVED CAREER ALIGNMENT BOX
       const printContent = `
         <!DOCTYPE html>
         <html>
@@ -1230,35 +1313,7 @@
                     gap: 5px;
                 }
                 
-                .career-match-badge {
-                    background: linear-gradient(135deg, #6366f1, #818cf8);
-                    color: white;
-                    padding: 12px 16px;
-                    border-radius: 8px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 16px;
-                    margin-bottom: 24px;
-                    max-width: 400px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-                
-                .badge-label {
-                    font-size: 14px;
-                    font-weight: 500;
-                }
-                
-                .badge-value {
-                    font-size: 20px;
-                    font-weight: 700;
-                }
-                
-                .badge-career {
-                    font-size: 14px;
-                    font-weight: 500;
-                }
+                /* REMOVED CAREER ALIGNMENT BOX */
                 
                 .resume-section-print {
                     margin-bottom: 24px;
@@ -1383,18 +1438,13 @@
                     color: #475569;
                 }
                 
-                .assessment-footer-print {
+                .generated-footer-print {
                     margin-top: 32px;
                     padding-top: 16px;
                     border-top: 1px dashed #e2e8f0;
                     font-size: 12px;
                     color: #94a3b8;
                     text-align: center;
-                }
-                
-                .footer-note-print {
-                    margin-bottom: 8px;
-                    font-style: italic;
                 }
                 
                 .footer-date-print {
@@ -1466,25 +1516,31 @@
     }
   }
 
-  // NEW: View career details with comprehensive information
+  // NEW: View career details with comprehensive information including real salary data
   async function viewCareerDetails(career: CareerMatch) {
     try {
       careerDetailsLoading = true;
-      selectedCareer = career;
+      
+      // Enhance career with real Philippine salary data
+      let enhancedCareer = enhanceCareerWithSalary(career);
+      selectedCareer = enhancedCareer;
       
       // Enhance career data with detailed descriptions if available
       const careerKey = career.title as keyof typeof careerDescriptions;
       if (careerDescriptions[careerKey]) {
         selectedCareer = {
-          ...career,
+          ...enhancedCareer,
           ...careerDescriptions[careerKey]
         };
       } else {
         // Generate generic description based on career title
-        selectedCareer.description = `${career.title} is a professional role that ${generateGenericDescription(career.title)}`;
-        selectedCareer.dailyTasks = generateGenericDailyTasks(career.title);
-        selectedCareer.workEnvironment = generateGenericWorkEnvironment(career.title);
-        selectedCareer.careerPath = generateGenericCareerPath(career.title);
+        selectedCareer = {
+          ...enhancedCareer,
+          description: `${career.title} is a professional role that ${generateGenericDescription(career.title)}`,
+          dailyTasks: generateGenericDailyTasks(career.title),
+          workEnvironment: generateGenericWorkEnvironment(career.title),
+          careerPath: generateGenericCareerPath(career.title)
+        };
       }
       
       showCareerDetails = true;
@@ -1509,13 +1565,16 @@
       return 'focuses on creating visually appealing and functional designs. This role combines creativity with technical skills to develop products, interfaces, or experiences that meet user needs.';
     } else if (title.toLowerCase().includes('marketing')) {
       return 'involves promoting products or services, analyzing market trends, and developing strategies to reach target audiences. This role combines creativity with analytical thinking.';
+    } else if (title.toLowerCase().includes('medical') || title.toLowerCase().includes('lab') || title.toLowerCase().includes('technician')) {
+      return 'involves performing diagnostic tests and analyses to support medical diagnosis and treatment. This role requires precision, attention to detail, and adherence to strict protocols.';
     } else {
       return 'is a professional position that requires specific skills and expertise. Success in this role depends on a combination of technical knowledge, soft skills, and industry experience.';
     }
   }
 
   function generateGenericDailyTasks(title: string): string[] {
-    if (title.toLowerCase().includes('developer') || title.toLowerCase().includes('engineer')) {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes('developer') || titleLower.includes('engineer')) {
       return [
         'Writing and testing code',
         'Debugging software issues',
@@ -1523,13 +1582,21 @@
         'Attending planning meetings',
         'Documenting code and processes'
       ];
-    } else if (title.toLowerCase().includes('manager')) {
+    } else if (titleLower.includes('manager')) {
       return [
         'Leading team meetings',
         'Planning and organizing projects',
         'Monitoring progress and performance',
         'Communicating with stakeholders',
         'Problem-solving and decision-making'
+      ];
+    } else if (titleLower.includes('medical') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return [
+        'Performing laboratory tests',
+        'Maintaining equipment',
+        'Recording test results',
+        'Following safety protocols',
+        'Quality control procedures'
       ];
     } else {
       return [
@@ -1543,10 +1610,13 @@
   }
 
   function generateGenericWorkEnvironment(title: string): string {
-    if (title.toLowerCase().includes('developer') || title.toLowerCase().includes('engineer')) {
+    const titleLower = title.toLowerCase();
+    if (titleLower.includes('developer') || titleLower.includes('engineer')) {
       return 'Office-based or remote work, often in tech companies or organizations with digital products. Collaborative environment with regular team interactions.';
-    } else if (title.toLowerCase().includes('manager')) {
+    } else if (titleLower.includes('manager')) {
       return 'Office environment with team leadership responsibilities. May involve travel and regular meetings with different departments or clients.';
+    } else if (titleLower.includes('medical') || titleLower.includes('lab') || titleLower.includes('technician')) {
+      return 'Clinical laboratory environment with strict safety protocols. Typically works in hospitals, diagnostic labs, or research facilities.';
     } else {
       return 'Professional office environment with standard business hours. May involve hybrid or remote work options depending on the organization.';
     }
@@ -1571,7 +1641,7 @@
       // Create a temporary assessment with this career as top match
       const tempAssessment = {
         ...latestAssessment,
-        top_careers: [career, ...(latestAssessment.top_careers || []).filter(c => c.title !== career.title)]
+        top_careers: [career, ...(latestAssessment.top_careers || []).filter((c: CareerMatch) => c.title !== career.title)]
       };
       
       // Save original and set temp
@@ -1789,7 +1859,7 @@
     </div>
   {/if}
 
-  <!-- NEW: Career Details Modal -->
+  <!-- NEW: Enhanced Career Details Modal with Real Salary Data -->
   {#if showCareerDetails && selectedCareer}
     <div class="modal-overlay career-details-overlay" transition:fade>
       <div class="modal career-details-modal" transition:scale>
@@ -1838,10 +1908,17 @@
                     </div>
                   {/if}
                   {#if selectedCareer.salary}
-                    <div class="quick-fact">
+                    <div class="quick-fact salary-highlight">
                       <i class="fa-solid fa-money-bill-wave"></i>
                       <span class="fact-label">Salary Range:</span>
-                      <span class="fact-value">{selectedCareer.salary}</span>
+                      <span class="fact-value salary-amount">{selectedCareer.salary}</span>
+                    </div>
+                  {/if}
+                  {#if selectedCareer.salaryData}
+                    <div class="quick-fact">
+                      <i class="fa-solid fa-chart-pie"></i>
+                      <span class="fact-label">Average:</span>
+                      <span class="fact-value">{formatSalary(selectedCareer.salaryData.average)}/month</span>
                     </div>
                   {/if}
                   {#if selectedCareer.educationRequired}
@@ -1852,6 +1929,40 @@
                     </div>
                   {/if}
                 </div>
+                
+                <!-- Salary Details Box -->
+                {#if selectedCareer.salaryData}
+                  <div class="salary-details-box">
+                    <div class="salary-header">
+                      <h5><i class="fa-solid fa-peso-sign"></i> Philippine Salary Information</h5>
+                      <span class="salary-source">Source: {selectedCareer.salaryData.source || 'Industry Data'}</span>
+                    </div>
+                    <div class="salary-breakdown">
+                      <div class="salary-item">
+                        <div class="salary-label">Entry Level</div>
+                        <div class="salary-amount">{formatSalary(selectedCareer.salaryData.min)}</div>
+                      </div>
+                      <div class="salary-item">
+                        <div class="salary-label">Average</div>
+                        <div class="salary-amount average">{formatSalary(selectedCareer.salaryData.average)}</div>
+                      </div>
+                      <div class="salary-item">
+                        <div class="salary-label">Experienced</div>
+                        <div class="salary-amount">{formatSalary(selectedCareer.salaryData.max)}</div>
+                      </div>
+                    </div>
+                    <div class="salary-footer">
+                      <div class="salary-experience">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>{selectedCareer.salaryData.experienceLevel} Level</span>
+                      </div>
+                      <div class="salary-updated">
+                        <i class="fa-solid fa-calendar"></i>
+                        <span>Updated {selectedCareer.salaryData.lastUpdated}</span>
+                      </div>
+                    </div>
+                  </div>
+                {/if}
               </div>
 
               <!-- Daily Tasks & Responsibilities -->
@@ -1908,7 +2019,15 @@
                         <div class="step-number">{index + 1}</div>
                         <div class="step-content">
                           <div class="step-title">{step}</div>
-                          {#if index === 0}
+                          {#if index === 0 && selectedCareer.salaryData}
+                            <div class="step-duration">Entry-level (0-2 years) • {formatSalary(selectedCareer.salaryData.min)}</div>
+                          {:else if index === 1 && selectedCareer.salaryData}
+                            <div class="step-duration">Mid-level (2-5 years) • {formatSalary(selectedCareer.salaryData.average)}</div>
+                          {:else if index === 2 && selectedCareer.salaryData}
+                            <div class="step-duration">Senior (5-8 years) • {formatSalary(Math.round(selectedCareer.salaryData.average * 1.5))}</div>
+                          {:else if index === 3 && selectedCareer.salaryData}
+                            <div class="step-duration">Lead/Manager (8+ years) • {formatSalary(selectedCareer.salaryData.max)}</div>
+                          {:else if index === 0}
                             <div class="step-duration">Entry-level (0-2 years)</div>
                           {:else if index === 1}
                             <div class="step-duration">Mid-level (2-5 years)</div>
@@ -2107,7 +2226,6 @@
             </div>
             <div class="user-details">
               <span class="user-name">{userProfile?.first_name || 'User'} {userProfile?.last_name || ''}</span>
-              <!-- Only show username, not email -->
             </div>
           </div>
           
@@ -2547,7 +2665,7 @@
                   <span class="stat-label">Career Paths Explored:</span>
                   <span class="stat-value">
                     {#if assessments.length > 0}
-                      {new Set(assessments.flatMap(a => [...(a.top_careers || []), ...(a.full_results?.recommendations || [])].map(c => c.title))).size}
+                      {new Set(assessments.flatMap(a => [...(a.top_careers || []), ...(a.full_results?.recommendations || [])].map((c: CareerMatch) => c.title))).size}
                     {:else}
                       0
                     {/if}
@@ -2558,7 +2676,7 @@
                   <span class="stat-value">
                     {#if assessments.length > 0}
                       {new Set(assessments.flatMap(a => 
-                        [...(a.top_careers || []), ...(a.full_results?.recommendations || [])].flatMap(c => c.requiredSkills || [])
+                        [...(a.top_careers || []), ...(a.full_results?.recommendations || [])].flatMap((c: CareerMatch) => c.requiredSkills || [])
                       )).size}
                     {:else}
                       0
@@ -2608,12 +2726,7 @@
       <!-- Footer -->
       <footer class="dashboard-footer">
         <div class="footer-content">
-          <p>© 2024 CareerGeenie. All rights reserved.</p>
-          <nav class="footer-links">
-            <a href="/privacy">Privacy</a>
-            <a href="/terms">Terms</a>
-            <a href="/help">Help</a>
-          </nav>
+          <p>© 2026 CareerGeenie. All rights reserved.</p> 
         </div>
       </footer>
     </div>
@@ -2832,7 +2945,7 @@
               </div>
             </div>
             
-            <!-- Experience - FIXED: Now properly adds new experiences -->
+            <!-- Experience -->
             <div class="resume-section">
               <h4><i class="fa-solid fa-briefcase"></i> Experience</h4>
               {#each resumeData.experiences as exp, index}
@@ -2987,7 +3100,7 @@
               </div>
             </div>
             
-            <!-- Education - FIXED: Now properly adds new education and has editable location -->
+            <!-- Education -->
             <div class="resume-section">
               <h4><i class="fa-solid fa-graduation-cap"></i> Education</h4>
               {#each resumeData.education as edu, index}
@@ -3104,7 +3217,7 @@
               </div>
             </div>
             
-            <!-- Certifications - FIXED: Now properly adds new certifications -->
+            <!-- Certifications -->
             <div class="resume-section">
               <h4><i class="fa-solid fa-certificate"></i> Certifications</h4>
               {#each resumeData.certifications as cert, index}
@@ -3205,7 +3318,7 @@
             </div>
             
             <div class="resume-preview-content" id="resume-preview-content">
-              <!-- Printable Resume Template -->
+              <!-- Printable Resume Template - REMOVED CAREER ALIGNMENT BOX -->
               <div class="resume-template" id="printable-resume">
                 <!-- Header -->
                 <div class="resume-header-section">
@@ -3229,14 +3342,7 @@
                   </div>
                 </div>
                 
-                <!-- Career Match Badge -->
-                {#if latestAssessment}
-                  <div class="career-match-badge">
-                    <span class="badge-label">Career Match:</span>
-                    <span class="badge-value">{latestAssessment.match_score}%</span>
-                    <span class="badge-career">{latestAssessment.top_careers[0]?.title || 'Top Recommended Career'}</span>
-                  </div>
-                {/if}
+                <!-- REMOVED: Career Alignment Note -->
                 
                 <!-- Professional Summary -->
                 {#if resumeData.summary}
@@ -3318,18 +3424,12 @@
                   </div>
                 {/if}
                 
-                <!-- Assessment Footer -->
-                {#if latestAssessment}
-                  <div class="assessment-footer">
-                    <p class="footer-note">
-                      <i class="fa-solid fa-lightbulb"></i> This resume is generated based on your career assessment results. 
-                      Career match score: <strong>{latestAssessment.match_score}%</strong> with <strong>{latestAssessment.top_careers[0]?.title || 'recommended career'}</strong>.
-                    </p>
-                    <p class="footer-date">
-                      Generated on {new Date().toLocaleDateString()} by CareerGeenie
-                    </p>
-                  </div>
-                {/if}
+                <!-- Simple Generated Footer -->
+                <div class="generated-footer">
+                  <p class="footer-date">
+                    Generated on {new Date().toLocaleDateString()} by CareerGeenie
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -3558,6 +3658,123 @@
       color: var(--text-secondary);
     }
 
+    /* Salary-specific styles */
+    .salary-highlight {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border-left: 3px solid var(--success);
+    }
+
+    .salary-amount {
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .salary-details-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(99, 102, 241, 0.02));
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      border: 1px solid rgba(99, 102, 241, 0.1);
+      margin-top: 1rem;
+    }
+
+    .salary-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .salary-header h5 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .salary-source {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .salary-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .salary-item {
+      text-align: center;
+      padding: 0.75rem;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 0.5rem;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .salary-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .salary-item .salary-amount {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .salary-item .salary-amount.average {
+      color: var(--success);
+      font-size: 1.125rem;
+    }
+
+    .salary-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .salary-experience,
+    .salary-updated {
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .step-duration {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive adjustments for salary display */
+    @media (max-width: 768px) {
+      .salary-breakdown {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .salary-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .salary-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+
     .tasks-list {
       list-style: none;
       padding: 0;
@@ -3667,11 +3884,6 @@
       margin-bottom: 0.25rem;
     }
 
-    .step-duration {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
     .certifications-list {
       list-style: none;
       padding: 0;
@@ -3755,6 +3967,17 @@
 
     .career-card-trigger {
       cursor: pointer;
+    }
+
+    /* REMOVED: Career Alignment Box Styles */
+
+    .generated-footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-align: center;
     }
 
     /* Responsive styles for career details modal */
@@ -5073,22 +5296,6 @@
       color: var(--text-muted);
     }
 
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.875rem;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--text);
-    }
-
     /* Responsive Design */
     @media (max-width: 1024px) {
       .sidebar {
@@ -5815,33 +6022,6 @@
       gap: 0.5rem;
     }
 
-    .career-match-badge {
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .badge-label {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
-    .badge-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .badge-career {
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-
     .resume-section-preview {
       margin-bottom: 1.5rem;
     }
@@ -5963,18 +6143,13 @@
       color: #475569;
     }
 
-    .assessment-footer {
+    .generated-footer {
       margin-top: 2rem;
       padding-top: 1rem;
       border-top: 1px dashed #e2e8f0;
       font-size: 0.75rem;
       color: #94a3b8;
       text-align: center;
-    }
-
-    .footer-note {
-      margin-bottom: 0.5rem;
-      font-style: italic;
     }
 
     .footer-date {

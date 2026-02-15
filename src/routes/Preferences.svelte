@@ -63,26 +63,26 @@
   const WORK_TYPE_LIMIT = 3;
   
   const workTypeOptions = [
-    { id: 'creative', label: 'Creative', value: 'creative', icon: 'fa-solid fa-palette', description: 'Design, writing, arts', gradient: 'from-pink-500 to-rose-500' },
-    { id: 'analytical', label: 'Analytical', value: 'analytical', icon: 'fa-solid fa-chart-line', description: 'Data analysis, research', gradient: 'from-blue-500 to-cyan-500' },
-    { id: 'technical', label: 'Technical', value: 'technical', icon: 'fa-solid fa-code', description: 'Engineering, programming', gradient: 'from-purple-500 to-indigo-500' },
-    { id: 'handsOn', label: 'Hands-on', value: 'handsOn', icon: 'fa-solid fa-wrench', description: 'Construction, manufacturing', gradient: 'from-amber-500 to-orange-500' },
-    { id: 'social', label: 'Social', value: 'social', icon: 'fa-solid fa-users', description: 'Teaching, counseling, service', gradient: 'from-emerald-500 to-teal-500' },
-    { id: 'structured', label: 'Structured', value: 'structured', icon: 'fa-solid fa-list-check', description: 'Accounting, administration', gradient: 'from-slate-500 to-gray-500' },
-    { id: 'leadership', label: 'Leadership', value: 'leadership', icon: 'fa-solid fa-chart-simple', description: 'Team leading, management', gradient: 'from-violet-500 to-purple-500' },
-    { id: 'entrepreneurial', label: 'Entrepreneurial', value: 'entrepreneurial', icon: 'fa-solid fa-lightbulb', description: 'Startups, business', gradient: 'from-yellow-500 to-amber-500' },
-    { id: 'scientific', label: 'Scientific', value: 'scientific', icon: 'fa-solid fa-flask', description: 'Biology, chemistry', gradient: 'from-red-500 to-pink-500' },
-    { id: 'healthcare', label: 'Healthcare', value: 'healthcare', icon: 'fa-solid fa-stethoscope', description: 'Nursing, medicine', gradient: 'from-rose-500 to-pink-500' },
-    { id: 'outdoor', label: 'Outdoor', value: 'outdoor', icon: 'fa-solid fa-tree', description: 'Agriculture, forestry', gradient: 'from-green-500 to-emerald-500' },
-    { id: 'digital', label: 'Digital', value: 'digital', icon: 'fa-solid fa-globe', description: 'Online work, remote', gradient: 'from-indigo-500 to-blue-500' },
-    { id: 'logistical', label: 'Logistical', value: 'logistical', icon: 'fa-solid fa-boxes-stacked', description: 'Supply chain, operations', gradient: 'from-gray-500 to-slate-500' },
-    { id: 'artistic', label: 'Artistic', value: 'artistic', icon: 'fa-solid fa-music', description: 'Performing, visual arts', gradient: 'from-fuchsia-500 to-pink-500' },
-    { id: 'financial', label: 'Financial', value: 'financial', icon: 'fa-solid fa-dollar-sign', description: 'Banking, investment', gradient: 'from-amber-500 to-yellow-500' },
-    { id: 'legal', label: 'Legal', value: 'legal', icon: 'fa-solid fa-scale-balanced', description: 'Law, compliance', gradient: 'from-stone-500 to-neutral-500' },
-    { id: 'educational', label: 'Educational', value: 'educational', icon: 'fa-solid fa-book-open', description: 'Teaching, training', gradient: 'from-sky-500 to-blue-500' },
-    { id: 'environmental', label: 'Environmental', value: 'environmental', icon: 'fa-solid fa-leaf', description: 'Sustainability', gradient: 'from-lime-500 to-green-500' },
-    { id: 'sales', label: 'Sales', value: 'sales', icon: 'fa-solid fa-chart-column', description: 'Business development', gradient: 'from-orange-500 to-amber-500' },
-    { id: 'support', label: 'Support', value: 'support', icon: 'fa-solid fa-headset', description: 'HR, office management', gradient: 'from-zinc-500 to-gray-500' }
+    { id: 'creative', label: 'Creative', value: 'creative', icon: 'fa-solid fa-palette', description: 'Design, writing, arts', gradient: 'from-pink-500 to-rose-500', category: 'creative' },
+    { id: 'analytical', label: 'Analytical', value: 'analytical', icon: 'fa-solid fa-chart-line', description: 'Data analysis, research', gradient: 'from-blue-500 to-cyan-500', category: 'technical' },
+    { id: 'technical', label: 'Technical', value: 'technical', icon: 'fa-solid fa-code', description: 'Engineering, programming', gradient: 'from-purple-500 to-indigo-500', category: 'technical' },
+    { id: 'handsOn', label: 'Hands-on', value: 'handsOn', icon: 'fa-solid fa-wrench', description: 'Construction, manufacturing', gradient: 'from-amber-500 to-orange-500', category: 'organizational' },
+    { id: 'social', label: 'Social', value: 'social', icon: 'fa-solid fa-users', description: 'Teaching, counseling, service', gradient: 'from-emerald-500 to-teal-500', category: 'social' },
+    { id: 'structured', label: 'Structured', value: 'structured', icon: 'fa-solid fa-list-check', description: 'Accounting, administration', gradient: 'from-slate-500 to-gray-500', category: 'organizational' },
+    { id: 'leadership', label: 'Leadership', value: 'leadership', icon: 'fa-solid fa-chart-simple', description: 'Team leading, management', gradient: 'from-violet-500 to-purple-500', category: 'business' },
+    { id: 'entrepreneurial', label: 'Entrepreneurial', value: 'entrepreneurial', icon: 'fa-solid fa-lightbulb', description: 'Startups, business', gradient: 'from-yellow-500 to-amber-500', category: 'business' },
+    { id: 'scientific', label: 'Scientific', value: 'scientific', icon: 'fa-solid fa-flask', description: 'Biology, chemistry', gradient: 'from-red-500 to-pink-500', category: 'scientific' },
+    { id: 'healthcare', label: 'Healthcare', value: 'healthcare', icon: 'fa-solid fa-stethoscope', description: 'Nursing, medicine', gradient: 'from-rose-500 to-pink-500', category: 'scientific' },
+    { id: 'outdoor', label: 'Outdoor', value: 'outdoor', icon: 'fa-solid fa-tree', description: 'Agriculture, forestry', gradient: 'from-green-500 to-emerald-500', category: 'organizational' },
+    { id: 'digital', label: 'Digital', value: 'digital', icon: 'fa-solid fa-globe', description: 'Online work, remote', gradient: 'from-indigo-500 to-blue-500', category: 'technical' },
+    { id: 'logistical', label: 'Logistical', value: 'logistical', icon: 'fa-solid fa-boxes-stacked', description: 'Supply chain, operations', gradient: 'from-gray-500 to-slate-500', category: 'organizational' },
+    { id: 'artistic', label: 'Artistic', value: 'artistic', icon: 'fa-solid fa-music', description: 'Performing, visual arts', gradient: 'from-fuchsia-500 to-pink-500', category: 'creative' },
+    { id: 'financial', label: 'Financial', value: 'financial', icon: 'fa-solid fa-dollar-sign', description: 'Banking, investment', gradient: 'from-amber-500 to-yellow-500', category: 'business' },
+    { id: 'legal', label: 'Legal', value: 'legal', icon: 'fa-solid fa-scale-balanced', description: 'Law, compliance', gradient: 'from-stone-500 to-neutral-500', category: 'business' },
+    { id: 'educational', label: 'Educational', value: 'educational', icon: 'fa-solid fa-book-open', description: 'Teaching, training', gradient: 'from-sky-500 to-blue-500', category: 'social' },
+    { id: 'environmental', label: 'Environmental', value: 'environmental', icon: 'fa-solid fa-leaf', description: 'Sustainability', gradient: 'from-lime-500 to-green-500', category: 'scientific' },
+    { id: 'sales', label: 'Sales', value: 'sales', icon: 'fa-solid fa-chart-column', description: 'Business development', gradient: 'from-orange-500 to-amber-500', category: 'business' },
+    { id: 'support', label: 'Support', value: 'support', icon: 'fa-solid fa-headset', description: 'HR, office management', gradient: 'from-zinc-500 to-gray-500', category: 'organizational' }
   ];
 
   const salaryOptions = [
@@ -98,7 +98,7 @@
     { id: 'balance', label: 'Balance', value: 'balance', icon: 'fa-solid fa-scale-balanced', description: 'Work-life harmony', gradient: 'from-cyan-500 to-blue-500' }
   ];
 
-  // Updated education options for college years only with Font Awesome icons
+  // Education options for college years only with Font Awesome icons
   const educationOptions = [
     { id: 'first', label: 'Freshman', value: 'first', description: 'First year student', icon: 'fa-solid fa-user-plus', gradient: 'from-sky-500 to-blue-500' },
     { id: 'second', label: 'Sophomore', value: 'second', description: 'Second year student', icon: 'fa-solid fa-user', gradient: 'from-purple-500 to-indigo-500' },
@@ -116,8 +116,7 @@
     { id: 'social', label: 'Social Sciences', value: 'Social Sciences', icon: 'fa-solid fa-users', gradient: 'from-sky-500 to-blue-500' },
     { id: 'education', label: 'Education', value: 'Education', icon: 'fa-solid fa-book-open', gradient: 'from-violet-500 to-purple-500' },
     { id: 'communications', label: 'Communications', value: 'Communications', icon: 'fa-solid fa-comments', gradient: 'from-cyan-500 to-blue-500' },
-    { id: 'undeclared', label: 'Undeclared', value: 'Undeclared', icon: 'fa-solid fa-compass', gradient: 'from-slate-500 to-gray-500' }
-  ];
+   ];
 
   // Work type categories for filtering
   const workTypeCategories = [
@@ -145,14 +144,14 @@
   // Optimized reactive declarations
   $: selectedWorkTypesCount = data.workTypes.length;
   
-  // FIXED: Proper form completion check - all 5 sections must be filled
+  // Proper form completion check - all 5 sections must be filled
   $: isFormComplete = data.workTypes.length > 0 && 
                       data.salaryExpectation !== '' && 
                       data.workMotivation !== '' && 
                       data.educationLevel !== '' && 
                       data.educationField !== '';
 
-  // FIXED: Calculate completion count properly
+  // Calculate completion count properly
   $: completionCount = (data.workTypes.length > 0 ? 1 : 0) +
                       (data.salaryExpectation ? 1 : 0) +
                       (data.workMotivation ? 1 : 0) +
@@ -280,7 +279,7 @@
     }, 3000);
   };
 
-  // FIXED: Simplified navigation - just pass data to parent
+  // Simplified navigation - just pass data to parent
   const nextQuestion = async () => {
     console.log('Next button clicked');
     console.log('Current form state:', {
@@ -645,6 +644,7 @@
             {/if}
           </div>
           
+          <!-- Category Filters -->
           <div class="category-filters">
             {#each workTypeCategories as category (category.id)}
               <button 
@@ -704,9 +704,6 @@
                   <div class="checkmark">
                     <i class="fa-solid fa-check"></i>
                   </div>
-                  <div class="option-badge" style="background: linear-gradient(135deg, {option.gradient.replace('from-', '').replace('to-', '').replace(' ', ', ')})">
-                    {option.category}
-                  </div>
                 </div>
               </div>
             </label>
@@ -763,17 +760,6 @@
                 <div class="option-details">
                   <span class="option-label">{option.label}</span>
                   <span class="option-description">{option.description}</span>
-                </div>
-                <div class="option-price">
-                  <span class="price-label">
-                    {#if option.id === 'entry'}
-                      $
-                    {:else if option.id === 'average'}
-                      $$
-                    {:else}
-                      $$$
-                    {/if}
-                  </span>
                 </div>
               </div>
             </label>
@@ -1794,7 +1780,7 @@
     justify-content: center;
     font-size: 1rem;
   }
-
+ 
   /* Options Grid */
   .options-grid {
     display: grid;
@@ -1933,13 +1919,6 @@
     color: white;
     font-weight: 500;
     text-transform: capitalize;
-  }
-
-  .option-price .price-label {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #fbbf24;
-    font-family: 'Poppins', sans-serif;
   }
 
   .option-year .year-badge {
@@ -2444,18 +2423,6 @@
 
     .progress-step {
       flex: 0 0 calc(50% - 1rem);
-    }
-    
-    .progress-step:nth-child(9) {
-      display: none;
-    }
-    
-    .progress-step:nth-child(10) {
-      display: none;
-    }
-    
-    .progress-step:nth-child(11) {
-      display: none;
     }
     
     .progress-info {
