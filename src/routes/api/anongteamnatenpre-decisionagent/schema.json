@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Task Prioritization Schema",
+    "description": "Schema for validating tasks in the prioritization API",
+    "type": "object",
+    "properties": {
+        "tasks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "description": { "type": "string", "minLength": 5 },
+                    "deadline": { "type": "string", "format": "date" },
+                    "category": { 
+                        "type": "string", 
+                        "enum": ["work", "personal", "other", "development", "maintenance", "security", "performance", "frontend", "testing", "cloud"] 
+                    },
+                    "urgency": { "type": "string", "enum": ["high", "medium", "low"] }
+                },
+                "required": ["description", "deadline", "category", "urgency"]
+            }
+        }
+    },
+    "required": ["tasks"]
+}
